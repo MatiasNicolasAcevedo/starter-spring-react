@@ -1,11 +1,11 @@
 # Tablero vivo
 
-Próxima acción: revisión independiente de T-001 in_review en chore/t-001-local-stack, PR #2; precondición de CI FULL y prompt en STATUS.
+Próxima acción: corregir T-001 en sesión implementer nueva, misma rama/PR #2, tras CAMBIOS REQUERIDOS R1 y CI FULL del HEAD documental final; precondición y prompt en STATUS.
 
 ## En vuelo
 | Tarea | Estado | Salida |
 |---|---|---|
-| [T-001](tasks/T-001-local-stack.md) | in_review | B1…B4 publicadas, FULL propio exit 0; revisión independiente tras CI FULL del HEAD final, PR #2 |
+| [T-001](tasks/T-001-local-stack.md) | changes_requested | R1-01 P2: SIGTERM en la nueva fase de proxies deja recursos; corregir en la misma rama/PR #2 tras el veredicto final |
 
 ## Listas
 Ninguna.
