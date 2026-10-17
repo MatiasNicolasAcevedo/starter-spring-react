@@ -33,5 +33,6 @@ Checklist propia de 22 criterios. Las reglas y suites del snapshot son heredadas
 | O-01 | Swagger opt-in apagado por defecto, HTTP loopback/GET/api/docs; UI/JSON/Try it out y negativos nginx/Vite | heredado | Contrato/suite base conservados; sin acreditar ejecución propia. Ver tareas A…E | Frontera/revisor; revalidar en starter y cada adopción |
 
 ## Pendientes externos
+Revisión A R1 (2026-10-17): FULL propio y matrices verdes, inventario conciliado y cleanup 0/0/0; detalle en T-000. Transición documental mergeable, sujeta a veredicto/CI del HEAD final y MERGED confirmado. No modifica los 22 criterios ni acredita beta/template/adopción; la próxima sesión reconcilia el merge y revisa ciclo antes de refinar B.
 Google real nunca probado por esta extracción; solo el dueño configura credenciales y registra resultado saneado siguiendo SETUP. No bloquea modo local ni permite fallback del perfil real.
 No hay recepción de un ejecutor de producto desde este starter. Tras E, única continuidad final según PROVENANCE.

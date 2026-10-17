@@ -1,11 +1,11 @@
 # Tablero vivo
 
-Próxima acción: T-000, revisar exclusivamente A en sesión distinta sobre el HEAD publicado con CI FULL verde.
+Próxima acción: T-000, confirmar CI FULL del HEAD documental, publicar veredicto y completar merge elegible; después reconciliar en sesión nueva.
 
 ## En vuelo
 | Tarea | Estado | Salida |
 |---|---|---|
-| [T-000](tasks/T-000-starter-extraction.md) | in_review | A: extracción e inventario neutralizados, PR #1 ready |
+| [T-000](tasks/T-000-starter-extraction.md) | mergeable | A: revisión R1 sin bloqueantes y FULL local propio verde; falta veredicto sobre HEAD documental/CI y merge confirmado |
 
 ## Listas
 Ninguna hasta el merge de A.
