@@ -3,7 +3,14 @@ import { defineConfig } from 'vitest/config'
 import type { Plugin, ProxyOptions } from 'vite'
 
 // Rutas que el origen público reenvía al server; deben coincidir con nginx.conf (build servido por el contenedor client).
-const proxiedPaths = ['/api/', '/oauth2/', '/login/oauth2/code/', '/logout']
+const readinessPath = '/actuator/health/readiness'
+const proxiedPaths = [
+  '/api/',
+  '/oauth2/',
+  '/login/oauth2/code/',
+  '/logout',
+  '^/actuator/health/readiness(?:\\?.*)?$',
+]
 // En el contenedor client-dev apunta a http://server:8080; en el host, al server publicado en loopback.
 const apiTarget = process.env.STARTER_API_TARGET ?? 'http://127.0.0.1:8080'
 
@@ -47,6 +54,15 @@ function originBoundary(authority: string, suppliedAuthority: string): Plugin {
         if (host !== authority && host !== suppliedAuthority) {
           response.writeHead(400, { 'Cache-Control': 'no-store' })
           response.end('Solicitud inválida.')
+          return
+        }
+        const path = request.url?.split('?')[0] ?? ''
+        if (path.startsWith('/actuator') && (path !== readinessPath || request.method !== 'GET')) {
+          response.writeHead(404, {
+            'Cache-Control': 'no-store',
+            'Content-Type': 'application/problem+json',
+          })
+          response.end('{"status":404,"title":"Ruta no disponible."}')
           return
         }
         next()

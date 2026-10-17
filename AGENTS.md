@@ -59,5 +59,5 @@ Buscar con rg y leer por rangos; no cargar node_modules, target, reportes ni loc
 Lockfiles solo con su gestor. Sin actualizaciones a latest durante neutralización.
 No leer/imprimir secretos, .env real, cookies, tokens, claims completos ni datos personales.
 Auth: Google OIDC/sesión backend/CSRF; spec y ADR vigentes, sin auth propia ni tokens en navegador.
-Comando local actual sin Google: bash scripts/dev-auth.sh nginx starter-dev-auth-local-nginx session.
-Este harness efímero conserva su semántica; dev.sh persistente up/check/down es contrato pendiente B.
+Comando local persistente sin Google: bash scripts/dev.sh up --mode local --proxy nginx --project starter-dev-local-nginx; parámetros y retoma en docs/SETUP.md.
+El harness dev-auth.sh conserva su sintaxis/semántica efímera y sus regresiones; no usarlo para datos persistentes.

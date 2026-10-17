@@ -8,15 +8,16 @@ interface ErrorAlertProps {
   title?: string
   /** Si se indica, muestra la acción «Reintentar». */
   onRetry?: () => void
+  retryDisabled?: boolean
 }
 
-export function ErrorAlert({ error, title, onRetry }: ErrorAlertProps) {
+export function ErrorAlert({ error, title, onRetry, retryDisabled = false }: ErrorAlertProps) {
   return (
     <Alert
       severity="error"
       action={
         onRetry ? (
-          <Button color="inherit" size="small" onClick={onRetry}>
+          <Button color="inherit" size="small" onClick={onRetry} disabled={retryDisabled}>
             Reintentar
           </Button>
         ) : undefined

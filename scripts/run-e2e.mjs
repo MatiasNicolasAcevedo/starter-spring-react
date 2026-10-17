@@ -47,6 +47,9 @@ function execute(request) {
     case 'stop': case 'start': case 'restart':
       compose([request.operation, 'server']);
       return true;
+    case 'stop-db': case 'start-db':
+      compose([request.operation === 'stop-db' ? 'stop' : 'start', 'db']);
+      return true;
     case 'fingerprint': {
       assert.match(request.identity, /^[a-f0-9-]{36}$/);
       const query = "SELECT json_build_object('id',id,'createdAt',created_at)::text FROM app_user " +

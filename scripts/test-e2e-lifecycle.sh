@@ -10,10 +10,11 @@ cp scripts/fixtures/docker-e2e-fault.sh "$task_temp/docker"
 chmod +x "$task_temp/docker"
 export PATH="$task_temp:$PATH"
 check_empty() {
+  local task_checked_project="${1:-$STARTER_E2E_PROJECT}"
   for kind in container network volume; do
     local flags=-q
     [[ "$kind" != container ]] || flags=-aq
-    [[ -z "$("$STARTER_A_DOCKER" "$kind" ls "$flags" --filter "label=com.docker.compose.project=$STARTER_E2E_PROJECT")" ]] || {
+    [[ -z "$("$STARTER_A_DOCKER" "$kind" ls "$flags" --filter "label=com.docker.compose.project=$task_checked_project")" ]] || {
       echo 'Residual resources after A assay' >&2; exit 1;
     }
   done
@@ -35,17 +36,23 @@ for scenario in "${scenarios[@]}"; do
   log="${TMPDIR:-/tmp}/starter-lifecycle-$scenario.log"
   code=0
   if [[ "$scenario" == verify-signal ]]; then
-    # C: TERM to the gate must reach e2e.sh (the cleanup owner), wait for its teardown and stop later suites.
+    # TERM must reach the integrated suite's first local lifecycle owner, wait for cleanup and stop later suites.
+    export STARTER_LOCAL_TEST_PREFIX="starter-dev-test-verify-$$"
+    task_local_project="$STARTER_LOCAL_TEST_PREFIX-nginx"
+    check_empty "$task_local_project"
     bash scripts/verify.sh --e2e > "$log" 2>&1 &
     task_pid=$!
     deadline=$((SECONDS + 300))
-    until [[ -n "$("$STARTER_A_DOCKER" container ls -q --filter "label=com.docker.compose.project=$STARTER_E2E_PROJECT" --filter label=com.docker.compose.service=db)" ]]; do
+    until [[ -n "$("$STARTER_A_DOCKER" container ls -q --filter "label=com.docker.compose.project=$task_local_project" --filter label=com.docker.compose.service=db)" ]]; do
       [[ "$SECONDS" -lt "$deadline" ]] && kill -0 "$task_pid" || exit 1
       sleep 0.2
     done
     kill -TERM "$task_pid"
     wait "$task_pid" || code=$?
     grep -q 'e2e     INTERRUMPIDA (señal; exit 143 tras su cleanup)' "$log"
+    ! grep -Fq 'Local assay cleanup failed.' "$log"
+    check_empty "$task_local_project"
+    unset STARTER_LOCAL_TEST_PREFIX
   elif [[ "$scenario" == verify-startup ]]; then
     # C: a real startup failure inside the gate's E2E suite is reported per suite and fails the gate.
     bash scripts/verify.sh --e2e > "$log" 2>&1 || code=$?

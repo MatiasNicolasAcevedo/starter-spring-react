@@ -43,7 +43,11 @@ public class SecurityConfig {
                         auth.requestMatchers(HttpMethod.GET, ApiDocsAccess.PATHS)
                                 .permitAll();
                     }
-                    auth.requestMatchers("/actuator/health", "/actuator/health/**")
+                    auth.requestMatchers(
+                                    HttpMethod.GET,
+                                    "/actuator/health",
+                                    "/actuator/health/liveness",
+                                    "/actuator/health/readiness")
                             .permitAll()
                             .requestMatchers(
                                     HttpMethod.GET,

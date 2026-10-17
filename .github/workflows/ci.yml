@@ -160,7 +160,7 @@ jobs:
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: ${{ env.NODE_VERSION }}
-      - name: E2E Playwright (desktop 1280 / móvil 375)
+      - name: Integración local persistente y Playwright (1280 / 375)
         timeout-minutes: 40
         run: bash scripts/verify.sh --e2e
       # Solo el export saneado: sanitized/ existe únicamente si su auditoría pasó. Brutos, control y logs nunca se suben.

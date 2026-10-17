@@ -1,7 +1,7 @@
 # TESTING · Pruebas, gate y CI
 
 ## Fase del gate
-**Fase actual: `FULL`**. Se conserva sin rebajar suites: docs-check, backend clean verify (Spotless/unitarios/IT PostgreSQL/JaCoCo), client typecheck/lint/formato/tests con cobertura/build y E2E Playwright (1280/375, Swagger desktop). La CI y verify.sh declaran la misma fase; docs-check lo exige.
+**Fase actual: `FULL`**. Se conserva sin rebajar suites: docs-check, backend clean verify (Spotless/unitarios/IT PostgreSQL/JaCoCo), client typecheck/lint/formato/tests con cobertura/build y suite e2e integrada (CLI persistente, guardias/rollback/señales, proxies, copia sin kit y Playwright 1280/375/Swagger). La CI y verify.sh declaran la misma fase; docs-check lo exige.
 Comandos aislados y requisitos: SETUP. Gate de entrega `bash scripts/verify.sh`; --fast y suites sueltas son parciales. --docs solo acredita DOCS_ONLY si clasificador del diff completo lo permite. A cambia código/renombra paquetes: exige FULL.
 Señales INT/TERM/HUP: reenviar TERM al hijo real, esperar cleanup y salir 130/143/129 sin iniciar otra suite. No cambiar Bash mientras está ejecutándose.
 Backend runner container por defecto; alternativa host preaprobada solo con motivo documentado, JDK21 y mismas suites/Testcontainers. Ver TR-03.
@@ -66,3 +66,10 @@ Clasificador/agregado: node --test scripts/ci/*.test.mjs, matrices y mutantes he
 docs-check propio valida 22 criterios heredado/pendiente/verificado/bloqueado, evidencia propia para verificado, NO_LISTO mientras falte uno, tarea/tablero/STATUS/CI coherentes. Pruebas dirigidas alteran copia temporal sin kit/Git/artefactos y exigen rechazo de criterio ausente, herencia falsa y conteo incorrecto.
 Proxy outage solo stack de ensayo propio: IP cacheada y DNS frío devuelven 502/504 dentro de 3s; restaurar y exigir 200. No acredita lectura upstream ni Google real.
 Trampas y cleanup: [SETUP](SETUP.md#trampas-conocidas). Cambios en condición de HANDOFF revalidan o acotan ese criterio en el mismo PR. Revisión de sesión distinta sobre SHA/base comprobados; beta en D y adopción en E requieren FULL local y CI, sin excepciones por etiqueta.
+
+## Regresiones B dentro de FULL
+verify.sh --e2e ejecuta verify-local-and-e2e.sh: controles HTTP del probe, test-local-guards, test-dev-stack nginx/Vite, test-dev-stack-failures, test-local-copy, test-auth-proxies y el E2E heredado completo. Cualquier fallo detiene la suite y conserva salida no cero; señales esperan el cleanup del hijo. No hay interruptor para omitir las regresiones locales de una entrega. La CI conserva el mismo job/check e2e y sus límites de tiempo.
+
+ReadinessIT usa PostgreSQL real e interrupción TCP pause/unpause (TR-13), sin reiniciar la aplicación: health status-only, 503 en menos de 6 s, liveness UP, recuperación en menos de 20 s, denegaciones y logs sin causas/host. Los probes incluyen negativos HTML 200, JSON inválido, issuer/JWKS ajeno o inválido, DB DOWN y detalles filtrados.
+
+SystemInfoPanel conserva las pruebas previas y agrega readiness retenida, inválida, 503 tras UP sin éxito cacheado, teclado/reintento y polling real de 5 s. El navegador local containerizado prueba DB Compose stop/start en ambos proxies y 1280/375: health 503, check no cero y UI error/recuperación en ventanas de 30 s. Swagger comprueba index/config/JSON/asset/servers/Try it out real y denegaciones; Vite prueba HMR sin navegar y restaura los bytes originales en cleanup. Sesiones/trazas brutas quedan locales/ignoradas; solo capturas SPA ficticia y el export auditado del E2E pueden compartirse. La copia temporal usa las fuentes actuales sin .git/kit/ignorados y el recorrido README; no acredita adopción E ni personalización de otro producto.

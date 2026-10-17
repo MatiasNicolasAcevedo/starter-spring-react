@@ -5,7 +5,7 @@
 #   bash scripts/verify.sh --docs     solo docs-check (gate de entrega solo si --policy informa DOCS_ONLY)
 #   bash scripts/verify.sh --server   solo backend (runner server-tests o alternativa host)
 #   bash scripts/verify.sh --client   solo client (runner client-tests: typecheck, lint, formato, tests, build)
-#   bash scripts/verify.sh --e2e      solo E2E Playwright real (scripts/e2e.sh: stack aislado, Node 24 en el host)
+#   bash scripts/verify.sh --e2e      integración local y Playwright real (stacks aislados, Node 24 en el host)
 #   bash scripts/verify.sh --fast     fase actual sin E2E (solo iteración; nunca habilita revisión ni merge)
 #   bash scripts/verify.sh --policy <base>   muestra la política del diff contra <base> sin ejecutar suites
 set -uo pipefail
@@ -56,7 +56,8 @@ suite_client() {
 
 # Proyecto Compose único y propio, env-file ficticio, sin puertos host; exporta solo reportes saneados y auditados.
 suite_e2e() {
-  exec bash scripts/e2e.sh
+  # Normal FULL/--e2e executes the persistent CLI/browser/ownership/proxy/copy regressions first.
+  exec bash scripts/verify-local-and-e2e.sh
 }
 
 # INT/TERM/HUP: reenviar TERM a la suite en curso, esperar a que termine su cleanup y no iniciar las siguientes.
