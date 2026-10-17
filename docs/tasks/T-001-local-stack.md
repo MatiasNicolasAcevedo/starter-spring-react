@@ -8,7 +8,7 @@ counts_for_cycle: false
 product_cycle: null
 spec: S-002
 branch: chore/t-001-local-stack
-pr: null
+pr: 2
 depends_on: [T-000]
 ---
 # T-001 · B · Arranque mínimo conectado
@@ -66,3 +66,7 @@ Sesión nueva, rol implementer; Codex desktop/API, terminal PowerShell y Git Bas
 Conciliación previa: árbol limpio, ningún PR abierto, PR #1 MERGED; main local/tracking/remoto 47184f725f8a89528acac0aa3e7383f2334258de, CI 39045270616 completed/success. Rama local/tracking/remota e21479dd94f454c3cbad9356244a80e57e3cd6c0; primer commit 0310e73e77e7200c0445df285138acbc1792ddbc, posteriores exclusivamente Markdown. Reutilizada sin recrear.
 
 Checkpoint previo a baseline: COMPOSE_ENV_FILES=.env.example COMPOSE_PROJECT_NAME=starter-b-baseline-20261017-1827 STARTER_E2E_PROJECT=starter-e2e-b-baseline-20261017-1827 STARTER_SERVER_TESTS=container bash scripts/verify.sh. Docker 28.5.1/Compose 2.40.2, Node host 24.21.0. Ausencia por labels de container -a/network/volume comprobada para ambos proyectos (0/0/0); sin puertos host de aplicación previstos. Log local ignorado %TEMP%/starter-B-baseline-20261017-1827.log; reportes E2E saneados bajo e2e/artifacts del proyecto. Cleanup: solo proyectos nuevos indicados por labels, verify down --volumes tras finalizar; E2E conserva su cleanup. Pendientes: baseline propia → B1 → B2 → B3 → B4 → FULL/CI → revisor independiente.
+
+Baseline propia sobre a92f792b11f92d4552b4e82df6209f281aef8690, antes de cambios técnicos: FULL exit 0; docs-check OK, backend 81 unit/slices + 60 IT PostgreSQL, client 100 tests/typecheck/lint/formato/build, Playwright 11/11 (desktop/móvil y Swagger). Cleanup de ambos proyectos comprobado por labels: 0/0/0. Reporte saneado local: e2e/artifacts/starter-e2e-b-baseline-20261017-1827/sanitized/.
+
+Bloqueo CI reproducido antes de arreglo: run 39053875528, classify falla en “a second active task is rejected”, 0 !== 1. Preparación heredada intentaba cambiar T-001 desde draft y asumía T-000 activa; tras el cierre de A ninguna condición era cierta. Arreglo limitado a preparar explícitamente T-000 y T-001 in_progress en la copia temporal; conserva rechazo WIP y asserts. No cambia aceptación ni comportamiento de docs-check. Matriz CI local se vuelve a ejecutar con acceso a Git temporal (el sandbox niega escritura de .git); producción sin cambios, FULL precedente sigue acotado a baseline. Gate FULL final y CI de implementación continúan pendientes.

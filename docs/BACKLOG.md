@@ -5,7 +5,7 @@ Próxima acción: T-001 in_progress, baseline propia y B1 → B2 → B3 → B4 e
 ## En vuelo
 | Tarea | Estado | Salida |
 |---|---|---|
-| [T-001](tasks/T-001-local-stack.md) | in_progress | Baseline propia y ejecución secuencial B1…B4; PR draft por abrir |
+| [T-001](tasks/T-001-local-stack.md) | in_progress | Baseline propia y ejecución secuencial B1…B4; PR draft #2 |
 
 ## Listas
 Ninguna.

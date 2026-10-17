@@ -6,7 +6,7 @@
 | Tarea y contrato | [T-001](tasks/T-001-local-stack.md) · B; [S-002 v1](specs/S-002-local-stack.md) |
 | Estado | in_progress |
 | Rol actual | implementer; baseline propia → B1 → B2 → B3 → B4 |
-| Rama | chore/t-001-local-stack; PR draft por abrir |
+| Rama | chore/t-001-local-stack; PR draft #2 |
 | Base | main, 47184f725f8a89528acac0aa3e7383f2334258de |
 | Continuidad | POR_SESION |
 
