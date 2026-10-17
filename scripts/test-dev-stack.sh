@@ -79,6 +79,8 @@ trap cleanup EXIT
 trap 'exit 130' INT
 trap 'exit 143' TERM
 trap 'exit 129' HUP
+# On Linux, a bind source created by Docker belongs to root; host-side IPC/HMR must remain writable.
+mkdir -p "$STARTER_LOCAL_ARTIFACTS"
 expect_rejected() {
   local code=0
   dev "$@" > /dev/null 2>&1 || code=$?

@@ -1,11 +1,11 @@
 # Tablero vivo
 
-Próxima acción: revisión independiente de T-001 in_review en chore/t-001-local-stack, PR #2; precondición de CI FULL y prompt en STATUS.
+Próxima acción: corrección implementer de permisos Linux de B4 en T-001 in_progress, misma rama y PR #2 draft; checkpoint en la tarea.
 
 ## En vuelo
 | Tarea | Estado | Salida |
 |---|---|---|
-| [T-001](tasks/T-001-local-stack.md) | in_review | B1…B4 publicadas, FULL propio exit 0; revisión independiente tras CI FULL del HEAD final, PR #2 |
+| [T-001](tasks/T-001-local-stack.md) | in_progress | FULL 02 local verde; CI detectó permiso de artefactos Linux; corrección/FULL nuevo en curso, PR #2 draft |
 
 ## Listas
 Ninguna.
