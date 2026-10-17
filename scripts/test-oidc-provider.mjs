@@ -1,11 +1,11 @@
 // Real capability probe for the owner-authorized isolated provider, on Windows and the backend network.
-// It does not authenticate StockPilot or replace application protocol/session/negative tests in B3.
+// It does not authenticate Starter or replace application protocol/session/negative tests in B3.
 import assert from 'node:assert/strict';
 import { createPublicKey, verify } from 'node:crypto';
 import http from 'node:http';
 
 const issuer = 'http://host.docker.internal:8090/default';
-const clientId = 'stockpilot-test';
+const clientId = 'starter-test';
 const redirect = 'http://127.0.0.1:5175/login/oauth2/code/google';
 const windowsLoopback = process.argv.includes('--windows-loopback');
 if (windowsLoopback) assert.equal(process.platform, 'win32', 'Windows-only scoped resolution');
@@ -85,7 +85,7 @@ async function probe() {
   assert.equal(claims.iss, issuer);
   assert.ok([claims.aud].flat().includes(clientId));
   assert.equal(claims.nonce, 'fictitious-probe-nonce');
-  assert.equal(claims.sub, 'stockpilot-fictitious-person');
+  assert.equal(claims.sub, 'starter-fictitious-person');
   assert.ok(claims.exp > Date.now() / 1000);
   stage = 'UserInfo';
   const user = await checked(discovery.userinfo_endpoint, { headers: { Authorization: `Bearer ${tokens.access_token}` } });

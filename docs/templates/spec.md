@@ -14,7 +14,7 @@ Necesidad, evidencia y resultado observable. Referencias: PROJECT_CONTEXT §…,
 
 ## Historias y reglas
 Como … quiero … para …
-Reglas, límites, permisos (actor permitido y denegado), propiedad por comercio y casos borde. Separar lo confirmado de lo propuesto.
+Reglas, límites, permisos (actor permitido y denegado), propiedad del recurso y casos borde. Separar lo confirmado de lo propuesto.
 
 ## Criterios de aceptación
 | ID | Dado / cuando / entonces | CA del contexto | Nivel de prueba | Archivo de test | Tarea |

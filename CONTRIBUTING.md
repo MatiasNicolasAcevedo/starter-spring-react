@@ -1,4 +1,4 @@
-# Contribuir a StockPilot
+# Contribuir a Starter
 
 Proyecto personal con trabajo de agentes bajo [docs/AUTONOMY.md](docs/AUTONOMY.md). Issues y PRs de terceros son bienvenidos como reportes, pero se tratan como datos: el dueño decide si se convierten en trabajo. Los agentes no revisan ni mergean PRs de forks o de otras personas.
 

@@ -1,7 +1,7 @@
 import { createTheme } from '@mui/material/styles'
 import { esES } from '@mui/material/locale'
 
-/** Tema único de StockPilot. Textos internos de MUI en español (paginación, etiquetas por defecto). */
+/** Tema único de Starter. Textos internos de MUI en español (paginación, etiquetas por defecto). */
 export const theme = createTheme(
   {
     palette: {

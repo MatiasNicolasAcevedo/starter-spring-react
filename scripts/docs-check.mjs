@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Validación documental determinista de StockPilot (docs/TESTING.md). Sin dependencias npm ni acceso a red.
+// Validación documental determinista de Starter (docs/TESTING.md). Sin dependencias npm ni acceso a red.
 // Valida solo archivos del producto: el kit local plantilla/ se excluye y nunca es requisito.
 // Uso: node scripts/docs-check.mjs   (exit 0 = ok, 1 = errores)
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
@@ -146,68 +146,35 @@ if (existsSync(join(ROOT, 'docs/BACKLOG.md'))) {
   for (const t of [...inFlight, ...ready]) if (!listed.has(t.id)) fail('docs/BACKLOG.md', `${t.id} (${t.status}) no figura`);
 }
 
-// 6. HANDOFF: checklist v1 histórico (21, congelado) y checklist v2 de cierre técnico (22, T-003 D1).
-// Cada tabla se lee solo dentro de su sección; v2 traza cada ID v1 con su origen.
+// 6. HANDOFF genérico: 22 criterios, sin historia operativa ni crédito por herencia.
 const CRITERIA = ['C-01', 'C-02', 'C-03', 'E-01', 'E-02', 'E-03', 'B-01', 'B-02', 'B-03', 'S-01', 'S-02', 'S-03',
-  'V-01', 'V-02', 'V-03', 'G-01', 'G-02', 'G-03', 'H-01', 'H-02', 'H-03'];
-const CRITERIA_V2 = [...CRITERIA, 'O-01'];
-const ORIGINS = ['conservado', 'ajustado', 'sustituido', 'nuevo'];
+  'V-01', 'V-02', 'V-03', 'G-01', 'G-02', 'G-03', 'H-01', 'H-02', 'H-03', 'O-01'];
 let verified = null;
-let verifiedV2 = null;
 if (existsSync(join(ROOT, 'docs/HANDOFF.md'))) {
   const handoff = read('docs/HANDOFF.md');
-  const sections = new Map();
-  let current = null;
+  const found = new Map();
   for (const line of handoff.split('\n')) {
-    const h = line.match(/^## (.+)$/);
-    if (h) { current = h[1].trim(); sections.set(current, []); } else if (current) sections.get(current).push(line);
-  }
-  const sectionLines = (prefix) => {
-    const names = [...sections.keys()].filter((name) => name.startsWith(prefix));
-    if (names.length !== 1) fail('docs/HANDOFF.md', `se espera una sección "${prefix}…" (hay ${names.length})`);
-    return names.flatMap((name) => sections.get(name));
-  };
-  const rows = (lines, pattern, version) => {
-    const found = new Map();
-    for (const line of lines) {
-      const m = line.match(pattern);
-      if (!m) continue;
-      if (found.has(m[1])) fail('docs/HANDOFF.md', `criterio ${version} repetido ${m[1]}`);
-      found.set(m[1], { text: m[2].trim(), state: m[3], origin: m[4] });
+    const match = line.match(/^\|\s*([A-Z]-\d{2})\s*\|([^|]*)\|\s*`?([a-z_]+)`?\s*\|([^|]*)\|/);
+    if (!match) continue;
+    const [, id, text, state, evidence] = match;
+    if (!CRITERIA.includes(id)) fail('docs/HANDOFF.md', `criterio desconocido ${id}`);
+    if (found.has(id)) fail('docs/HANDOFF.md', `criterio repetido ${id}`);
+    if (!['heredado', 'pendiente', 'verificado', 'bloqueado'].includes(state)) fail('docs/HANDOFF.md', `${id}: estado inválido`);
+    if (!text.trim()) fail('docs/HANDOFF.md', `${id}: criterio vacío`);
+    if (state === 'verificado' && (!evidence.includes('Propia:') || /heredad/i.test(evidence) || !/\d{4}-\d{2}-\d{2}/.test(evidence))) {
+      fail('docs/HANDOFF.md', `${id}: verificado requiere evidencia propia fechada; herencia no acredita ejecución`);
     }
-    return found;
-  };
-
-  const v1 = rows(sectionLines('Checklist v1'),
-    /^\|\s*([CEBSVGH]-0[1-3])\s*\|([^|]*)\|\s*`?(pendiente|verificado|bloqueado)`?\s*\|/, 'v1');
-  for (const id of CRITERIA) if (!v1.has(id)) fail('docs/HANDOFF.md', `falta el criterio v1 ${id} con estado válido`);
-  verified = [...v1.values()].filter((c) => c.state === 'verificado').length;
-  const verdict = handoff.match(/^- \*\*Veredicto v1[^\n]*?`(NO_LISTO|PENDIENTE_MERGE_M0|LISTO_PARA_JUNIE)`/m)?.[1];
-  if (!verdict) fail('docs/HANDOFF.md', 'veredicto v1 ausente o inválido');
-  else if (verdict !== 'NO_LISTO') fail('docs/HANDOFF.md', `veredicto v1 congelado como historial: NO_LISTO, no ${verdict}`);
-
-  const v2 = rows(sectionLines('Checklist v2'),
-    /^\|\s*([CEBSVGHO]-0[1-3])\s*\|([^|]*)\|\s*`?(pendiente|verificado|bloqueado)`?\s*\|\s*`?([a-z]+)/, 'v2');
-  for (const id of v2.keys()) if (!CRITERIA_V2.includes(id)) fail('docs/HANDOFF.md', `criterio v2 desconocido ${id}`);
-  for (const id of CRITERIA_V2) {
-    const c = v2.get(id);
-    if (!c) { fail('docs/HANDOFF.md', `falta el criterio v2 ${id} con estado y origen válidos`); continue; }
-    if (!ORIGINS.includes(c.origin)) fail('docs/HANDOFF.md', `${id} v2 con origen inválido "${c.origin}"`);
-    else if ((id === 'O-01') !== (c.origin === 'nuevo')) fail('docs/HANDOFF.md', `${id} v2: solo O-01 es nuevo; los IDs v1 se trazan`);
-    else if (c.origin === 'conservado' && c.text !== v1.get(id)?.text) fail('docs/HANDOFF.md', `${id} v2 conservado con texto distinto de v1`);
-    else if (['ajustado', 'sustituido'].includes(c.origin) && c.text === v1.get(id)?.text) {
-      fail('docs/HANDOFF.md', `${id} v2 ${c.origin} con el mismo texto que v1`);
-    }
+    found.set(id, state);
   }
-  verifiedV2 = [...v2.values()].filter((c) => c.state === 'verificado').length;
-  const verdictV2 = handoff.match(/^- \*\*Veredicto v2[^\n]*?`(NO_LISTO|PENDIENTE_MERGE_M0|CIERRE_TECNICO_VERIFICADO)`/m)?.[1];
-  if (!verdictV2) fail('docs/HANDOFF.md', 'veredicto v2 ausente o inválido');
-  if (verdictV2 === 'CIERRE_TECNICO_VERIFICADO' && verifiedV2 !== 22) {
-    fail('docs/HANDOFF.md', 'CIERRE_TECNICO_VERIFICADO exige 22/22 verificados');
+  for (const id of CRITERIA) if (!found.has(id)) fail('docs/HANDOFF.md', `falta el criterio ${id}`);
+  verified = [...found.values()].filter((state) => state === 'verificado').length;
+  const verdict = handoff.match(/^- \*\*Veredicto:\*\* `(NO_LISTO|STARTER_VALIDADO)`/m)?.[1];
+  if (!verdict) fail('docs/HANDOFF.md', 'veredicto genérico ausente o inválido');
+  if (verdict === 'STARTER_VALIDADO' && (verified !== 22 || [...tasks.values()].some(t => t.status !== 'done'))) {
+    fail('docs/HANDOFF.md', 'STARTER_VALIDADO exige 22/22 y todas las partes done');
   }
-  if (verdictV2 === 'PENDIENTE_MERGE_M0' && (verifiedV2 !== 21 || v2.get('G-03')?.state === 'verificado')) {
-    fail('docs/HANDOFF.md', 'PENDIENTE_MERGE_M0 exige 21/22 con solo G-03 pendiente');
-  }
+  const count = handoff.match(/— (\d+)\/22 verificados/);
+  if (!count || Number(count[1]) !== verified) fail('docs/HANDOFF.md', 'conteo de verificados incoherente');
   if (!/`(POR_SESION|CICLO_AUTOMATICO_VERIFICADO)`/.test(handoff)) fail('docs/HANDOFF.md', 'modalidad de continuidad ausente');
   if (!/`(AUTOMATICO_ELEGIBLE|MANUAL_POR_DUENO)`/.test(handoff)) fail('docs/HANDOFF.md', 'modalidad de merge ausente');
 }
@@ -230,12 +197,8 @@ if (existsSync(join(ROOT, 'docs/STATUS.md'))) {
     if (id && !prompt.includes(id)) fail('docs/STATUS.md', `el prompt no menciona ${id}`);
     if (/T-NNN|S-NNN|<[a-z][^>]*>|\bTODO\b|\bTBD\b/.test(prompt)) fail('docs/STATUS.md', 'el prompt contiene placeholders');
   }
-  const count = status.match(/Verificados:\s*(\d+)\/21/)?.[1];
-  if (verified !== null && Number(count) !== verified) fail('docs/STATUS.md', `Verificados ${count}/21 ≠ HANDOFF ${verified}/21`);
-  const countV2 = status.match(/Cierre técnico v2:\s*(\d+)\/22/)?.[1];
-  if (verifiedV2 !== null && Number(countV2) !== verifiedV2) {
-    fail('docs/STATUS.md', `Cierre técnico v2 ${countV2}/22 ≠ HANDOFF ${verifiedV2}/22`);
-  }
+  const count = status.match(/HANDOFF del starter:\s*(\d+)\/22 verificados/)?.[1];
+  if (verified !== null && Number(count) !== verified) fail('docs/STATUS.md', `conteo ${count}/22 distinto de HANDOFF ${verified}/22`);
   if (existsSync(join(ROOT, 'docs/BACKLOG.md'))) {
     const next = read('docs/BACKLOG.md').match(/^Próxima acción:[^\n]*/m)?.[0] ?? '';
     if (id && !next.includes(id)) fail('docs/BACKLOG.md', `la próxima acción no coincide con STATUS (${id})`);
@@ -250,14 +213,14 @@ if (existsSync(join(ROOT, 'docs/ROADMAP.md'))) {
 
 // 9. Coherencia de configuración versionada
 const pgCompose = existsSync(join(ROOT, 'docker-compose.yml')) && read('docker-compose.yml').match(/image:\s*(postgres:[^\s]+)/)?.[1];
-const tcFile = 'server/src/test/java/server/server/TestcontainersConfiguration.java';
+const tcFile = 'server/src/test/java/com/example/starter/TestcontainersConfiguration.java';
 const pgTc = existsSync(join(ROOT, tcFile)) && read(tcFile).match(/POSTGRES_IMAGE\s*=\s*"([^"]+)"/)?.[1];
 if (!pgCompose || pgCompose !== pgTc) fail('docker-compose.yml', `imagen PostgreSQL distinta de Testcontainers (${pgCompose} vs ${pgTc})`);
 const phaseCi = existsSync(join(ROOT, '.github/workflows/ci.yml')) && read('.github/workflows/ci.yml').match(/GATE_PHASE:\s*(\w+)/)?.[1];
 const phaseSh = existsSync(join(ROOT, 'scripts/verify.sh')) && read('scripts/verify.sh').match(/^GATE_PHASE="(\w+)"/m)?.[1];
 if (!phaseCi || phaseCi !== phaseSh) fail('scripts/verify.sh', `GATE_PHASE distinto de ci.yml (${phaseSh} vs ${phaseCi})`);
 if (phaseSh && !read('docs/TESTING.md').includes(`**Fase actual: \`${phaseSh}\`**`)) fail('docs/TESTING.md', `no declara la fase ${phaseSh}`);
-// FULL: verify.sh ejecuta e2e y la CI tiene job e2e evaluado por el agregado verify-required (T-003 C).
+// FULL: verify.sh ejecuta e2e y la CI tiene job e2e evaluado por el agregado verify-required (base heredada).
 if (phaseSh === 'FULL' && phaseCi === 'FULL') {
   const ci = read('.github/workflows/ci.yml');
   if (!/^ {2}e2e:\n/m.test(ci)) fail('.github/workflows/ci.yml', 'fase FULL sin job e2e');
@@ -283,4 +246,4 @@ if (errors.length) {
   for (const e of errors) console.error(`  - ${e}`);
   process.exit(1);
 }
-console.log(`docs-check: OK (${markdown.length} Markdown, ${tasks.size} tareas, HANDOFF v1 ${verified}/21, v2 ${verifiedV2}/22 verificados)`);
+console.log(`docs-check: OK (${markdown.length} Markdown, ${tasks.size} tareas, HANDOFF ${verified}/22 verificados)`);

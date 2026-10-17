@@ -15,7 +15,7 @@ describe('SystemInfoPanel (T1-02)', () => {
     renderWithProviders(<SystemInfoPanel />)
 
     expect(screen.getByRole('status')).toHaveTextContent('Consultando el servidor…')
-    expect(await screen.findByText('StockPilot · versión 9.8.7')).toBeInTheDocument()
+    expect(await screen.findByText('Starter · versión 9.8.7')).toBeInTheDocument()
     expect(screen.getByText('Servidor conectado')).toBeInTheDocument()
   })
 
@@ -32,7 +32,7 @@ describe('SystemInfoPanel (T1-02)', () => {
     expect(screen.queryByText(/versión/)).not.toBeInTheDocument()
 
     await user.click(screen.getByRole('button', { name: 'Reintentar' }))
-    expect(await screen.findByText('StockPilot · versión 0.0.1-TEST')).toBeInTheDocument()
+    expect(await screen.findByText('Starter · versión 0.0.1-TEST')).toBeInTheDocument()
     expect(screen.queryByRole('alert')).not.toBeInTheDocument()
   })
 
@@ -46,7 +46,7 @@ describe('SystemInfoPanel (T1-02)', () => {
     )
     await user.click(screen.getByRole('button', { name: 'Reintentar' }))
 
-    expect(await screen.findByText('StockPilot · versión 0.0.1-TEST')).toBeInTheDocument()
+    expect(await screen.findByText('Starter · versión 0.0.1-TEST')).toBeInTheDocument()
     expect(screen.queryByRole('alert')).not.toBeInTheDocument()
   })
 })

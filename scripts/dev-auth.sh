@@ -3,10 +3,10 @@
 set -euo pipefail
 source "$(dirname "${BASH_SOURCE[0]}")/lib/isolated-auth.sh"
 isolated_init
-[[ $# == 3 ]] || { echo 'Usage: dev-auth.sh nginx|vite stockpilot-dev-auth-<unique> session|restart|rebuild|status|stop' >&2; exit 2; }
+[[ $# == 3 ]] || { echo 'Usage: dev-auth.sh nginx|vite starter-dev-auth-<unique> session|restart|rebuild|status|stop' >&2; exit 2; }
 MODE=$1 PROJECT=$2 ACTION=$3
 validate_project "$PROJECT"
-[[ "$PROJECT" == stockpilot-dev-auth-* ]] || exit 2
+[[ "$PROJECT" == starter-dev-auth-* ]] || exit 2
 case "$MODE" in
   nginx) SERVICE=client; export APP_PUBLIC_URL=http://127.0.0.1:5175 ;;
   vite) SERVICE=client-dev; export APP_PUBLIC_URL=http://127.0.0.1:5176 ;;

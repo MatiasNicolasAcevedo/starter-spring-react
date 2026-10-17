@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Regresiones del clasificador DOCS_ONLY (T-003 AC-08): node --test scripts/ci/
+// Regresiones del clasificador DOCS_ONLY (base heredadaC-08): node --test scripts/ci/
 // Construye repos git descartables con plumbing (sin working tree: modos symlink/gitlink/ejecutable portables a
 // Windows) y ejecuta el clasificador real. CLASSIFY_DIFF_SCRIPT permite correr la misma matriz contra otra versión.
 import { after, test } from 'node:test';
@@ -11,7 +11,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SCRIPT = resolve(process.env.CLASSIFY_DIFF_SCRIPT ?? join(dirname(fileURLToPath(import.meta.url)), 'classify-diff.mjs'));
-const workspace = mkdtempSync(join(tmpdir(), 'stockpilot-classify-'));
+const workspace = mkdtempSync(join(tmpdir(), 'starter-classify-'));
 after(() => rmSync(workspace, { recursive: true, force: true }));
 
 // Configuración git aislada y determinista: sin config de sistema/usuario (autocrlf, firmas, renames).

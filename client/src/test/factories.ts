@@ -6,7 +6,7 @@ import type { FieldError, ProblemDetail } from '../services/http'
 // Datos ficticios para pruebas; nunca datos reales.
 
 export function buildSystemInfo(overrides: Partial<SystemInfo> = {}): SystemInfo {
-  return { name: 'StockPilot', version: '0.0.1-TEST', ...overrides }
+  return { name: 'Starter', version: '0.0.1-TEST', ...overrides }
 }
 
 /** Forma exacta de `GET /api/v1/auth/me` (server: security/AuthMeResponse). */

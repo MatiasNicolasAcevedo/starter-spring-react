@@ -5,7 +5,7 @@ import type { Plugin, ProxyOptions } from 'vite'
 // Rutas que el origen público reenvía al server; deben coincidir con nginx.conf (build servido por el contenedor client).
 const proxiedPaths = ['/api/', '/oauth2/', '/login/oauth2/code/', '/logout']
 // En el contenedor client-dev apunta a http://server:8080; en el host, al server publicado en loopback.
-const apiTarget = process.env.STOCKPILOT_API_TARGET ?? 'http://127.0.0.1:8080'
+const apiTarget = process.env.STARTER_API_TARGET ?? 'http://127.0.0.1:8080'
 
 // Required for serving; builds/tests use no proxy and need no environment or credentials.
 function publicOrigin() {
@@ -39,7 +39,7 @@ function publicOrigin() {
 
 function originBoundary(authority: string, suppliedAuthority: string): Plugin {
   return {
-    name: 'stockpilot-origin-boundary',
+    name: 'starter-origin-boundary',
     configureServer(server) {
       // Before Vite's proxy; allowedHosts alone does not check the configured port/authority.
       server.middlewares.use((request, response, next) => {
@@ -105,7 +105,7 @@ export default defineConfig(({ command, mode }) => {
       ),
       // Bind mounts de Windows no propagan eventos de archivos al contenedor: client-dev activa polling.
       watch:
-        process.env.STOCKPILOT_WATCH_POLLING === 'true' ? { usePolling: true, interval: 300 } : {},
+        process.env.STARTER_WATCH_POLLING === 'true' ? { usePolling: true, interval: 300 } : {},
     },
     test: {
       environment: 'jsdom',

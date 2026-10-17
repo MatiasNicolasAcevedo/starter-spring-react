@@ -1,4 +1,4 @@
-# CI de StockPilot. Política y reglas de eficiencia en docs/TESTING.md.
+# CI de Starter. Política y reglas de eficiencia en docs/TESTING.md.
 # verify-required es el check requerido por el ruleset de main: siempre se emite e informa política, base y HEAD.
 # Su decisión vive en scripts/ci/verify-required.mjs; clasificador y agregado se prueban en classify antes de usarse.
 name: ci
@@ -151,7 +151,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     env:
-      STOCKPILOT_E2E_PROJECT: stockpilot-e2e-ci-${{ github.run_id }}-${{ github.run_attempt }}
+      STARTER_E2E_PROJECT: starter-e2e-ci-${{ github.run_id }}-${{ github.run_attempt }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -169,7 +169,7 @@ jobs:
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: e2e-sanitized-report
-          path: e2e/artifacts/${{ env.STOCKPILOT_E2E_PROJECT }}/sanitized/
+          path: e2e/artifacts/${{ env.STARTER_E2E_PROJECT }}/sanitized/
           if-no-files-found: ignore
           retention-days: 7
 

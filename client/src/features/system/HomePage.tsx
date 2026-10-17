@@ -9,11 +9,10 @@ export function HomePage() {
     <Stack spacing={3}>
       <Stack spacing={1}>
         <Typography variant="h4" component="h1">
-          Bienvenido a StockPilot
+          Bienvenido a Starter
         </Typography>
         <Typography color="text.secondary">
-          Inventario y ventas para pequeños comercios: productos, existencias y ventas de cada
-          comercio, sin mezclar datos entre comercios.
+          Base para tu próxima aplicación, con identidad, sesión y una API de referencia.
         </Typography>
       </Stack>
       <Card variant="outlined">

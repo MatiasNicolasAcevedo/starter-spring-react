@@ -6,15 +6,15 @@ import { renderWithProviders } from '../test/render'
 import { AppRoutes } from './AppRoutes'
 
 describe('AppRoutes', () => {
-  it('la ruta inicial muestra el shell de StockPilot con el estado real del servidor', async () => {
+  it('la ruta inicial muestra el shell de Starter con el estado real del servidor', async () => {
     installAuthBackend()
     renderWithProviders(<AppRoutes />)
 
-    expect(screen.getByRole('link', { name: 'StockPilot' })).toHaveAttribute('href', '/')
+    expect(screen.getByRole('link', { name: 'Starter' })).toHaveAttribute('href', '/')
     expect(
-      await screen.findByRole('heading', { level: 1, name: 'Bienvenido a StockPilot' }),
+      await screen.findByRole('heading', { level: 1, name: 'Bienvenido a Starter' }),
     ).toBeVisible()
-    expect(await screen.findByText('StockPilot · versión 0.0.1-TEST')).toBeInTheDocument()
+    expect(await screen.findByText('Starter · versión 0.0.1-TEST')).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Ingresar' })).toHaveAttribute('href', '/login')
   })
 
@@ -25,7 +25,7 @@ describe('AppRoutes', () => {
     expect(await screen.findByRole('heading', { name: 'No encontramos esta página' })).toBeVisible()
     await user.click(screen.getByRole('link', { name: 'Volver al inicio' }))
 
-    expect(screen.getByRole('heading', { level: 1, name: 'Bienvenido a StockPilot' })).toBeVisible()
+    expect(screen.getByRole('heading', { level: 1, name: 'Bienvenido a Starter' })).toBeVisible()
     expect(await screen.findByText(/versión/)).toBeInTheDocument()
   })
 })
@@ -35,7 +35,7 @@ describe('Página /login', () => {
     installAuthBackend()
     renderWithProviders(<AppRoutes />, { route: '/login' })
 
-    expect(await screen.findByRole('heading', { name: 'Ingresar a StockPilot' })).toBeVisible()
+    expect(await screen.findByRole('heading', { name: 'Ingresar a Starter' })).toBeVisible()
     const google = screen.getByRole('link', { name: 'Continuar con Google' })
     expect(google.tagName).toBe('A')
     expect(google).toHaveAttribute('href', '/oauth2/authorization/google')
@@ -75,10 +75,10 @@ describe('Página /login', () => {
     const { user } = renderWithProviders(<AppRoutes />, { route: '/login' })
 
     expect(await screen.findByRole('heading', { name: 'Ya iniciaste sesión' })).toBeVisible()
-    expect(screen.getByText('Estás usando StockPilot como Persona Demo.')).toBeVisible()
+    expect(screen.getByText('Estás usando Starter como Persona Demo.')).toBeVisible()
     expect(screen.queryByRole('link', { name: 'Continuar con Google' })).not.toBeInTheDocument()
     await user.click(screen.getByRole('link', { name: 'Ir al inicio' }))
 
-    expect(screen.getByRole('heading', { level: 1, name: 'Bienvenido a StockPilot' })).toBeVisible()
+    expect(screen.getByRole('heading', { level: 1, name: 'Bienvenido a Starter' })).toBeVisible()
   })
 })

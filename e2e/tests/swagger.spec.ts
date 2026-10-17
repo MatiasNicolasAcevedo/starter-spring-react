@@ -21,7 +21,7 @@ test('Swagger UI loads the served document and runs only real same-origin GET ca
   await expect(page.locator('.servers select option')).toHaveText(['http://localhost']);
 
   const real = await (await page.request.get('/api/v1/system/info')).json();
-  expect(real.name).toBe('StockPilot');
+  expect(real.name).toBe('Starter');
   const system = operation(page, 'get', '/api/v1/system/info');
   const info = await execute(page, system, '/api/v1/system/info');
   expect(info.status()).toBe(200);

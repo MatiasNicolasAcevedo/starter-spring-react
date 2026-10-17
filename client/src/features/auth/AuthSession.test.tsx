@@ -145,7 +145,7 @@ describe('Sesión en el shell', () => {
     expect(within(banner()).getByRole('button', { name: 'Cerrar sesión' })).toBeVisible()
     expect(await screen.findByText('Datos de Persona A')).toBeVisible()
     expect(screen.queryByRole('combobox')).not.toBeInTheDocument()
-    expect(screen.queryByText(/rol|comercio/i)).not.toBeInTheDocument()
+    expect(screen.queryByText(/rol|permiso/i)).not.toBeInTheDocument()
   })
 
   it.each([
@@ -245,7 +245,7 @@ describe('Expiración de la sesión', () => {
     expect(within(banner()).queryByText('Persona A')).not.toBeInTheDocument()
     expect(within(banner()).getByRole('link', { name: 'Ingresar' })).toBeVisible()
     expect(screen.queryByText('Datos de Persona A')).not.toBeInTheDocument()
-    expect(screen.queryByRole('heading', { name: 'Ingresar a StockPilot' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'Ingresar a Starter' })).not.toBeInTheDocument()
     expect(queryClient.getQueryData(PRIVATE_KEY)).toBeUndefined()
     expect(queryClient.getQueryData(authQueryKeys.session)).toBeNull()
     expect(backend.calls.me).toBe(2)
@@ -296,7 +296,7 @@ describe('Cierre de sesión', () => {
 
     expect(within(banner()).getByRole('button', { name: 'Cerrando sesión…' })).toBeDisabled()
     releaseLogout()
-    expect(await screen.findByRole('heading', { name: 'Ingresar a StockPilot' })).toBeVisible()
+    expect(await screen.findByRole('heading', { name: 'Ingresar a Starter' })).toBeVisible()
     releaseInFlight()
 
     expect(backend.state.user).toBeNull()
@@ -332,7 +332,7 @@ describe('Cierre de sesión', () => {
 
       await user.click(within(alert).getByRole('button', { name: 'Reintentar' }))
 
-      expect(await screen.findByRole('heading', { name: 'Ingresar a StockPilot' })).toBeVisible()
+      expect(await screen.findByRole('heading', { name: 'Ingresar a Starter' })).toBeVisible()
       expect(backend.state.user).toBeNull()
     },
   )
@@ -357,7 +357,7 @@ describe('Cierre de sesión', () => {
 
     await user.click(within(alert).getByRole('button', { name: 'Reintentar' }))
 
-    expect(await screen.findByRole('heading', { name: 'Ingresar a StockPilot' })).toBeVisible()
+    expect(await screen.findByRole('heading', { name: 'Ingresar a Starter' })).toBeVisible()
     expect(backend.calls.logout).toBe(2)
   })
 
@@ -397,7 +397,7 @@ describe('Cierre de sesión', () => {
     while (document.activeElement !== button) await user.tab()
     await user.keyboard('{Enter}')
 
-    expect(await screen.findByRole('heading', { name: 'Ingresar a StockPilot' })).toBeVisible()
+    expect(await screen.findByRole('heading', { name: 'Ingresar a Starter' })).toBeVisible()
   })
 })
 
@@ -410,7 +410,7 @@ describe('Identidades consecutivas', () => {
     const button = within(banner()).getByRole('button', { name: 'Cerrar sesión' })
     await waitFor(() => expect(button).toBeEnabled())
     await user.click(button)
-    expect(await screen.findByRole('heading', { name: 'Ingresar a StockPilot' })).toBeVisible()
+    expect(await screen.findByRole('heading', { name: 'Ingresar a Starter' })).toBeVisible()
 
     backend.login(personaB)
     regainFocus()

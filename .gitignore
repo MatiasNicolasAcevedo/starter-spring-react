@@ -1,4 +1,4 @@
-# StockPilot · ignores comunes del monorepo.
+# Starter · ignores comunes del monorepo.
 # Cada subproyecto conserva además su propio .gitignore (server/, client/).
 # El kit personal plantilla/ se excluye localmente en .git/info/exclude; no se lista aquí.
 

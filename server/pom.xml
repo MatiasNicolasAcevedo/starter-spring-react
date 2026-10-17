@@ -8,11 +8,11 @@
 		<version>4.1.1</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>server</groupId>
-	<artifactId>server</artifactId>
+	<groupId>com.example</groupId>
+	<artifactId>starter-server</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>StockPilot Server</name>
-	<description>API REST de StockPilot: inventario y ventas para pequeños comercios</description>
+	<name>Starter Server</name>
+	<description>API REST genérica del starter</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -27,13 +27,13 @@
 		<url/>
 	</scm>
 	<properties>
-		<!-- Java 21 LTS: decisión confirmada en PROJECT_CONTEXT §9; el scaffold se generó con 25 (ver docs/adr/0001). -->
+		<!-- Java 21 LTS; decisión base conservada (ADR 0001). -->
 		<java.version>21</java.version>
 		<springdoc.version>3.1.1</springdoc.version>
 		<spotless.version>3.10.4</spotless.version>
 		<palantir-java-format.version>2.102.0</palantir-java-format.version>
 		<jacoco.version>0.8.15</jacoco.version>
-		<!-- Umbrales de cobertura: 0 durante M0 (app sin dominio); M1 los fija en 0.80/0.70 según docs/TESTING.md. -->
+		<!-- Umbrales heredados sin cambios; la feature de referencia los evalúa en su tarea. -->
 		<jacoco.line.minimum>0.00</jacoco.line.minimum>
 		<jacoco.branch.minimum>0.00</jacoco.branch.minimum>
 		<!-- Valor inicial; JaCoCo lo amplía con su agente antes de cada suite. -->

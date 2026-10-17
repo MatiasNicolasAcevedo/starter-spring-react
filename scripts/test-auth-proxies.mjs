@@ -6,7 +6,7 @@ import http from 'node:http';
 import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
-const project = `stockpilot-t002-b2-${process.pid}`;
+const project = `starter-auth-proxy-${process.pid}`;
 const base = ['compose', '--env-file', 'scripts/fixtures/auth-test.env.example', '-p', project,
   '-f', 'docker-compose.yml', '-f', 'compose.auth-test.yml'];
 const echoFile = ['-f', 'scripts/fixtures/compose.proxy-test.yml'];
@@ -134,7 +134,7 @@ function invalidOrigins() {
 }
 
 // Refuse a reused project BEFORE entering the cleanup scope.
-assert.match(project, /^stockpilot-t002-b2-\d+$/);
+assert.match(project, /^starter-auth-proxy-\d+$/);
 assert.equal(JSON.parse(compose(['ps', '--all', '--format', 'json'], true) || '[]').length, 0);
 try {
   // Observe both real proxies directly upstream. Unknown forwarding extensions cannot be inferred from callback alone.

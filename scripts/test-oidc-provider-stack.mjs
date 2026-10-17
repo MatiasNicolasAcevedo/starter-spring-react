@@ -8,7 +8,7 @@ import { join, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
-const project = `stockpilot-t002-b2-provider-${process.pid}`;
+const project = `starter-oidc-provider-${process.pid}`;
 const issuer = 'http://host.docker.internal:8090/default';
 const base = ['compose', '--env-file', 'scripts/fixtures/auth-test.env.example', '-p', project,
   '-f', 'docker-compose.yml', '-f', 'compose.auth-test.yml', '--profile', 'oidc'];
@@ -60,7 +60,7 @@ try {
     const edge = ['C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
       'C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe'].find(existsSync);
     assert.ok(edge, 'Pre-existing Windows Edge required');
-    browserProfile = mkdtempSync(join(tmpdir(), 'stockpilot-b2-browser-'));
+    browserProfile = mkdtempSync(join(tmpdir(), 'starter-oidc-browser-'));
     const dom = run(edge, ['--headless', '--disable-gpu', '--no-first-run',
       `--user-data-dir=${browserProfile}`, '--host-resolver-rules=MAP host.docker.internal 127.0.0.1',
       '--dump-dom', `${issuer}/.well-known/openid-configuration`], 30_000);
@@ -76,7 +76,7 @@ try {
   assert.equal(server.State.Health.Status, 'healthy');
   assert.ok(!server.HostConfig.PortBindings || Object.keys(server.HostConfig.PortBindings).length === 0);
   console.log('Real backend healthy with PostgreSQL 18.6; discovery reached from backend namespace, exact issuer/endpoints and no published backend port.');
-  console.log('B2 provider/topology checks passed. StockPilot OIDC callback/session/negatives remain B3.');
+  console.log('B2 provider/topology checks passed. Starter OIDC callback/session/negatives remain B3.');
 } catch {
   console.error(`B2 provider stack failed at ${stage}; subprocess output and response bodies omitted.`);
   process.exitCode = 1;
@@ -88,7 +88,7 @@ try {
   if (browserProfile) {
     const target = resolve(browserProfile);
     const temporaryRoot = resolve(tmpdir()) + sep;
-    assert.ok(target.startsWith(temporaryRoot) && target.startsWith(resolve(join(tmpdir(), 'stockpilot-b2-browser-'))), 'Verified isolated browser profile path');
+    assert.ok(target.startsWith(temporaryRoot) && target.startsWith(resolve(join(tmpdir(), 'starter-oidc-browser-'))), 'Verified isolated browser profile path');
     rmSync(target, { recursive: true, force: true });
     console.log('Cleanup complete for the verified isolated Windows browser profile.');
   }
