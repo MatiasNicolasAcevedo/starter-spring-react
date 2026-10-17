@@ -8,7 +8,17 @@
 
 ## Secuencia contratada
 
-Cada parte requiere revisión, squash merge confirmado y CI vigente antes de activar la siguiente. Los contratos futuros están en draft, sin ejecución ni evidencia atribuida.
+El objetivo vigente es completar este mismo starter de A a E. Estamos entre A terminada y la implementación de B; publicar el plan de B no completa esa parte ni inicia una etapa distinta. Cada parte requiere revisión, squash merge confirmado y CI vigente antes de activar la siguiente.
+
+| Parte | Estado real | Resultado en palabras simples |
+|---|---|---|
+| A | done; PR #1 MERGED y CI verificada | Extraer y neutralizar la base, conservar versiones y contratos |
+| B | ready; plan publicado, implementación pendiente | Levantar, comprobar, detener y retomar la aplicación conectada a su DB |
+| C | draft; espera B MERGED | Incorporar un ejemplo removible completo con permisos y pruebas |
+| D | draft; espera C MERGED | Personalizar la base con un inicializador y habilitarla como template beta |
+| E | draft; espera D MERGED | Comprobar desde otra copia limpia que sirve para empezar otra aplicación |
+
+La aceptación detallada está abajo y en la tarea/spec de cada parte. Refinar solo la próxima parte al habilitarse; una tarea ready pasa a implementación, sin otra ronda de planificación salvo cambio material. Aplicar documentación mínima útil de AGENTS durante el trabajo: comandos de uso en README/SETUP, decisiones en ADR, evidencia en tarea/PR y estado breve con enlaces en el tablero. Guardar lecciones generales en el kit local existente cuando estén comprobadas, sin convertir su mantenimiento en otro entregable que frene B…E.
 
 | Parte / tarea | Depende | Salida y prueba exigidas |
 |---|---|---|

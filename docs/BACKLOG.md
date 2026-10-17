@@ -23,4 +23,4 @@ C…E permanecen draft con dependencia secuencial; ver ROADMAP y sus contratos e
 |---|---|---|
 | [T-000](tasks/T-000-starter-extraction.md) | done | A: PR #1 MERGED, squash 47184f725f8a89528acac0aa3e7383f2334258de; FULL PR 39044690435 y main 39045270616 verificadas success, seis jobs verdes |
 
-Revisión del ciclo de cierre de A registrada en ROADMAP el 2026-10-17. Única tarea ready T-001 (M0, no cuenta para ciclo de producto); planificación publicada en rama, sin implementación ni revisión de código propias. HANDOFF 0/22 NO_LISTO.
+Objetivo y estado de A…E: ROADMAP. Única tarea ready T-001; siguiente sesión implementa B con documentación mínima útil según AGENTS, sin nuevo ciclo de planificación. HANDOFF 0/22 NO_LISTO; detalle/evidencia en T-000/T-001.

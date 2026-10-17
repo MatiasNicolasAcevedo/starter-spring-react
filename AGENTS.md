@@ -45,6 +45,9 @@ Bugfix demuestra rojo antes del arreglo; reglas críticas con negativos que dete
 
 ## Documentación y cierre
 Actualizar tarea, STATUS, BACKLOG y HANDOFF juntos; docs-check antes de publicar.
+Documentación mínima útil: cada regla, contrato y evidencia tiene una fuente canónica; los demás documentos enlazan y resumen solo su estado. STATUS contiene próxima acción/precondición y checkpoint vigente, no una copia del historial ni de los protocolos.
+Agrupar correcciones documentales con el avance al que pertenecen; no abrir sesiones/PRs ni repetir gates solo por reformular texto. Conservar checks exigidos por TESTING, evidencia por SHA y checkpoint antes de operaciones largas. Cada sesión debe producir implementación verificable, una decisión necesaria o un bloqueo concreto; no volver a planificar una tarea ready sin un cambio material.
+Lecciones genéricas comprobadas o decisiones expresas del dueño se incorporan a la sección existente del kit local; propuestas y contratos pendientes no se presentan como soluciones probadas. El producto sigue autosuficiente sin el kit.
 No done con PR abierto. No confundir heredado con verificado ni aprobado con MERGED.
 Checkpoint antes de operaciones largas: comandos, logs saneados, SHA, cleanup, pendientes y próximo paso.
 STATUS mantiene un único prompt vigente con precondición observable; si no coincide, sin cambios.
