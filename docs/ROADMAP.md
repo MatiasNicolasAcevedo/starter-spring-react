@@ -18,7 +18,7 @@ El objetivo vigente es completar este mismo starter de A a E. Estamos entre A te
 | D | draft; espera C MERGED | Personalizar la base con un inicializador y habilitarla como template beta |
 | E | draft; espera D MERGED | Comprobar desde otra copia limpia que sirve para empezar otra aplicación |
 
-La aceptación detallada está abajo y en la tarea/spec de cada parte. Refinar solo la próxima parte al habilitarse; una tarea ready pasa a implementación, sin otra ronda de planificación salvo cambio material. Aplicar documentación mínima útil de AGENTS durante el trabajo: comandos de uso en README/SETUP, decisiones en ADR, evidencia en tarea/PR y estado breve con enlaces en el tablero. Guardar lecciones generales en el kit local existente cuando estén comprobadas, sin convertir su mantenimiento en otro entregable que frene B…E.
+La aceptación detallada está abajo y en la tarea/spec de cada parte. Refinar solo la próxima parte al habilitarse; una tarea ready pasa a implementación, sin otra ronda de planificación salvo cambio material. Aplicar documentación mínima útil de AGENTS durante el trabajo: comandos de uso en README/SETUP, decisiones en ADR, evidencia en tarea/PR y estado breve con enlaces en el tablero. Materializar aprendizajes en esa base, sin mantener otro manual vivo en el kit transitorio.
 
 | Parte / tarea | Depende | Salida y prueba exigidas |
 |---|---|---|
@@ -31,6 +31,7 @@ La aceptación detallada está abajo y en la tarea/spec de cada parte. Refinar s
 ## Límites de cierre
 En B, Docker Desktop + Git Bash deben bastar para up/check/down sin Maven, PostgreSQL ni Node instalados en el host; usar runners containerizados para los probes reproducibles y declarar cualquier navegador host opcional. Debe haber cero fallback del perfil real y ningún cambio global de hosts. El check valida estado y contenido, no un 200 que sea index.html. El arranque fallido limpia lo recién creado sin borrar volúmenes preexistentes.
 En D se contratan además Dependabot semanal, política de actualización con FULL para majors y workflow manual/semanal de personalización/adopción temporal. La CI debe comprobar inicializador, lista de escrituras, build/docs-check e inventario, sin crear otro repo. La autorización para marcar este mismo repo como template en D es específica; no permite modificar las protecciones iniciales.
+Decisión del dueño 2026-10-17: [destino autosuficiente](../PROJECT_CONTEXT.md#adopción-futura). D integra/pule el formulario de contexto dentro del repo y consolida la guía de crear desde template, adoptar y hacer crecer la arquitectura; E prueba el recorrido sin `plantilla/`, incluido el contexto nuevo. El kit queda transitorio hasta esa validación; su eliminación local posterior corresponde al dueño y no al inicializador. D/E siguen draft y secuenciales: aquí solo se registra su salida aceptada, sin implementarlas ni agregar una etapa al cierre.
 En E se usan defaults ficticios primero y contexto de otra app después; registrar comandos, SHA, fecha, exit codes, evidencias saneadas y labels sin huérfanos. El proyecto limpio debe poder detenerse y retomarse con datos persistentes propios antes de limpiar sus recursos de prueba.
 
 Beta solo tras D; adopción validada solo tras E. Las comprobaciones de A no acreditan B…E.

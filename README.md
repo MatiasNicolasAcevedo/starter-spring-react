@@ -2,7 +2,9 @@
 
 Base genérica Java 21 / Spring Boot 4.1.1, React/TypeScript/Vite y PostgreSQL 18.6. MIT · Matias Nicolas Acevedo.
 
-**Estado: parte A, extracción e inventario en revisión pendiente.** No es beta ni template validado. Contratos B…E en [ROADMAP](docs/ROADMAP.md); pruebas propias y fecha de la última validación en [T-000](docs/tasks/T-000-starter-extraction.md). Origen y límites de continuidad: [PROVENANCE](docs/PROVENANCE.md).
+**Estado: A terminada y mergeada; B con plan listo, pendiente de implementación.** No es beta ni template validado. Estado y contratos B…E en [ROADMAP](docs/ROADMAP.md); pruebas propias y fecha de la última validación en [T-000](docs/tasks/T-000-starter-extraction.md). Origen y límites de continuidad: [PROVENANCE](docs/PROVENANCE.md).
+
+**Destino:** crear aplicaciones con «Use this template → Create a new repository», personalizar y verificar la base, y empezar el primer flujo. D integrará el formulario de contexto y la guía breve de adopción/crecimiento; E comprobará el recorrido sin kit personal. Objetivo aceptado y condiciones de retiro de `plantilla/`: [PROJECT_CONTEXT](PROJECT_CONTEXT.md#adopción-futura).
 
 ## Modo local explícito sin credenciales
 Requiere Docker Desktop abierto, Git Bash y Node >=24 en el host para el control E2E/sondas; primer build necesita red. Desde raíz en Git Bash:

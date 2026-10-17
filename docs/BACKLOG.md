@@ -14,6 +14,7 @@ Ninguna implementación ni PR activo.
 C…E permanecen draft con dependencia secuencial; ver ROADMAP y sus contratos en tasks/. Ninguna se activa por publicar el plan de B.
 
 ## Por refinar
+- En D, integrar/pulir el formulario de contexto y consolidar adopción desde GitHub template/guía de crecimiento; en E, probar todo el recorrido sin kit. Objetivo aceptado en PROJECT_CONTEXT y salidas registradas en T-003/T-004; permanecen draft, sin ampliar B.
 - En C, fijar al menos 80% de líneas y 70% de ramas para dominio/servicios/hooks de referencia, sin reducir suites ni umbrales heredados.
 - En C, cubrir logout con mutación de referencia en vuelo; invalidación evita repoblar cache de otra identidad.
 - En una tarea futura, evaluar endurecimiento del callback fallido con sesión previa: cerrar replay invalida la sesión y permite logout forzado cross-site. No reabrir auth dentro de A o B.
