@@ -1,0 +1,74 @@
+# Configuración común. Valores por entorno llegan por variables (ver .env.example y docs/SETUP.md);
+# el datasource lo aportan SPRING_DATASOURCE_* en Compose o @ServiceConnection en pruebas.
+spring:
+  profiles:
+    default: google
+  application:
+    name: stockpilot-server
+  autoconfigure:
+    # Sin usuarios en memoria ni contraseña generada en logs: la identidad llega solo por OIDC (T-002).
+    exclude: org.springframework.boot.security.autoconfigure.UserDetailsServiceAutoConfiguration
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+  flyway:
+    locations: classpath:db/migration
+  mvc:
+    problemdetails:
+      enabled: true
+
+stockpilot:
+  # Versión del artefacto Maven, filtrada en el build por spring-boot-starter-parent (delimitador @).
+  version: "@project.version@"
+  api-docs:
+    # ADR 0003: OpenAPI/Swagger UI opt-in, solo con APP_PUBLIC_URL HTTP loopback (ApiDocsAccess valida al arrancar).
+    # Mapeo explícito: el binding relajado esperaría STOCKPILOT_APIDOCS_ENABLED.
+    enabled: ${STOCKPILOT_API_DOCS_ENABLED:false}
+
+# El mismo interruptor gobierna springdoc y el permiso GET de SecurityConfig; apagado no registra rutas.
+springdoc:
+  api-docs:
+    enabled: ${stockpilot.api-docs.enabled}
+    path: /api/docs/openapi
+  swagger-ui:
+    enabled: ${stockpilot.api-docs.enabled}
+    # Raíz de la UI = /api/docs/ (recursos en /api/docs/swagger-ui/**): atraviesa los proxies existentes de /api/.
+    path: /api/docs/swagger-ui.html
+    supported-submit-methods: get
+    persist-authorization: false
+    # Sin la URL de ejemplo externa (petstore) en el inicializador: solo llamadas same-origin.
+    disable-swagger-default-url: true
+
+server:
+  # No host publication in ordinary Compose; nginx/Vite remove incoming forwarding metadata.
+  # Direct loopback diagnostics MUST override this to none (compose.diagnostic.yml).
+  forward-headers-strategy: framework
+  servlet:
+    session:
+      timeout: 30m
+      tracking-modes: cookie
+      cookie:
+        name: JSESSIONID
+        path: /
+        http-only: true
+        same-site: lax
+        # Secure is derived from validated APP_PUBLIC_URL by OidcConfiguration.
+  error:
+    include-stacktrace: never
+    include-message: never
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: never

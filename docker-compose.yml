@@ -1,0 +1,133 @@
+# Stack de desarrollo de StockPilot (Docker Compose V2). Uso: docker compose up -d --build --wait
+# - db, server y client: perfil por defecto. El navegador usa solo el client (http://127.0.0.1:5173).
+# - client-dev: perfil "dev" (Vite con HMR, opcional).
+# - server-tests, client-tests y docs-check: perfil "verify", los invoca scripts/verify.sh.
+# Los defaults coinciden con .env.example; un .env local (ignorado) puede sobrescribirlos.
+name: stockpilot
+
+services:
+  db:
+    # Misma imagen fijada que Testcontainers (TestcontainersConfiguration.POSTGRES_IMAGE); docs-check lo verifica.
+    image: postgres:18.6
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-stockpilot}
+      POSTGRES_USER: ${POSTGRES_USER:-stockpilot}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-stockpilot-dev-only}
+    volumes:
+      # PostgreSQL 18+: el volumen se monta en /var/lib/postgresql (PGDATA = /var/lib/postgresql/18/docker).
+      - db-data:/var/lib/postgresql
+    ports:
+      - "127.0.0.1:${DB_PORT:-55432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$${POSTGRES_USER}\" -d \"$${POSTGRES_DB}\""]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 10s
+
+  server:
+    build:
+      context: ./server
+      target: runtime
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${POSTGRES_DB:-stockpilot}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-stockpilot}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-stockpilot-dev-only}
+      APP_PUBLIC_URL: &public-origin ${APP_PUBLIC_URL:-http://127.0.0.1:${CLIENT_PORT:-5173}}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
+      # OpenAPI/Swagger UI (ADR 0003): apagado; opt-in solo con APP_PUBLIC_URL HTTP loopback, en /api/docs/.
+      STOCKPILOT_API_DOCS_ENABLED: ${STOCKPILOT_API_DOCS_ENABLED:-false}
+      SERVER_FORWARD_HEADERS_STRATEGY: framework
+    depends_on:
+      db:
+        condition: service_healthy
+    # Internal only. Direct loopback access requires compose.diagnostic.yml (forwarding none).
+    expose: ["8080"]
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8080/actuator/health/readiness"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 20s
+
+  # Origen público del navegador: SPA compilada en nginx + proxy de /api, /oauth2, /login/oauth2/code y /logout a server.
+  client:
+    build:
+      context: ./client
+      target: runtime
+    environment:
+      APP_PUBLIC_URL: *public-origin
+    depends_on:
+      server:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:${CLIENT_PORT:-5173}:80"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null --header \"Host: $${APP_PUBLIC_URL#*://}\" http://127.0.0.1/healthz"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 5s
+
+  # Desarrollo con HMR (opcional): docker compose --profile dev up -d --build client-dev
+  # Monta solo fuentes; node_modules queda en la imagen. Polling porque los bind mounts de Windows no emiten eventos.
+  client-dev:
+    profiles: ["dev"]
+    build:
+      context: ./client
+      target: dev
+    environment:
+      STOCKPILOT_WATCH_POLLING: "true"
+      APP_PUBLIC_URL: *public-origin
+    depends_on:
+      server:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:${CLIENT_DEV_PORT:-5174}:5173"
+    volumes:
+      - ./client/src:/app/src:ro
+      - ./client/public:/app/public:ro
+      - ./client/index.html:/app/index.html:ro
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null --header \"Host: $${APP_PUBLIC_URL#*://}\" http://127.0.0.1:5173/"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 10s
+
+  # Runner de pruebas client: typecheck, lint, format:check, test:ci (cobertura) y build dentro de la imagen.
+  client-tests:
+    profiles: ["verify"]
+    build:
+      context: ./client
+      target: verify
+
+  # Runner de pruebas backend: ./mvnw clean verify (Spotless, unitarios, integración Testcontainers, JaCoCo).
+  # Recibe el socket Docker para crear contenedores PostgreSQL hermanos; ningún servicio de la app lo monta.
+  server-tests:
+    profiles: ["verify"]
+    image: eclipse-temurin:21.0.12_8-jdk-noble
+    working_dir: /workspace
+    command: ["./mvnw", "-B", "-ntp", "clean", "verify"]
+    environment:
+      TESTCONTAINERS_HOST_OVERRIDE: host.docker.internal
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./server:/workspace
+      - m2-cache:/root/.m2
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  # Validación documental determinista (scripts/docs-check.mjs), sin dependencias npm.
+  docs-check:
+    profiles: ["verify"]
+    image: node:24.21.0-alpine
+    working_dir: /repo
+    command: ["node", "scripts/docs-check.mjs"]
+    volumes:
+      - .:/repo:ro
+
+volumes:
+  db-data:
+  m2-cache:

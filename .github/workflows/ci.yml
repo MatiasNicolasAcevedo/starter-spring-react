@@ -1,0 +1,200 @@
+# CI de StockPilot. Política y reglas de eficiencia en docs/TESTING.md.
+# verify-required es el check requerido por el ruleset de main: siempre se emite e informa política, base y HEAD.
+# Su decisión vive en scripts/ci/verify-required.mjs; clasificador y agregado se prueban en classify antes de usarse.
+name: ci
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened, ready_for_review]
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  # Fase del gate: debe coincidir con scripts/verify.sh (lo valida docs-check).
+  GATE_PHASE: FULL
+  NODE_VERSION: 24.21.0
+  # Formato de versión de Temurin en actions/setup-java (equivale a la imagen eclipse-temurin:21.0.12_8).
+  JAVA_VERSION: 21.0.12+8.0.LTS
+
+jobs:
+  classify:
+    name: classify
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      policy: ${{ steps.policy.outputs.policy }}
+      draft: ${{ steps.policy.outputs.draft }}
+      base: ${{ steps.policy.outputs.base }}
+      head: ${{ steps.policy.outputs.head }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      # Repos git temporales y matriz del agregado: si fallan, classify falla y verify-required rechaza.
+      - name: Pruebas del clasificador y del agregado
+        run: node --test "scripts/ci/*.test.mjs"
+      - id: policy
+        name: Clasificar el diff
+        env:
+          EVENT: ${{ github.event_name }}
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD: ${{ github.event.pull_request.head.sha }}
+          PR_DRAFT: ${{ github.event.pull_request.draft }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PUSH_BEFORE: ${{ github.event.before }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ "$EVENT" = "pull_request" ]; then
+            base="$PR_BASE"; head="$PR_HEAD"
+            # Estado draft vigente: el payload de un synchronize puede quedar viejo si el PR pasó a ready
+            # mientras tanto y concurrency canceló el run de ready_for_review (trampa TR-07).
+            draft="$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER" --jq .draft 2>/dev/null || echo "$PR_DRAFT")"
+          else base="$PUSH_BEFORE"; head="$GITHUB_SHA"; draft=false; fi
+          node scripts/ci/classify-diff.mjs --base "$base" --head "$head" --phase "$GATE_PHASE" | tee -a "$GITHUB_OUTPUT"
+          { echo "draft=$draft"; echo "base=$base"; echo "head=$head"; } >> "$GITHUB_OUTPUT"
+
+  docs:
+    name: docs-check
+    needs: classify
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - run: node scripts/docs-check.mjs
+
+  server:
+    name: server
+    needs: classify
+    if: needs.classify.outputs.policy != 'DOCS_ONLY'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
+        with:
+          distribution: temurin
+          java-version: ${{ env.JAVA_VERSION }}
+          cache: maven
+          cache-dependency-path: server/pom.xml
+      - name: Backend rápido (draft)
+        if: needs.classify.outputs.draft == 'true'
+        run: ./mvnw -B -ntp spotless:check test
+      - name: Backend completo (clean verify con Testcontainers)
+        if: needs.classify.outputs.draft != 'true'
+        run: ./mvnw -B -ntp clean verify
+      - name: Reportes de pruebas (solo en fallos)
+        if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: server-test-reports
+          path: |
+            server/target/surefire-reports/
+            server/target/failsafe-reports/
+          retention-days: 7
+
+  client:
+    name: client
+    needs: classify
+    if: needs.classify.outputs.policy != 'DOCS_ONLY'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: client
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: client/package-lock.json
+      - run: npm ci --no-audit --no-fund
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run format:check
+      - run: npm run test:ci
+      - run: npm run build
+
+  # E2E real en paralelo, también en draft para confirmar el HEAD publicado: build SPA/nginx, API, PostgreSQL y OIDC
+  # local en un proyecto Compose único sin puertos host. El navegador nunca recibe el socket Docker.
+  e2e:
+    name: e2e
+    needs: classify
+    if: needs.classify.outputs.policy != 'DOCS_ONLY'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      STOCKPILOT_E2E_PROJECT: stockpilot-e2e-ci-${{ github.run_id }}-${{ github.run_attempt }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # Node del host: control cerrado de lifecycle/DB del proyecto propio (scripts/run-e2e.mjs).
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: E2E Playwright (desktop 1280 / móvil 375)
+        timeout-minutes: 40
+        run: bash scripts/verify.sh --e2e
+      # Solo el export saneado: sanitized/ existe únicamente si su auditoría pasó. Brutos, control y logs nunca se suben.
+      - name: Export saneado (solo en fallos)
+        if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: e2e-sanitized-report
+          path: e2e/artifacts/${{ env.STOCKPILOT_E2E_PROJECT }}/sanitized/
+          if-no-files-found: ignore
+          retention-days: 7
+
+  verify-required:
+    name: verify-required
+    needs: [classify, docs, server, client, e2e]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Evaluar política y suites exigidas
+        env:
+          POLICY: ${{ needs.classify.outputs.policy }}
+          DRAFT: ${{ needs.classify.outputs.draft }}
+          BASE: ${{ needs.classify.outputs.base }}
+          HEAD: ${{ needs.classify.outputs.head }}
+          CLASSIFY: ${{ needs.classify.result }}
+          DOCS: ${{ needs.docs.result }}
+          SERVER: ${{ needs.server.result }}
+          CLIENT: ${{ needs.client.result }}
+          E2E: ${{ needs.e2e.result }}
+        run: node scripts/ci/verify-required.mjs
