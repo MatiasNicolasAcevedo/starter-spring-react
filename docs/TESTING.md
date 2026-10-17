@@ -58,7 +58,7 @@ Eficiencia de la capa gratuita: jobs en paralelo con `timeout-minutes`, caché M
 
 
 ## Cobertura
-Se conservan los umbrales exactos del snapshot: backend JaCoCo LINE/BRANCH 0.00 para base sin dominio, reporte unit+IT combinado; frontend coverage-v8 sin mínimos declarados. No se reducen suites/asserts/umbrales para obtener verde. C evalúa el mínimo para dominio/servicios/hooks de la referencia (política base 80% líneas/70% ramas) y deja justificación sin atribuir cobertura heredada como medida propia.
+Se conservan los umbrales exactos del snapshot: backend JaCoCo LINE/BRANCH 0.00 para base sin dominio, reporte unit+IT combinado; frontend coverage-v8 sin mínimos declarados. No se reducen suites/asserts/umbrales para obtener verde. Desde la primera feature de dominio, C fija al menos 80% líneas/70% ramas para dominio/servicios/hooks de la referencia, conservando la política heredada sin atribuir su cobertura como medida propia.
 
 ## Reglas y negativos
 Bugfix primero rojo pertinente, luego arreglo mínimo. Datos ficticios propios, Clock inyectado, sin orden/red externa/retries arbitrarios. Capturar exit real del proceso, no de una tubería.

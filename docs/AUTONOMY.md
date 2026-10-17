@@ -32,7 +32,7 @@ El traspaso a Junie Lite no revoca estos permisos Git. Si una tarea requiere red
 | Auto-merge de GitHub | Deshabilitado |
 | Secret scanning / push protection | Activos |
 | Ruleset `main-protection` (id 25305930) | refs/heads/main; PR obligatorio con 0 aprobaciones formales; solo squash; sin eliminación; sin force push (non-fast-forward); sin actores con bypass |
-| Check requerido | `verify-required` con rama actualizada (`strict`): pendiente de agregar tras su primer reporte en el PR de A, único paso restante del bootstrap autorizado |
+| Check requerido | `verify-required` (GitHub Actions, integración 15368), rama actualizada (`strict`), do_not_enforce_on_create=false; agregado el 2026-10-17 después del primer reporte terminado en PR #1 (run 39042564145) |
 
 Después de esta configuración ningún agente modifica, relaja ni elimina rulesets, ajustes de merge, visibilidad, permisos o planes. Si una protección bloquea un PR, se conserva el checkpoint y se informa al dueño.
 
@@ -66,7 +66,7 @@ Una sesión nueva reduce el arrastre de contexto, pero no es una revisión human
 | Aspecto | Valor | Evidencia / condición |
 |---|---|---|
 | Continuidad | `POR_SESION` | El dueño abre cada sesión con el prompt de [STATUS.md](STATUS.md). No hay dispatcher instalado ([ORCHESTRATION.md](ORCHESTRATION.md)) |
-| Merge | `AUTOMATICO_ELEGIBLE` | Condicional a completar verify-required tras primer reporte y revisión independiente; ningún merge propio ejecutado |
+| Merge | `AUTOMATICO_ELEGIBLE` | Bootstrap completo; requiere veredicto de sesión distinta y checks verdes del HEAD/base vigentes. Ningún merge propio ejecutado |
 
 ## Alcance de esta autorización
 Solo creación/configuración inicial de este repo y partes A…E secuenciales; esta sesión implementa A. No crear/borrar otros repos. No operar Google real, datos persistentes ajenos ni el origen. No marcar template antes de D ni adopción validada antes de E. La constancia final tiene el único límite definido en PROVENANCE.

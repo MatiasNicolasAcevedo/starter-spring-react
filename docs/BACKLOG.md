@@ -1,11 +1,11 @@
 # Tablero vivo
 
-Próxima acción: T-000, completar A y publicar para revisión en sesión distinta.
+Próxima acción: T-000, revisar exclusivamente A en sesión distinta sobre el HEAD publicado con CI FULL verde.
 
 ## En vuelo
 | Tarea | Estado | Salida |
 |---|---|---|
-| [T-000](tasks/T-000-starter-extraction.md) | in_progress | A: extracción e inventario neutralizados |
+| [T-000](tasks/T-000-starter-extraction.md) | in_review | A: extracción e inventario neutralizados, PR #1 ready |
 
 ## Listas
 Ninguna hasta el merge de A.
@@ -14,7 +14,7 @@ Ninguna hasta el merge de A.
 B…E permanecen draft con dependencia secuencial; ver ROADMAP y sus contratos en tasks/.
 
 ## Por refinar
-- En C, fijar cobertura para la feature de referencia según riesgo, sin reducir suites ni umbrales heredados.
+- En C, fijar al menos 80% de líneas y 70% de ramas para dominio/servicios/hooks de referencia, sin reducir suites ni umbrales heredados.
 - En C, cubrir logout con mutación de referencia en vuelo; invalidación evita repoblar cache de otra identidad.
 - En una tarea futura, evaluar endurecimiento del callback fallido con sesión previa: cerrar replay invalida la sesión y permite logout forzado cross-site. No reabrir auth dentro de A.
 
