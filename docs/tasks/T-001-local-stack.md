@@ -1,6 +1,6 @@
 ---
 id: T-001
-status: ready
+status: in_progress
 executor: frontier
 role: implementer
 milestone: M0
@@ -59,3 +59,10 @@ Decisión posterior del dueño en esta sesión planner: registrar en esta misma 
 Reconciliación previa a este ajuste: HEAD local/tracking/remoto `4b23864b94eb683d04c4b86a9913df8d3a5a116b`, main en el squash de A y CI 39045270616 completed/success, ningún PR abierto. Validación: docs-check exit 0 (41 Markdown, 5 tareas, 0/22), diff sin errores; sin FULL nuevo. Publicación documental en esta rama, SHA final comprobado en cierre.
 2026-10-17, aclaración expresa del dueño en esta misma sesión planner: el objetivo sigue siendo completar A…E con documentación precisa y necesaria. Se explicita el estado real en ROADMAP, se abrevia STATUS y se incorpora la regla de fuentes canónicas en AGENTS y el kit local ignorado. Sin nueva tarea, replanteo de B, cambios de aceptación/pruebas ni implementación. Identidad de sesión e impacto documental: ver registro anterior. La siguiente acción sigue siendo implementar B, no otra sesión de planificación.
 Validación del ajuste: docs-check exit 0 (41 Markdown, 5 tareas, 0/22), diff sin errores; STATUS 695 → 352 palabras. Kit local v1.15: tres archivos con versión coherente, fences cerrados y 15 enlaces relativos con destino existente; ignorado y fuera de índice/Git. Sin FULL nuevo ni recursos creados.
+
+## Ejecución implementer · 2026-10-17
+Sesión nueva, rol implementer; Codex desktop/API, terminal PowerShell y Git Bash, modelo declarado GPT-6. Runtime exacto y esfuerzo efectivo no expuestos; no atribuir Sol/high. Sin delegación ni apertura de otra sesión/modelo. Impacto previsto vigente: comportamiento lifecycle persistente; API readiness exacta; permisos públicos solo GET readiness y propiedad Docker comprobada; datos propios persistentes sin migración; UI disponibilidad API/DB real. No cambios de C…E.
+
+Conciliación previa: árbol limpio, ningún PR abierto, PR #1 MERGED; main local/tracking/remoto 47184f725f8a89528acac0aa3e7383f2334258de, CI 39045270616 completed/success. Rama local/tracking/remota e21479dd94f454c3cbad9356244a80e57e3cd6c0; primer commit 0310e73e77e7200c0445df285138acbc1792ddbc, posteriores exclusivamente Markdown. Reutilizada sin recrear.
+
+Checkpoint previo a baseline: COMPOSE_ENV_FILES=.env.example COMPOSE_PROJECT_NAME=starter-b-baseline-20261017-1827 STARTER_E2E_PROJECT=starter-e2e-b-baseline-20261017-1827 STARTER_SERVER_TESTS=container bash scripts/verify.sh. Docker 28.5.1/Compose 2.40.2, Node host 24.21.0. Ausencia por labels de container -a/network/volume comprobada para ambos proyectos (0/0/0); sin puertos host de aplicación previstos. Log local ignorado %TEMP%/starter-B-baseline-20261017-1827.log; reportes E2E saneados bajo e2e/artifacts del proyecto. Cleanup: solo proyectos nuevos indicados por labels, verify down --volumes tras finalizar; E2E conserva su cleanup. Pendientes: baseline propia → B1 → B2 → B3 → B4 → FULL/CI → revisor independiente.

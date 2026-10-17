@@ -1,14 +1,14 @@
 # Tablero vivo
 
-Próxima acción: T-001 ready, implementar exclusivamente B1 → B2 → B3 → B4 en sesión nueva sobre la planificación publicada de chore/t-001-local-stack, después de verificar STATUS.
+Próxima acción: T-001 in_progress, baseline propia y B1 → B2 → B3 → B4 en chore/t-001-local-stack; checkpoint en la tarea.
 
 ## En vuelo
-Ninguna implementación ni PR activo.
-
-## Listas
 | Tarea | Estado | Salida |
 |---|---|---|
-| [T-001](tasks/T-001-local-stack.md) | ready | B refinada con S-002 v1; lifecycle persistente → readiness DB/proxies → UI → integración/FULL; implementación pendiente, sin PR todavía |
+| [T-001](tasks/T-001-local-stack.md) | in_progress | Baseline propia y ejecución secuencial B1…B4; PR draft por abrir |
+
+## Listas
+Ninguna.
 
 ## Bloqueadas
 C…E permanecen draft con dependencia secuencial; ver ROADMAP y sus contratos en tasks/. Ninguna se activa por publicar el plan de B.
@@ -24,4 +24,4 @@ C…E permanecen draft con dependencia secuencial; ver ROADMAP y sus contratos e
 |---|---|---|
 | [T-000](tasks/T-000-starter-extraction.md) | done | A: PR #1 MERGED, squash 47184f725f8a89528acac0aa3e7383f2334258de; FULL PR 39044690435 y main 39045270616 verificadas success, seis jobs verdes |
 
-Objetivo y estado de A…E: ROADMAP. Única tarea ready T-001; siguiente sesión implementa B con documentación mínima útil según AGENTS, sin nuevo ciclo de planificación. HANDOFF 0/22 NO_LISTO; detalle/evidencia en T-000/T-001.
+Objetivo y estado de A…E: ROADMAP. Única tarea activa T-001; HANDOFF 0/22 NO_LISTO; detalle/evidencia en T-000/T-001.
