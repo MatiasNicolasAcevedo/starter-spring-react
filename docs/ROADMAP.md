@@ -8,12 +8,12 @@
 
 ## Secuencia contratada
 
-El objetivo vigente es completar este mismo starter de A a E. Estamos entre A terminada y la implementación de B; publicar el plan de B no completa esa parte ni inicia una etapa distinta. Cada parte requiere revisión, squash merge confirmado y CI vigente antes de activar la siguiente.
+El objetivo vigente es completar este mismo starter de A a E. A está terminada; B está implementada y en revisión independiente, pendiente de merge. Publicar su implementación no completa B ni habilita C. Cada parte requiere revisión, squash merge confirmado y CI vigente antes de activar la siguiente.
 
 | Parte | Estado real | Resultado en palabras simples |
 |---|---|---|
 | A | done; PR #1 MERGED y CI verificada | Extraer y neutralizar la base, conservar versiones y contratos |
-| B | ready; plan publicado, implementación pendiente | Levantar, comprobar, detener y retomar la aplicación conectada a su DB |
+| B | in_review; implementación publicada, revisión/merge pendientes | Levantar, comprobar, detener y retomar la aplicación conectada a su DB |
 | C | draft; espera B MERGED | Incorporar un ejemplo removible completo con permisos y pruebas |
 | D | draft; espera C MERGED | Personalizar la base con un inicializador y habilitarla como template beta |
 | E | draft; espera D MERGED | Comprobar desde otra copia limpia que sirve para empezar otra aplicación |

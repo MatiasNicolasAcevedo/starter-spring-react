@@ -1,6 +1,6 @@
 ---
 id: T-001
-status: in_progress
+status: in_review
 executor: frontier
 role: implementer
 milestone: M0
@@ -40,7 +40,7 @@ Matriz obligatoria B-AC-01…11 en S-002, sin flexibilizar ROADMAP ni suite here
 Bugfix de readiness y cualquier regresión: demostrar rojo pertinente antes del arreglo; reglas críticas requieren negativo que detecte su ausencia y control positivo, sin mocks de API propia en E2E. Mantener suites completas de auth y dev-auth; `test` no acredita IT PostgreSQL. No actualizar aceptación/tests/umbrales para pasar.
 Integrar ensayos nuevos en el gate correspondiente de forma reproducible, no dejarlos solo como comandos manuales. FULL de B: `bash scripts/verify.sh` sin opciones con env-file ficticio/proyectos explícitos, clean verify con IT, client completo y Playwright real. Matrices CI/docs y pruebas de lifecycle/proxies relevantes también deben pasar. Revisión independiente sobre HEAD/base publicados y CI FULL, sin autorrevisión ni merge propio. T-001 sigue distinta de done mientras el PR esté abierto.
 
-## Checkpoint ejecutable antes de operaciones largas
+## Checkpoint de planificación previo a la implementación
 Base conciliada: `47184f725f8a89528acac0aa3e7383f2334258de`; primer commit documental `0310e73e77e7200c0445df285138acbc1792ddbc`. Antes de implementar comparar HEAD local/tracking/remoto de `chore/t-001-local-stack`, árbol limpio, main sin cambios, T-001 ready y ningún PR abierto. La planificación queda publicada por push de esta rama sin PR; implementer reutiliza rama, transiciona in_progress con tarea/STATUS/BACKLOG/HANDOFF coherentes, commit/push de tablero y abre el único PR draft según protocolo. No recrear rama desde main perdiendo estos commits.
 
 Inicio de sesión implementer: leer AGENTS raíz/server/client, AUTONOMY, STATUS/BACKLOG/HANDOFF/ROADMAP, T-001/S-002, protocolo implementer y SETUP TR-01…TR-12/TESTING; registrar identidad/impacto reales antes de editar. Línea de base propia antes de código: `COMPOSE_ENV_FILES=.env.example COMPOSE_PROJECT_NAME=starter-b-baseline-<unico> STARTER_E2E_PROJECT=starter-e2e-b-baseline-<unico> STARTER_SERVER_TESTS=container bash scripts/verify.sh`, con Git Bash y Node >=24 para el controlador FULL. Sustituir sufijos por nombres únicos y comprobar ausencia por labels antes de usarlos.
@@ -103,4 +103,4 @@ Preflight 0/0/0 para ambos namespaces. Huella SHA-256 técnica previa `b04d59e31
 
 Resultado FULL 02: exit 0 y cleanup exit 0. Docs/backend/client/E2E OK: 81 unit/slices + 62 IT PostgreSQL, client 109/109 con todos sus checks, Playwright 13/13 sin fallos/errores; export auditado en `e2e/artifacts/starter-e2e-b-full-20261017-02/sanitized/`. Incluye nginx/Vite completos con recuperación 1280/375 en 17,96/22,99 y 13,94/22,00 s, HMR restaurado y retoma; guardias, suite ampliada de fallos/señales/preservación de recursos previos, copia sin Git/kit, matriz de proxies y suite heredada íntegra. Sin interruptor de omisión. Huella posterior idéntica a la previa (196 archivos). Ambos proyectos FULL y cada subensayo terminaron 0/0/0 por labels; verify retiró solo su red/cache propia. No se cuenta el FULL 01 fallido como verde.
 
-Antes de publicar se volvió a conciliar main/remoto sin cambios, rama remota e48f61b y único PR #2 draft. Próximo: publicar código → cierre documental/in_review/PR ready → CI FULL del HEAD final → revisor independiente. Sin autorrevisión, merge ni inicio de C.
+Publicación comprobada de implementación: `293df79172f4d9bee13405102f6e167f488a6d1a`, HEAD local/tracking/remoto idénticos tras push; main conserva `47184f725f8a89528acac0aa3e7383f2334258de`, único PR #2 propio. Este cierre documental transiciona T-001/STATUS/BACKLOG/HANDOFF juntos a in_review y deja la retoma independiente en STATUS. El padre del HEAD de cierre debe ser ese SHA técnico; no hay cambios técnicos posteriores al FULL. Docs-check antes de publicar y kit ignorado/fuera de Git/índice. Estado y evidencia exactos de CI del HEAD final se registran en PR #2, sin un nuevo commit autorreferencial que vuelva a cambiar el SHA. Solo FULL completed/success con seis jobs verdes habilita la retoma; DRAFT no cuenta. Revisión independiente/merge pendientes, sin autorrevisión ni inicio de C. HANDOFF permanece 0/22 NO_LISTO; sin beta/template/adopción validada.

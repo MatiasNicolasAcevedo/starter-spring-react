@@ -1,11 +1,11 @@
 # Tablero vivo
 
-Próxima acción: T-001 in_progress, baseline propia y B1 → B2 → B3 → B4 en chore/t-001-local-stack; checkpoint en la tarea.
+Próxima acción: revisión independiente de T-001 in_review en chore/t-001-local-stack, PR #2; precondición de CI FULL y prompt en STATUS.
 
 ## En vuelo
 | Tarea | Estado | Salida |
 |---|---|---|
-| [T-001](tasks/T-001-local-stack.md) | in_progress | Baseline propia y ejecución secuencial B1…B4; PR draft #2 |
+| [T-001](tasks/T-001-local-stack.md) | in_review | B1…B4 publicadas, FULL propio exit 0; revisión independiente tras CI FULL del HEAD final, PR #2 |
 
 ## Listas
 Ninguna.

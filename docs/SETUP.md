@@ -19,11 +19,11 @@ El harness heredado sigue separado: bash scripts/dev-auth.sh nginx starter-dev-a
 
 ## Comandos de verificación aislada
 ```bash
-COMPOSE_ENV_FILES=.env.example COMPOSE_PROJECT_NAME=starter-a-gate bash scripts/verify.sh
+COMPOSE_ENV_FILES=.env.example COMPOSE_PROJECT_NAME=starter-verify-mi-prueba STARTER_E2E_PROJECT=starter-e2e-mi-prueba STARTER_SERVER_TESTS=container bash scripts/verify.sh
 # Al terminar, solo del proyecto propio recién creado:
-docker compose --env-file .env.example -p starter-a-gate --profile verify down --volumes --remove-orphans
+docker compose --env-file .env.example -p starter-verify-mi-prueba --profile verify down --volumes --remove-orphans
 ```
-Antes de usar ese nombre, comprobar que no tiene recursos: listar container (incluidos detenidos), network y volume con label=com.docker.compose.project=starter-a-gate. Si existe, elegir nombre nuevo; nunca adoptar o borrar un stack previo.
+Antes de usar ese nombre, comprobar que no tiene recursos: listar container (incluidos detenidos), network y volume con label=com.docker.compose.project=starter-verify-mi-prueba. Si existe, elegir nombre nuevo; nunca adoptar o borrar un stack previo.
 El gate no opera DB ordinaria: server-tests usa Testcontainers y caché propia; E2E genera namespace reservado starter-e2e-<sufijo>, comprueba ausencia antes del trap y verifica cero recursos al salir. No usar prune ni down -v ordinario.
 Suites: verify.sh --docs/--server/--client/--e2e; --fast es parcial. Diagnóstico directo `node scripts/docs-check.mjs`; matrices `node --test "scripts/ci/*.test.mjs"`.
 Proveedor aislado `node scripts/test-oidc-provider-stack.mjs`; frontera proxies `node scripts/test-auth-proxies.mjs`; UI real Windows `node scripts/test-auth-ui-smoke.mjs [--vite]`; desarrollo `node scripts/test-dev-auth.mjs nginx|vite`. Los scripts de navegador host requieren `npm ci --prefix e2e --no-audit --no-fund` y Edge Windows preexistente; el runner E2E Chromium containerizado es el camino portable, sin navegador instalado en host.
