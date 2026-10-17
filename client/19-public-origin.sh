@@ -27,4 +27,4 @@ if [ "$task_raw_authority" != "$PUBLIC_AUTHORITY" ]; then
     PUBLIC_AUTHORITY_ALIAS="\"$task_raw_authority\" 1;"
 fi
 export PUBLIC_SCHEME PUBLIC_AUTHORITY PUBLIC_PORT PUBLIC_AUTHORITY_ALIAS
-envsubst '${PUBLIC_SCHEME} ${PUBLIC_AUTHORITY} ${PUBLIC_PORT} ${PUBLIC_AUTHORITY_ALIAS}' < /opt/stockpilot/nginx.conf.template > /etc/nginx/conf.d/default.conf
+envsubst '${PUBLIC_SCHEME} ${PUBLIC_AUTHORITY} ${PUBLIC_PORT} ${PUBLIC_AUTHORITY_ALIAS}' < /opt/starter/nginx.conf.template > /etc/nginx/conf.d/default.conf

@@ -4,10 +4,10 @@ Autorización del dueño registrada una vez; las sesiones la heredan. Autoriza o
 
 | Campo | Valor |
 |---|---|
-| Fecha de autorización | 2026-10-12 (prompt de preparación del dueño) |
-| Repositorio | [MatiasNicolasAcevedo/stockpilot](https://github.com/MatiasNicolasAcevedo/stockpilot), público, GitHub Free |
+| Fecha de autorización | 2026-10-17 (prompt explícito de extracción del dueño) |
+| Repositorio | [MatiasNicolasAcevedo/starter-spring-react](https://github.com/MatiasNicolasAcevedo/starter-spring-react), público, GitHub Free |
 | Rama base | `main` |
-| Licencia | MIT, titular Matias Nicolas Acevedo (confirmado por el dueño el 2026-10-12) |
+| Licencia | MIT, titular Matias Nicolas Acevedo (confirmado por el dueño el 2026-10-17) |
 | Ejecutores autorizados | Preparación (M0): frontera, GPT-6.1 Sol (Codex) u Opus 5.5 (Claude Code), esfuerzo high, modelo registrado por sesión. Construcción/mantenimiento: Junie Lite en IntelliJ IDEA con AIR |
 
 El traspaso a Junie Lite no revoca estos permisos Git. Si una tarea requiere redefinir arquitectura, modelo de autenticación o alcance, Junie Lite prepara evidencia y propuesta para el dueño, que decide y puede abrir una sesión de frontera. Cambios pequeños ya especificados no se bloquean por tocar server o client.
@@ -23,7 +23,7 @@ El traspaso a Junie Lite no revoca estos permisos Git. Si una tarea requiere red
 - Corregir CI, configuración de desarrollo, autenticación y migraciones no destructivas mediante tareas explícitas con pruebas reforzadas.
 - Mejorar localmente `plantilla/` con lecciones genéricas de la tarea; esos archivos nunca entran en commits ni PRs.
 
-## Configuración inicial del repositorio (hecha una sola vez en T-000)
+## Configuración inicial única propia (2026-10-17)
 | Ajuste | Valor comprobado |
 |---|---|
 | Visibilidad | Pública |
@@ -31,8 +31,8 @@ El traspaso a Junie Lite no revoca estos permisos Git. Si una tarea requiere red
 | Ramas mergeadas | Borrado automático activado |
 | Auto-merge de GitHub | Deshabilitado |
 | Secret scanning / push protection | Activos |
-| Ruleset `main-protection` (id 24964732) | Rama por defecto; PR obligatorio con 0 aprobaciones formales; solo squash; sin eliminación; sin force push (non-fast-forward); sin actores con bypass |
-| Check requerido | `verify-required` (emitido por GitHub Actions, integración 15368) con rama actualizada antes del merge (`strict`); agregado el 2026-10-12 después de su primer reporte en el PR #1 |
+| Ruleset `main-protection` (id 25305930) | refs/heads/main; PR obligatorio con 0 aprobaciones formales; solo squash; sin eliminación; sin force push (non-fast-forward); sin actores con bypass |
+| Check requerido | `verify-required` (GitHub Actions, integración 15368), rama actualizada (`strict`), do_not_enforce_on_create=false; agregado el 2026-10-17 después del primer reporte terminado en PR #1 (run 39042564145) |
 
 Después de esta configuración ningún agente modifica, relaja ni elimina rulesets, ajustes de merge, visibilidad, permisos o planes. Si una protección bloquea un PR, se conserva el checkpoint y se informa al dueño.
 
@@ -66,4 +66,9 @@ Una sesión nueva reduce el arrastre de contexto, pero no es una revisión human
 | Aspecto | Valor | Evidencia / condición |
 |---|---|---|
 | Continuidad | `POR_SESION` | El dueño abre cada sesión con el prompt de [STATUS.md](STATUS.md). No hay dispatcher instalado ([ORCHESTRATION.md](ORCHESTRATION.md)) |
-| Merge | `AUTOMATICO_ELEGIBLE` | Protecciones completas desde el 2026-10-12; primer merge real comprobado el 2026-10-13 (PR #1 → `9f061f5`, HANDOFF G-02) |
+| Merge | `AUTOMATICO_ELEGIBLE` | Bootstrap completo; requiere veredicto de sesión distinta y checks verdes del HEAD/base vigentes. Ningún merge propio ejecutado |
+
+## Alcance de esta autorización
+Solo creación/configuración inicial de este repo y partes A…E secuenciales; esta sesión implementa A. No crear/borrar otros repos. No operar Google real, datos persistentes ajenos ni el origen. No marcar template antes de D ni adopción validada antes de E. La constancia final tiene el único límite definido en PROVENANCE.
+
+Respuesta efectiva de GitHub al crear ruleset: required_review_thread_resolution=true (pedido), required_reviewers=[] y require_extra_approval_for_unattributed_changes=true (defaults añadidos por GitHub); allowed_merge_methods=[squash], 0 aprobaciones, sin bypass. Registrar y observar en el primer merge; no modificarlos para destrabar. Visibilidad/merge/secret scanning/push protection reconsultados activos; auto-merge deshabilitado.

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Matriz del agregado verify-required (T-003 AC-09): node --test scripts/ci/
+// Matriz del agregado verify-required (base heredadaC-09): node --test scripts/ci/
 // Ejecuta el script real con el entorno que le pasa ci.yml. VERIFY_REQUIRED_SCRIPT permite correrla contra otra versión.
 import { after, test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -10,7 +10,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SCRIPT = resolve(process.env.VERIFY_REQUIRED_SCRIPT ?? join(dirname(fileURLToPath(import.meta.url)), 'verify-required.mjs'));
-const workspace = mkdtempSync(join(tmpdir(), 'stockpilot-verify-required-'));
+const workspace = mkdtempSync(join(tmpdir(), 'starter-verify-required-'));
 after(() => rmSync(workspace, { recursive: true, force: true }));
 
 const CONTROLLED = ['GATE_PHASE', 'POLICY', 'DRAFT', 'BASE', 'HEAD', 'CLASSIFY', 'DOCS', 'SERVER', 'CLIENT', 'E2E', 'GITHUB_STEP_SUMMARY'];

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Gate local de StockPilot (docs/TESTING.md). Ejecutar con Bash (Git Bash/WSL) desde cualquier carpeta del repo.
+# Gate local de Starter (docs/TESTING.md). Ejecutar con Bash (Git Bash/WSL) desde cualquier carpeta del repo.
 # Despacha contenedores con Docker Compose; devuelve exit code distinto de cero si falla cualquier suite.
 #   bash scripts/verify.sh            todas las suites de la fase actual (FULL: único gate de entrega)
 #   bash scripts/verify.sh --docs     solo docs-check (gate de entrega solo si --policy informa DOCS_ONLY)
@@ -10,7 +10,7 @@
 #   bash scripts/verify.sh --policy <base>   muestra la política del diff contra <base> sin ejecutar suites
 set -uo pipefail
 
-# Fase del gate: FULL desde T-003 C (BOOTSTRAP fue la fase de T-000..T-002). Debe coincidir con ci.yml (docs-check).
+# Fase del gate: FULL desde base heredada (BOOTSTRAP fue la fase de base heredada..base heredada). Debe coincidir con ci.yml (docs-check).
 GATE_PHASE="FULL"
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -25,9 +25,9 @@ phase_suites() {
 }
 
 server_mode() {
-  local mode="${STOCKPILOT_SERVER_TESTS:-}"
+  local mode="${STARTER_SERVER_TESTS:-}"
   if [[ -z "$mode" && -f .env ]]; then
-    mode="$(sed -n 's/^STOCKPILOT_SERVER_TESTS=//p' .env | tail -n 1 | tr -d '\r')"
+    mode="$(sed -n 's/^STARTER_SERVER_TESTS=//p' .env | tail -n 1 | tr -d '\r')"
   fi
   echo "${mode:-container}"
 }
@@ -45,7 +45,7 @@ suite_server() {
   case "$mode" in
     container) exec docker compose --profile verify run --rm server-tests ;;
     host) cd server && exec ./mvnw -B -ntp clean verify ;;
-    *) echo "verify.sh: STOCKPILOT_SERVER_TESTS inválido: $mode (container|host)" >&2; exit 2 ;;
+    *) echo "verify.sh: STARTER_SERVER_TESTS inválido: $mode (container|host)" >&2; exit 2 ;;
   esac
 }
 

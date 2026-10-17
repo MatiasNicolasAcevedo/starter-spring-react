@@ -10,7 +10,7 @@
           "match": "*",
           "claims": {
             "sub": "oidc-it-fictitious-person",
-            "aud": ["stockpilot-test"],
+            "aud": ["starter-test"],
             "name": "Persona Demo",
             "email": "persona@example.com",
             "email_verified": true

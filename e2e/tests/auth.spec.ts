@@ -9,7 +9,7 @@ test('visitor, real OIDC callback, reload and repeated login preserve the Postgr
   expect((await page.request.get('/api/v1/auth/me')).status()).toBe(401);
   await layout(page);
   await keyboardActivate(page, 'link', 'Ingresar');
-  await expect(page.getByRole('heading', { name: 'Ingresar a StockPilot' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Ingresar a Starter' })).toBeVisible();
   await layout(page);
   const id = await login(page, identity);
   const fingerprint = await control('fingerprint', identity) as { id: string; createdAt: string }[];

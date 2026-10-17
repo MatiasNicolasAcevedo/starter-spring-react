@@ -14,7 +14,7 @@ import { useSession } from '../features/auth/sessionContext'
 
 /**
  * Estructura común: barra superior con la sesión y contenido. Las rutas se remontan al cambiar la identidad, así que
- * el estado local de una pantalla nunca pasa de un usuario a otro. Comercio activo y rol se suman en M1.
+ * el estado local de una pantalla nunca pasa de un usuario a otro.
  */
 export function AppShell() {
   const { status, user } = useSession()
@@ -31,7 +31,7 @@ export function AppShell() {
             variant="h6"
             sx={{ fontWeight: 600, flexShrink: 0 }}
           >
-            StockPilot
+            Starter
           </Link>
           <Box sx={{ flexGrow: 1, minWidth: 0, display: 'flex', justifyContent: 'flex-end' }}>
             <SessionControls />

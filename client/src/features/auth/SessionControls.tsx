@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography'
 import { Link as RouterLink, useLocation } from 'react-router'
 import { sessionLabel, useSession } from './sessionContext'
 
-/** Estado de sesión en la barra superior: usuario con «Cerrar sesión» o acceso al ingreso. Sin roles ni comercio. */
+/** Estado de sesión en la barra superior: usuario con «Cerrar sesión» o acceso al ingreso. */
 export function SessionControls() {
   const { status, user, logout, logoutPending, csrfReady } = useSession()
   const { pathname } = useLocation()

@@ -1,6 +1,6 @@
--- Identidad local de una persona autenticada (PROJECT_CONTEXT §3 y §6 · Usuario).
+-- Identidad local genérica de una persona autenticada (spec de auth y ADR 0002).
 -- La identidad estable es (issuer, subject) del proveedor OIDC; el email es un atributo mutable
--- y nunca se usa para fusionar cuentas. La pertenencia a comercios se modela en migraciones posteriores.
+-- y nunca se usa para fusionar cuentas. La propiedad de recursos se modela en migraciones posteriores.
 CREATE TABLE app_user (
     id             UUID         NOT NULL,
     issuer         VARCHAR(255) NOT NULL,

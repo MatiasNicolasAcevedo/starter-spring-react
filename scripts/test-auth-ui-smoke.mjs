@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// T-002 D: smoke of the session UI in a real browser (pre-existing Windows Edge, headless, driven over CDP) through
+// base heredada: smoke of the session UI in a real browser (pre-existing Windows Edge, headless, driven over CDP) through
 // the real proxy (nginx `client` or, with --vite, `client-dev`) against the isolated 3.0.3 provider. Only fictitious
 // versioned inputs and a unique Compose project; finally removes that project and the ephemeral browser profile.
 // Output never includes codes, state, tokens or cookie values. Usage: node scripts/test-auth-ui-smoke.mjs
@@ -15,14 +15,14 @@ const args = process.argv.slice(2);
 const vite = args.includes('--vite');
 const shotsIndex = args.indexOf('--screenshots');
 const shotsDir = shotsIndex >= 0 ? resolve(args[shotsIndex + 1]) : null;
-const project = `stockpilot-t002-d-smoke-${process.pid}`;
+const project = `starter-auth-smoke-${process.pid}`;
 const clientPort = vite ? 5176 : 5175;
 const base = `http://127.0.0.1:${clientPort}`;
 const providerPort = 8090;
 // Fixed fictitious values so an inherited shell environment cannot redirect the stack.
 const env = {
   ...process.env,
-  POSTGRES_DB: 'stockpilot_auth_test', POSTGRES_USER: 'stockpilot_auth_test',
+  POSTGRES_DB: 'starter_auth_test', POSTGRES_USER: 'starter_auth_test',
   POSTGRES_PASSWORD: 'fictitious-auth-test-only', APP_PUBLIC_URL: base, CLIENT_PORT: '5175',
   CLIENT_DEV_PORT: '5176', LOCAL_OIDC_PORT: String(providerPort), GOOGLE_CLIENT_ID: '', GOOGLE_CLIENT_SECRET: '',
 };
@@ -92,7 +92,7 @@ try {
   await until(`${clientService} serving the SPA`, async () => (await fetch(`${base}/`)).ok, 120_000);
   step(`Isolated stack healthy: project ${project}, ${vite ? 'Vite' : 'nginx'} origin ${base}, provider 3.0.3 loopback`);
 
-  profile = mkdtempSync(join(tmpdir(), 'stockpilot-d-edge-'));
+  profile = mkdtempSync(join(tmpdir(), 'starter-auth-edge-'));
   browser = spawn(edge, ['--headless=new', '--remote-debugging-port=0', `--user-data-dir=${profile}`,
     '--host-resolver-rules=MAP host.docker.internal 127.0.0.1', '--no-first-run', '--no-default-browser-check',
     '--disable-extensions', '--disable-sync', 'about:blank'], { stdio: 'ignore' });
@@ -199,7 +199,7 @@ try {
 
   // 2. /login and keyboard entry through the real provider.
   await clickByText('Ingresar');
-  await until('/login page', async () => (await path()) === '/login' && (await text()).includes('Ingresar a StockPilot'));
+  await until('/login page', async () => (await path()) === '/login' && (await text()).includes('Ingresar a Starter'));
   await bothLayouts('Login page', '02-login');
   await evaluate('document.activeElement?.blur(); document.body.focus()');
   let focused = '';
@@ -252,7 +252,7 @@ try {
   assert.ok(!(await text()).includes('La sesión terminó'), 'expiry notice gone after a new login');
   const tokenBefore = await xsrf();
   await clickByText('Cerrar sesión', 'header button');
-  await until('logout lands on /login', async () => (await path()) === '/login' && (await text()).includes('Ingresar a StockPilot'));
+  await until('logout lands on /login', async () => (await path()) === '/login' && (await text()).includes('Ingresar a Starter'));
   assert.ok(responses.some((r) => r.path === '/logout' && r.status === 204), 'POST /logout 204');
   assert.ok(!(await bannerHas('Persona Demo')));
   const tokenAfter = await until('anonymous CSRF cookie after logout', xsrf);

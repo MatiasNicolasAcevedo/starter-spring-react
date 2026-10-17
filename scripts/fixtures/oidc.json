@@ -9,8 +9,8 @@
           "requestParam": "code",
           "match": "*",
           "claims": {
-            "sub": "stockpilot-fictitious-person",
-            "aud": ["stockpilot-test"],
+            "sub": "starter-fictitious-person",
+            "aud": ["starter-test"],
             "name": "Persona Demo",
             "email": "persona@example.com",
             "email_verified": true

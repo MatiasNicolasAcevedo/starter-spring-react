@@ -1,5 +1,5 @@
 {
-  "name": "stockpilot-e2e",
+  "name": "starter-e2e",
   "private": true,
   "type": "module",
   "scripts": {

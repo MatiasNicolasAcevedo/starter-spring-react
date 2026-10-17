@@ -7,7 +7,7 @@ import { setTimeout as pollDelay } from 'node:timers/promises';
 
 const args = process.argv.slice(2);
 const project = args[args.indexOf('-p') + 1];
-assert.match(project, /^stockpilot-e2e-[a-z0-9][a-z0-9-]{0,47}$/);
+assert.match(project, /^starter-e2e-[a-z0-9][a-z0-9-]{0,47}$/);
 const root = resolve('e2e/artifacts', project);
 const control = join(root, 'control');
 assert.deepEqual(args, ['compose', '--env-file', 'scripts/fixtures/e2e.env.example', '-p', project,
@@ -51,8 +51,8 @@ function execute(request) {
       assert.match(request.identity, /^[a-f0-9-]{36}$/);
       const query = "SELECT json_build_object('id',id,'createdAt',created_at)::text FROM app_user " +
         `WHERE issuer = 'http://host.docker.internal:8090/default' AND subject = 'e2e-${request.identity}'`;
-      const result = compose(['exec', '-T', 'db', 'psql', '-U', 'stockpilot_auth_test',
-        '-d', 'stockpilot_auth_test', '-Atc', query]);
+      const result = compose(['exec', '-T', 'db', 'psql', '-U', 'starter_auth_test',
+        '-d', 'starter_auth_test', '-Atc', query]);
       const rows = result ? result.split('\n').map(line => JSON.parse(line)) : [];
       return rows;
     }
@@ -61,7 +61,7 @@ function execute(request) {
 }
 // Directed red assays: each value selects one spec, which changes only its relevant expected UI result.
 const directedSpecs = { 1: 'system.spec.ts', swagger: 'swagger.spec.ts' };
-const requested = process.env.STOCKPILOT_E2E_ASSERT_FAILURE ?? '';
+const requested = process.env.STARTER_E2E_ASSERT_FAILURE ?? '';
 const inducedFailure = Object.hasOwn(directedSpecs, requested) ? requested : '0';
 const directedArguments = inducedFailure === '0' ? [] : ['--', directedSpecs[inducedFailure]];
 const runner = spawn('docker', [...args, 'run', '--rm', '--no-deps',

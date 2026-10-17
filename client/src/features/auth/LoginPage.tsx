@@ -22,7 +22,7 @@ export function LoginPage() {
         <Typography variant="h4" component="h1">
           Ya iniciaste sesión
         </Typography>
-        <Typography>Estás usando StockPilot como {sessionLabel(user)}.</Typography>
+        <Typography>Estás usando Starter como {sessionLabel(user)}.</Typography>
         <Button component={RouterLink} to="/" variant="contained">
           Ir al inicio
         </Button>
@@ -34,10 +34,10 @@ export function LoginPage() {
     <Stack spacing={3} sx={{ maxWidth: 480 }}>
       <Stack spacing={1}>
         <Typography variant="h4" component="h1">
-          Ingresar a StockPilot
+          Ingresar a Starter
         </Typography>
         <Typography color="text.secondary">
-          Usá tu cuenta de Google. StockPilot no recibe ni guarda tu contraseña.
+          Usá tu cuenta de Google. Starter no recibe ni guarda tu contraseña.
         </Typography>
       </Stack>
       {failed ? (

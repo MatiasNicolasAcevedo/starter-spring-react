@@ -36,7 +36,7 @@ Contrato mínimo para encadenar sesiones. **No hay dispatcher instalado:** la co
   "schema_version": 1,
   "session_id": "id-real-de-la-sesion",
   "role": "reviewer",
-  "task_id": "T-000",
+  "task_id": "T-NNN",
   "outcome": "approved",
   "head_sha": "sha-completo-del-head",
   "base_sha": "sha-completo-de-la-base",

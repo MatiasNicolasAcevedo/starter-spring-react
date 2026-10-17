@@ -39,7 +39,7 @@ function request() {
 async function success() {
   const result = await request();
   assert.equal(result.status, 200);
-  assert.equal(JSON.parse(result.body).name, 'StockPilot');
+  assert.equal(JSON.parse(result.body).name, 'Starter');
 }
 
 async function recovery() {

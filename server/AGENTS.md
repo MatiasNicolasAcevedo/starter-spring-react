@@ -10,7 +10,7 @@ Iteración en el IDE/host (Git Bash): `./mvnw spotless:apply` y `./mvnw clean ve
 `./mvnw test` solo corre unitarios/slices: no demuestra la integración (`*IT` corre en `verify` con Failsafe).
 
 ## Estructura
-Paquetes por feature bajo `server.server`: `<feature>/` con controller, DTOs, servicio/caso de uso y persistencia.
+Paquetes por feature bajo `com.example.starter`: `<feature>/` con controller, DTOs, servicio/caso de uso y persistencia.
 Separar en subpaquetes `web/`, `application/`, `persistence/` (y `domain/` si hay invariantes) cuando la feature crezca.
 `identity/` identidad local OIDC; `security/` configuración de seguridad; `shared/error/` errores transversales.
 No acceder a repositorios de otra feature como atajo; exponer un servicio/API interna y evitar ciclos.
@@ -18,16 +18,16 @@ No acceder a repositorios de otra feature como atajo; exponer un servicio/API in
 
 ## Reglas
 Controller fino: valida entrada HTTP y delega; sin transacciones ni reglas de negocio.
-Servicio/caso de uso: reglas, autorización contextual (pertenencia y rol por comercio) y límite transaccional.
+Servicio/caso de uso: reglas, autorización contextual (propiedad del recurso) y límite transaccional.
 DTOs `record` separados de entidades; nunca devolver entidades JPA por HTTP. Bean Validation en la entrada.
 Errores como ProblemDetail (`application/problem+json`); 401 sin sesión, 403 sin permiso o CSRF; sin stack traces.
-Recursos de otro comercio: denegar sin revelar existencia (ver PROJECT_CONTEXT RN-20 y CA-13).
+Recursos ajenos: denegar sin revelar existencia; derivar permisos del contexto nuevo.
 Inyección por constructor; sin `XService`/`XServiceImpl` sin necesidad; sin `@Data` en entidades relacionadas.
-Importes ARS con `BigDecimal` escala 2 (`NUMERIC(12,2)`); cantidades enteras; instantes `Instant` en UTC (`TIMESTAMPTZ`).
+Cantidades y decimales según el dominio nuevo; instantes `Instant` en UTC (`TIMESTAMPTZ`).
 Reglas temporales con `Clock` inyectado. Identificadores UUID v7 generados por la aplicación.
 Esquema solo por Flyway (`src/main/resources/db/migration/V<n>__<slug>.sql`), Hibernate `validate`, `open-in-view=false`.
 Migraciones aplicadas son inmutables; un cambio posterior es una migración nueva. Sin migraciones destructivas sin autorización.
-Constraints de DB respaldan unicidad e integridad; concurrencia de stock con una estrategia probada (spec de ventas).
+Constraints de DB respaldan unicidad e integridad; concurrencia con estrategia probada según la spec del recurso.
 Actuator: solo health público. Logs sin tokens, correos ni datos sensibles.
 
 ## Pruebas

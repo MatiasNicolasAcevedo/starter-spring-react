@@ -1,18 +1,18 @@
-# Stack de desarrollo de StockPilot (Docker Compose V2). Uso: docker compose up -d --build --wait
+# Stack de desarrollo de Starter (Docker Compose V2). Uso: docker compose up -d --build --wait
 # - db, server y client: perfil por defecto. El navegador usa solo el client (http://127.0.0.1:5173).
 # - client-dev: perfil "dev" (Vite con HMR, opcional).
 # - server-tests, client-tests y docs-check: perfil "verify", los invoca scripts/verify.sh.
 # Los defaults coinciden con .env.example; un .env local (ignorado) puede sobrescribirlos.
-name: stockpilot
+name: starter
 
 services:
   db:
     # Misma imagen fijada que Testcontainers (TestcontainersConfiguration.POSTGRES_IMAGE); docs-check lo verifica.
     image: postgres:18.6
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-stockpilot}
-      POSTGRES_USER: ${POSTGRES_USER:-stockpilot}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-stockpilot-dev-only}
+      POSTGRES_DB: ${POSTGRES_DB:-starter}
+      POSTGRES_USER: ${POSTGRES_USER:-starter}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-starter-dev-only}
     volumes:
       # PostgreSQL 18+: el volumen se monta en /var/lib/postgresql (PGDATA = /var/lib/postgresql/18/docker).
       - db-data:/var/lib/postgresql
@@ -30,14 +30,14 @@ services:
       context: ./server
       target: runtime
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${POSTGRES_DB:-stockpilot}
-      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-stockpilot}
-      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-stockpilot-dev-only}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${POSTGRES_DB:-starter}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-starter}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-starter-dev-only}
       APP_PUBLIC_URL: &public-origin ${APP_PUBLIC_URL:-http://127.0.0.1:${CLIENT_PORT:-5173}}
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
       # OpenAPI/Swagger UI (ADR 0003): apagado; opt-in solo con APP_PUBLIC_URL HTTP loopback, en /api/docs/.
-      STOCKPILOT_API_DOCS_ENABLED: ${STOCKPILOT_API_DOCS_ENABLED:-false}
+      STARTER_API_DOCS_ENABLED: ${STARTER_API_DOCS_ENABLED:-false}
       SERVER_FORWARD_HEADERS_STRATEGY: framework
     depends_on:
       db:
@@ -78,7 +78,7 @@ services:
       context: ./client
       target: dev
     environment:
-      STOCKPILOT_WATCH_POLLING: "true"
+      STARTER_WATCH_POLLING: "true"
       APP_PUBLIC_URL: *public-origin
     depends_on:
       server:

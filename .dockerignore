@@ -1,0 +1,11 @@
+.git
+plantilla
+.env
+**/.env
+**/node_modules
+**/target
+**/dist
+**/coverage
+**/artifacts
+**/playwright-report
+**/test-results

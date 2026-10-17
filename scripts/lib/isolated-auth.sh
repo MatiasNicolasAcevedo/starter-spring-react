@@ -5,14 +5,14 @@ isolated_init() {
   ROOT="$(pwd)"
   export MSYS_NO_PATHCONV=1
   unset COMPOSE_FILE COMPOSE_PROFILES COMPOSE_ENV_FILES COMPOSE_PROJECT_NAME
-  export POSTGRES_DB=stockpilot_auth_test POSTGRES_USER=stockpilot_auth_test
+  export POSTGRES_DB=starter_auth_test POSTGRES_USER=starter_auth_test
   export POSTGRES_PASSWORD=fictitious-auth-test-only LOCAL_OIDC_PORT=8090
   export GOOGLE_CLIENT_ID='' GOOGLE_CLIENT_SECRET='' CLIENT_PORT=5175 CLIENT_DEV_PORT=5176
-  export STOCKPILOT_SERVER_TESTS=container
+  export STARTER_SERVER_TESTS=container
 }
 validate_project() {
-  [[ "$1" =~ ^stockpilot-(e2e|dev-auth)-[a-z0-9][a-z0-9-]{0,47}$ ]] || {
-    echo 'Invalid isolated project; ordinary stockpilot is forbidden.' >&2; return 2;
+  [[ "$1" =~ ^starter-(e2e|dev-auth)-[a-z0-9][a-z0-9-]{0,47}$ ]] || {
+    echo 'Invalid isolated project; ordinary starter is forbidden.' >&2; return 2;
   }
 }
 compose() {

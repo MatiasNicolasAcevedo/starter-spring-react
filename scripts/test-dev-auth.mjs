@@ -10,10 +10,10 @@ import { chromium, expect } from '../e2e/node_modules/@playwright/test/index.mjs
 
 const mode = process.argv[2];
 assert.ok(['nginx', 'vite'].includes(mode), 'Usage: node scripts/test-dev-auth.mjs nginx|vite');
-const project = `stockpilot-dev-auth-a-${mode}-${process.pid}`;
+const project = `starter-dev-auth-a-${mode}-${process.pid}`;
 const base = `http://127.0.0.1:${mode === 'vite' ? 5176 : 5175}`;
 const bash = 'C:\\Program Files\\Git\\bin\\bash.exe';
-const log = createWriteStream(join(tmpdir(), `stockpilot-T003-A-dev-${mode}.log`));
+const log = createWriteStream(join(tmpdir(), `starter-lifecycle-dev-${mode}.log`));
 const args = ['scripts/dev-auth.sh', mode, project];
 let ready = false;
 let exited = false;
@@ -39,8 +39,8 @@ async function until(check, timeout) {
 }
 const composeArgs = ['compose', '--env-file', 'scripts/fixtures/auth-test.env.example', '-p', project,
   '-f', 'docker-compose.yml', '-f', 'compose.auth-test.yml', '-f', 'compose.dev-auth.yml', '--profile', 'oidc', '--profile', 'dev'];
-const fingerprint = () => run('docker', [...composeArgs, 'exec', '-T', 'db', 'psql', '-U', 'stockpilot_auth_test',
-  '-d', 'stockpilot_auth_test', '-Atc', "SELECT id::text || '|' || created_at::text FROM app_user ORDER BY id"]);
+const fingerprint = () => run('docker', [...composeArgs, 'exec', '-T', 'db', 'psql', '-U', 'starter_auth_test',
+  '-d', 'starter_auth_test', '-Atc', "SELECT id::text || '|' || created_at::text FROM app_user ORDER BY id"]);
 const source = 'client/src/features/system/SystemInfoPanel.tsx';
 const original = readFileSync(source);
 let browser;
