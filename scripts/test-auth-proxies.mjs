@@ -2,11 +2,12 @@
 // All Compose inputs are fictitious/versioned, projects unique; cleanup never targets development volumes.
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
+import { existsSync, readFileSync } from 'node:fs';
 import http from 'node:http';
 import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
-const project = `starter-auth-proxy-${Date.now()}-${process.pid}`;
+const project = process.env.STARTER_PROXY_PROJECT || `starter-auth-proxy-${Date.now()}-${process.pid}`;
 const base = ['compose', '--env-file', 'scripts/fixtures/auth-test.env.example', '-p', project,
   '-f', 'docker-compose.yml', '-f', 'compose.auth-test.yml'];
 const echoFile = ['-f', 'scripts/fixtures/compose.proxy-test.yml'];
@@ -26,15 +27,34 @@ const headersOnly = process.argv.includes('--headers-only');
 const readinessOnly = process.argv.includes('--readiness-only');
 let activeFiles = [];
 let origin = origins[0];
+let signalCode = 0;
+let cleaning = false;
+const interrupted = new Error('Proxy assay interrupted');
+for (const [signal, code] of [['SIGINT', 130], ['SIGTERM', 143], ['SIGHUP', 129]]) {
+  process.on(signal, () => { signalCode ||= code; });
+}
+function checkInterrupted() {
+  const stopFile = process.env.STARTER_PROXY_STOP_FILE;
+  if (stopFile && existsSync(stopFile)) {
+    const requested = Number(readFileSync(stopFile, 'utf8'));
+    assert.ok([130, 143, 129].includes(requested), 'Invalid proxy stop request');
+    signalCode ||= requested;
+  }
+  if (signalCode && !cleaning) throw interrupted;
+}
 
 function compose(args, capture = false) {
-  return execFileSync('docker', [...base, ...activeFiles, '--profile', 'dev', ...args], {
+  if (!cleaning) checkInterrupted();
+  const result = execFileSync('docker', [...base, ...activeFiles, '--profile', 'dev', ...args], {
     cwd: root, encoding: 'utf8', stdio: capture ? 'pipe' : 'inherit',
     env: { ...process.env, APP_PUBLIC_URL: origin },
   });
+  if (!cleaning) checkInterrupted();
+  return result;
 }
 
 function request(port, path, headers = {}, method = 'GET', body = '') {
+  checkInterrupted();
   return new Promise((resolve, reject) => {
     const req = http.request({ hostname: '127.0.0.1', port, path, method,
       headers: { Host: new URL(origin).host, ...headers }, timeout: 5000 }, (res) => {
@@ -151,6 +171,7 @@ function invalidOrigins() {
   for (const value of ['', 'http://attacker.example', 'https://demo.example/path',
     'https://user@demo.example', 'https://demo.example:0', 'https://demo.example?query=hidden']) {
     for (const service of ['client', 'client-dev']) {
+      checkInterrupted();
       let failure;
       try {
         execFileSync('docker', [...base, '--profile', 'dev', 'run', '--rm', '--no-deps',
@@ -177,6 +198,7 @@ function assertEmpty() {
   }
 }
 assertEmpty();
+console.log(`Proxy assay project=${project}`);
 try {
   // Observe both real proxies directly upstream. Unknown forwarding extensions cannot be inferred from callback alone.
   activeFiles = echoFile;
@@ -200,7 +222,12 @@ try {
   if (!headersOnly && !readinessOnly) invalidOrigins();
   console.log(`${headersOnly ? 'Header' : 'Proxy'} contract passed; HTTPS simulated over local HTTP. `
     + 'OIDC protocol is out of scope here (OidcLoginIT/OidcFailureIT, test-auth-ui-smoke.mjs).');
+} catch (error) {
+  if (error !== interrupted) throw error;
+  console.log(`Proxy worker interrupted at operation boundary (${signalCode}).`);
+  process.exitCode = signalCode;
 } finally {
+  cleaning = true;
   try {
     compose(['logs', '--no-color', '--tail', '30', 'server', 'client', 'client-dev']);
   } finally {
@@ -208,3 +235,4 @@ try {
     assertEmpty();
   }
 }
+if (signalCode) process.exitCode = signalCode;

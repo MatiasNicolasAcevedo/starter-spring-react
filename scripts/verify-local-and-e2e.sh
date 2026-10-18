@@ -24,5 +24,6 @@ run bash scripts/test-dev-stack.sh nginx
 run bash scripts/test-dev-stack.sh vite
 run bash scripts/test-dev-stack-failures.sh
 run bash scripts/test-local-copy.sh
-run node scripts/test-auth-proxies.mjs
+run bash scripts/test-auth-proxies-signals.sh
+run bash scripts/test-auth-proxies.sh
 exec bash scripts/e2e.sh
