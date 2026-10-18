@@ -1,8 +1,8 @@
 ---
 id: T-001
-status: in_progress
+status: in_review
 executor: frontier
-role: implementer
+role: reviewer
 milestone: M0
 counts_for_cycle: false
 product_cycle: null
@@ -155,3 +155,7 @@ Checkpoint previo a FULL propio: HEAD publicado/base `8f7793cfe19793efef11387996
 FULL propio R1-01 terminó **exit0, cleanup0**: docs/server/client/e2e OK. Backend clean verify **81 unit/slices + 62 IT PostgreSQL**, cero fallos/errores/omitidos, Spotless/JaCoCo; client **109 tests/11 archivos** y typecheck/lint/formato/cobertura/build; Playwright **13 tests, 0 fallos**, export auditado `e2e/artifacts/starter-e2e-r1-01-20261017-01/sanitized/`. Incluye toda la suite local y regresión nueva: señal de proxies exit143 y **0/0/0 al retorno**, proyecto `starter-auth-proxy-1792289335450-8894`, seguida de la matriz completa (`starter-auth-proxy-1792289358765-9046`) y E2E heredado. Recuperación DB nginx 1280/375 **14,913/15,931 s**; Vite **15,927/15,921 s**; HMR restaurado, persistencia/rollback/copia sin kit verdes.
 
 Los dos proyectos principales terminaron **0/0/0 por labels**; los subensayos exigieron sus labels cero en cleanup. Manifiestos técnicos antes/después idénticos, **198 archivos**, SHA256 `6c02c1546d1e5e1f1081c7592091dd9b83b95f7323d1f437335c295d488d7cc4`. No se editaron fuentes técnicas durante FULL. Publicar ahora código probado y luego cierre documental, sin repetir FULL local por ese cierre; CI FULL del HEAD final obligatoria. Durante la espera de CI se ejecutará verde dirigido integrado `--verify` con proyectos nuevos explícitos, para acreditar también TERM/143/0/0/0 a través del gate completo; resultado definitivo y CI por SHA en PR #2 antes de habilitar R2.
+
+Publicación técnica comprobada: `9f5cff8238b313f55e148a1b6bd1a38fe49554cd`, HEAD local/tracking/remoto idénticos tras push; main/base conserva `47184f725f8a89528acac0aa3e7383f2334258de`, único PR #2 OPEN/ready. JUnit saneado comprobado: **13 testcase, 0 failure, 0 error, 0 skipped**. Este cierre posterior cambia solo tarea/STATUS/BACKLOG/HANDOFF y su padre exacto es el commit técnico citado; fuentes técnicas idénticas al FULL. Docs-check/regresiones documentales y kit fuera de Git/índice antes del commit.
+
+T-001 vuelve a **in_review**, no done. R2 exige sesión reviewer nueva e independiente; esta implementación no se autorrevisa ni mergea. Verde integrado final previsto sobre el HEAD documental publicado: `COMPOSE_ENV_FILES=.env.example COMPOSE_PROJECT_NAME=starter-verify-r1-green-gate-20261017 STARTER_E2E_PROJECT=starter-e2e-r1-green-gate-20261017 STARTER_SERVER_TESTS=container bash scripts/test-auth-proxies-signals.sh --verify`, ambos namespaces nuevos 0/0/0; log `%TEMP%/starter-r1-01-green-gate.log`. El supervisor ejecuta todo el prefijo y señala al gate en proxies; exige resumen INTERRUMPIDA/143 y 0/0/0 antes de emergencia. Resultado final, cleanup, huella y CI FULL del HEAD documental exacto se publican en PR #2, sin commit autorreferencial. Solo con esas evidencias terminadas/success se habilita el prompt de R2. HANDOFF 0/22 NO_LISTO; C…E draft. R2 es la segunda y última ronda del límite vigente; cualquier bloqueo que agote ese límite termina en checkpoint y dueño.
