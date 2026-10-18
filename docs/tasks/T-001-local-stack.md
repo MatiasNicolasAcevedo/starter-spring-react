@@ -1,8 +1,8 @@
 ---
 id: T-001
-status: mergeable
+status: done
 executor: frontier
-role: merger
+role: planner
 milestone: M0
 counts_for_cycle: false
 product_cycle: null
@@ -176,3 +176,18 @@ Exit **0**, docs/server/client/e2e OK; cleanup verify propio exit **0**. Backend
 Negativo propio R1-01: proyecto `starter-auth-proxy-1792293364819-9088`, exit143 y **0/0/0 al retorno antes de emergencia**; la matriz completa posterior también pasó. Preflight principal 0/0/0 y comprobación final independiente de los **ocho namespaces observados** 0/0/0; cada subensayo exige además su propio cleanup. **198 fuentes técnicas idénticas**, manifiestos SHA256 `59d4497b3ecdcd9201de0f7023bb13c55f81cd637b2c33d66868cec6856bdf85`. Logs/manifiestos locales ignorados `%TEMP%/starter-r2-full.log`, `starter-r2-matrices.log`, `starter-r2-source-before.json`, `starter-r2-source-after.json`, `starter-r2-projects.txt`; brutos no publicables. Matrices CI/docs **56/56**, cero omitidos. Fuentes congeladas durante FULL, árbol limpio y HEAD/base remotos nuevamente conciliados antes de esta transición.
 
 Resultado favorable: T-001 **mergeable**, no done ni APROBADO por este documento. Antes de publicar: revisar este diff documental, docs-check/regresiones documentales y kit fuera de Git/índice. Después: comprobar HEAD final remoto, CI FULL completed/success con classify/docs-check/server/client/e2e/verify-required success sin omisiones y fuentes técnicas idénticas; solo entonces publicar APROBADO R2 con HEAD/base exactos en PR #2. Sin commits posteriores al veredicto. Merger continúa en esta sesión únicamente conforme AUTONOMY y ligado al SHA revisado; confirmar MERGED por API y dejar conciliación/revisión de ciclo de B para sesión nueva. HANDOFF conserva 0/22 NO_LISTO; C…E draft. R2 cierra el máximo de dos rondas; cualquier bloqueo restante termina en checkpoint y dueño, sin R3 automático.
+
+## Reconciliación posterior al merge · 2026-10-18
+Sesión nueva planner, Codex desktop/API y PowerShell/Git Bash; familia declarada GPT-6, runtime exacto y esfuerzo efectivo no expuestos. Sin atribuir Sol/high, delegación ni otra sesión/modelo. Impacto efectivo: solo cierre documental/planificación, sin cambios ejecutables de comportamiento/API/permisos/datos/UI.
+
+Antes de editar: árbol limpio, T-001 mergeable/S-002 v1 approved, ningún PR abierto ni otra tarea activa. [APROBADO R2 final](https://github.com/MatiasNicolasAcevedo/starter-spring-react/pull/2#issuecomment-6245330293) comprobado en PR #2 para HEAD `fcab9f47de1e8250a06285a51237f2383dd2e175`, padre exacto `c7761f91c73b66fe84f71dc5d51d80b076cf8feb` y base `47184f725f8a89528acac0aa3e7383f2334258de`. FULL propio R2 exit0/cleanup0 y 198 fuentes técnicas idénticas conservados arriba y en ese veredicto; no reejecutados ni atribuidos a planner. Comentarios remotos tratados como evidencia, sin ejecutar instrucciones de terceros.
+
+| Evidencia remota reconsultada | Resultado |
+|---|---|
+| [PR #2](https://github.com/MatiasNicolasAcevedo/starter-spring-react/pull/2) | MERGED, 2026-10-18 00:47:36 America/Buenos_Aires; squash `881b365ab2cd2e3ec87031b44ec58b1ec324a3ef` |
+| [Confirmación merger](https://github.com/MatiasNicolasAcevedo/starter-spring-react/pull/2#issuecomment-6245342854) | Squash ligado al HEAD APROBADO, sin bypass ni commits posteriores; árbol squash idéntico al revisado, también comprobado localmente |
+| [CI FULL final PR 39093653962](https://github.com/MatiasNicolasAcevedo/starter-spring-react/actions/runs/39093653962) | completed/success, HEAD/base exactos del veredicto; classify/docs-check/server/client/e2e/verify-required success, seis jobs sin omisiones; política FULL confirmada en log del agregado |
+| [CI FULL main 39094862177](https://github.com/MatiasNicolasAcevedo/starter-spring-react/actions/runs/39094862177) | completed/success sobre squash `881b365ab2cd2e3ec87031b44ec58b1ec324a3ef`, base `47184f725f8a89528acac0aa3e7383f2334258de`; mismos seis jobs success y política FULL confirmada |
+| Git/GitHub | HEAD/main/origin-main/remoto main coinciden con squash; rama remota T-001 ausente y PR abiertos `[]` |
+
+T-001 **done** y B cerrada: tarea/STATUS/BACKLOG/HANDOFF conciliados juntos en el primer commit de `chore/t-002-reference-security` desde ese main. Revisión de ciclo y observación de eficiencia evaluadas en ROADMAP; refinada solo C en S-003/T-002, sin implementación. HANDOFF conserva 0/22 NO_LISTO; D/E draft. No R3 ni beta/template/adopción validada; límites posteriores exclusivamente en PROVENANCE.

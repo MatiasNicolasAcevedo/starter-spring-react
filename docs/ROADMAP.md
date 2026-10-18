@@ -8,13 +8,13 @@
 
 ## Secuencia contratada
 
-El objetivo vigente es completar este mismo starter de A a E. A está terminada; B está implementada y en revisión independiente, pendiente de merge. Publicar su implementación no completa B ni habilita C. Cada parte requiere revisión, squash merge confirmado y CI vigente antes de activar la siguiente.
+El objetivo vigente es completar este mismo starter de A a E. A y B están terminadas con merge/CI comprobados. C está refinada para implementar en sesión nueva, sin código ni pruebas propias todavía. Cada parte requiere revisión, squash merge confirmado y CI vigente antes de activar la siguiente.
 
 | Parte | Estado real | Resultado en palabras simples |
 |---|---|---|
 | A | done; PR #1 MERGED y CI verificada | Extraer y neutralizar la base, conservar versiones y contratos |
-| B | in_review; implementación publicada, revisión/merge pendientes | Levantar, comprobar, detener y retomar la aplicación conectada a su DB |
-| C | draft; espera B MERGED | Incorporar un ejemplo removible completo con permisos y pruebas |
+| B | done; PR #2 MERGED y CI FULL PR/main verificadas | Levantar, comprobar, detener y retomar la aplicación conectada a su DB |
+| C | ready; T-002 / S-003 v1, implementación pendiente | Incorporar un ejemplo removible completo con permisos y pruebas |
 | D | draft; espera C MERGED | Personalizar la base con un inicializador y habilitarla como template beta |
 | E | draft; espera D MERGED | Comprobar desde otra copia limpia que sirve para empezar otra aplicación |
 
@@ -51,6 +51,22 @@ Resultado remoto comprobado antes de editar: PR #1 MERGED, HEAD revisado `1ba7ad
 | Riesgo de confundir documentación/FULL de A con validación propia de B | Publicar solo planificación en rama; implementación en sesión nueva, FULL propio/CI y revisión independiente antes de merge. HANDOFF sin crédito adicional |
 
 Cola revisada sin ampliar objetivo ni cambiar arquitectura/auth/ADR/versiones/umbrales/protecciones. Mantener pendientes de C (cobertura y logout con mutación en vuelo) y endurecimiento futuro de callback en BACKLOG, sin implementarlos aquí. No hay bloqueo que requiera decisión nueva del dueño para planificar B. Próximo corte por cierre de B, cambio relevante o cadencia de cinco tareas de producto; no anticipa D/E ni su constancia final.
+
+## Revisión de ciclo · cierre de B · 2026-10-18
+Disparador: cierre de parte B, sin esperar cinco tareas de producto. T-001 y T-002 son M0, `counts_for_cycle: false`, `product_cycle: null`; no incrementan un ciclo de producto. Planner nuevo: Codex desktop/API y PowerShell/Git Bash, familia declarada GPT-6; runtime exacto/esfuerzo efectivo no expuestos, sin atribuir Sol/high, delegar ni abrir otra sesión/modelo.
+
+Precondiciones y evidencia por SHA en [cierre de T-001](tasks/T-001-local-stack.md#reconciliación-posterior-al-merge--2026-10-18): APROBADO R2 final, PR #2 MERGED con squash idéntico al árbol revisado; CI FULL final PR/main completed/success, seis jobs success y agregados FULL. Main local/tracking/remoto coincidentes, árbol limpio inicial y ningún PR abierto. Primer commit de `chore/t-002-reference-security` reconcilia T-001 done/tarea/STATUS/BACKLOG/HANDOFF y refina solo C. Ningún FULL repetido por reformular documentos ni crédito de pruebas heredado para C/HANDOFF.
+
+| Hallazgo del corte | Decisión dentro del contrato |
+|---|---|
+| B tiene arranque persistente, DB/readiness/UI y proxies probados; R1-01 cerró teardown prematuro en Windows con negativo real | B done, conservar implementación/suites y SETUP TR-13…TR-16; C no reemplaza esas regresiones ni reabre R2/R3 |
+| Falta un CRUD real para enseñar propiedad, formulario y retiro | [S-003 v1](specs/S-003-reference-security.md) y T-002 ready: C1 datos/servicio → C2 API/permisos → C3 UI/cache → C4 integración/cobertura/guía. Una tarea/PR M0, implementación en sesión nueva |
+| Cobertura y logout con mutación en vuelo estaban pendientes de concretar en C | Contratados C-AC-07/09, incluyendo dos identidades/respuesta tardía y mínimos 80% líneas/70% ramas sin reducir base; salen de «Por refinar», todavía sin implementación acreditada |
+| [Observación de eficiencia](https://github.com/MatiasNicolasAcevedo/starter-spring-react/pull/2#issuecomment-6244875257): FULL+cleanup ≈33m26s; dirigidos integrados rojo/verde ≈21m29s/23m12s repiten prefijo local; CI e2e 16m58s en aquel run | Costo de repetición observado, sin perfil por fase ni ahorro demostrado. Mantener pendiente en BACKLOG: primero medir duración/exit saneados y builds/cache; luego evaluar entrada compartida con equivalencia de señal/espera/cleanup demostrada. No implementar optimización ni cambiar política en C |
+| Preparación documental y sondeos repetidos agregan trabajo sin evidencia nueva | Aplicar regla AGENTS ya vigente: agrupar cierre con el avance, evidencia por SHA, checklist/checkpoint útil y pruebas por incertidumbre nueva. Esta conciliación/planificación se publica en un commit sin PR propio ni FULL adicional; cierre técnico de C sí exige FULL/CI/revisión independiente |
+| Guía de retiro de referencia puede destruir datos o confundirse con inicializador/adopción | C documenta conexiones y diferencia DB vacía/existente sin tocar migraciones aplicadas; D integra formulario/guía y E prueba adopción sin kit, ambos draft |
+
+Cola revisada sin ampliar objetivo, arquitectura/auth/ADR, dependencias, aceptación de B, suites/umbrales/retries/deadlines ni protecciones. Endurecimiento de callback sigue pendiente fuera de T-002. No hay decisión nueva del dueño necesaria para implementar C contratada. Próximo corte al cierre de C, cambio relevante o cadencia de cinco tareas de producto. HANDOFF permanece 0/22 NO_LISTO; beta/template solo tras D y adopción validada solo tras E, con el único límite posterior de PROVENANCE.
 
 ## Adopción de otro producto
 Reiniciar PROJECT/ROADMAP/STATUS/BACKLOG desde el contexto nuevo, sin estados del starter. La primera tarea es T-000 de adopción; vuelve a validar HANDOFF, configuración GitHub propia y ensayo limpio. Las reglas/protocolos/ADR/spec de auth permanecen heredadas, sin convertirlas en pruebas ejecutadas.
