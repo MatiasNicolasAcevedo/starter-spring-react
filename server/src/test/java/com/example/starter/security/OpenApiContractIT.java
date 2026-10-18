@@ -107,6 +107,42 @@ class OpenApiContractIT {
     }
 
     @Test
+    void referenceDocumentsOnlyTheFiveOperationsWithSafeDtosAndCombinedMutationProtection() {
+        assertThat(document.<Map<String, Object>>read("$.paths['/api/v1/reference-items']"))
+                .containsOnlyKeys("get", "post");
+        assertThat(document.<Map<String, Object>>read("$.paths['/api/v1/reference-items/{id}']"))
+                .containsOnlyKeys("get", "put", "delete");
+        assertThat(document.<Map<String, Object>>read("$.components.schemas.ReferenceItemView.properties"))
+                .containsOnlyKeys("id", "title", "description", "createdAt", "updatedAt");
+        assertThat(document.<Map<String, Object>>read("$.components.schemas.ReferenceItemInput.properties"))
+                .containsOnlyKeys("title", "description");
+        for (String operation : List.of(
+                "['/api/v1/reference-items'].get",
+                "['/api/v1/reference-items'].post",
+                "['/api/v1/reference-items/{id}'].get",
+                "['/api/v1/reference-items/{id}'].put",
+                "['/api/v1/reference-items/{id}'].delete")) {
+            assertThat(document.<Map<String, Object>>read("$.paths" + operation + ".responses"))
+                    .containsKeys("400", "401", "403", "404");
+        }
+        for (String operation : List.of(
+                "['/api/v1/reference-items'].post",
+                "['/api/v1/reference-items/{id}'].put",
+                "['/api/v1/reference-items/{id}'].delete")) {
+            var protection = document.<List<Map<String, Object>>>read("$.paths" + operation + ".security");
+            assertThat(protection).hasSize(1);
+            assertThat(protection.getFirst()).containsOnlyKeys("sessionCookie", "csrfHeader");
+        }
+        assertThat(document.<List<Map<String, Object>>>read("$.paths['/api/v1/reference-items'].get.parameters"))
+                .extracting(parameter -> parameter.get("name"))
+                .containsExactlyInAnyOrder("page", "size");
+        assertThat(document.<Map<String, Object>>read("$.paths['/api/v1/reference-items'].post.responses"))
+                .containsKey("201");
+        assertThat(document.<Map<String, Object>>read("$.paths['/api/v1/reference-items/{id}'].delete.responses"))
+                .containsKey("204");
+    }
+
+    @Test
     void documentationRoutesStayDeniedOverHttp() throws Exception {
         mockMvc.perform(get("/v3/api-docs")).andExpect(status().isUnauthorized());
         mockMvc.perform(get("/swagger-ui/index.html")).andExpect(status().isUnauthorized());

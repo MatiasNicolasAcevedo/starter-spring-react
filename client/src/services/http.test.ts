@@ -11,6 +11,29 @@ const itemSchema = z.object({ id: z.string(), quantity: z.number().int() })
 const PATH = '/api/v1/test/items'
 
 describe('createHttpClient', () => {
+  it('un 401 tardío de una sesión reemplazada no publica expiración para la identidad nueva', async () => {
+    let release!: () => void
+    const held = new Promise<void>((resolve) => {
+      release = resolve
+    })
+    server.use(
+      mock.post(PATH, async () => {
+        await held
+        return problemResponse(401)
+      }),
+    )
+    const listener = vi.fn()
+    const client = createHttpClient({ onUnauthorized: listener })
+    let current = true
+    const pending = client
+      .requestVoid(PATH, { method: 'POST', sessionIsCurrent: () => current })
+      .catch((error: unknown) => error)
+    current = false
+    release()
+    expect(await pending).toMatchObject({ status: 401 })
+    expect(listener).not.toHaveBeenCalled()
+  })
+
   it('devuelve el cuerpo validado por el esquema y envía cookies del mismo origen', async () => {
     let seen: Request | undefined
     server.use(

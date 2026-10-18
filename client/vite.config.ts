@@ -134,6 +134,9 @@ export default defineConfig(({ command, mode }) => {
         exclude: ['src/test/**', 'src/**/*.test.{ts,tsx}', 'src/main.tsx'],
         reporter: ['text-summary', 'html'],
         reportsDirectory: 'coverage',
+        thresholds: {
+          'src/features/reference/{api,useReferenceItems}.ts': { lines: 80, branches: 70 },
+        },
       },
     },
   }

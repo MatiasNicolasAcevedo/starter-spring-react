@@ -38,6 +38,16 @@ function execute(request) {
       compose(['restart', 'oidc']);
       compose(['restart', 'server']);
       return true;
+    case 'reference-login': {
+      // Test-only native provider login: two subjects share stable signing keys and simultaneous backend sessions.
+      const fixture = structuredClone(original);
+      fixture.interactiveLogin = true;
+      fixture.tokenCallbacks = [];
+      writeFileSync(join(control, 'oidc.json'), JSON.stringify(fixture));
+      compose(['restart', 'oidc']);
+      compose(['restart', 'server']);
+      return true;
+    }
     case 'identity':
       identity(request.identity);
       compose(['restart', 'oidc']);

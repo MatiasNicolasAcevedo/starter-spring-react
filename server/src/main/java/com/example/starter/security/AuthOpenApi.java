@@ -19,9 +19,9 @@ import org.springframework.context.annotation.Configuration;
  * local opt-in of ADR 0003 (GET under /api/docs/); otherwise SecurityConfig keeps every documentation route denied.
  */
 @Configuration(proxyBeanMethods = false)
-class AuthOpenApi {
-    static final String SESSION_COOKIE = "sessionCookie";
-    static final String CSRF_HEADER = "csrfHeader";
+public class AuthOpenApi {
+    public static final String SESSION_COOKIE = "sessionCookie";
+    public static final String CSRF_HEADER = "csrfHeader";
     static final String TAG = "Autenticación";
 
     @Bean

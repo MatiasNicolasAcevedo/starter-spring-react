@@ -2,6 +2,7 @@ import { Route, Routes } from 'react-router'
 import { AuthSessionProvider } from '../features/auth/AuthSessionProvider'
 import { LoginPage } from '../features/auth/LoginPage'
 import { HomePage } from '../features/system/HomePage'
+import { ReferencePage } from '../features/reference/ReferencePage'
 import { AppShell } from './AppShell'
 import { NotFoundPage } from './NotFoundPage'
 
@@ -13,6 +14,7 @@ export function AppRoutes() {
         <Route element={<AppShell />}>
           <Route index element={<HomePage />} />
           <Route path="login" element={<LoginPage />} />
+          <Route path="reference" element={<ReferencePage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>

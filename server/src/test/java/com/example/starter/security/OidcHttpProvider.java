@@ -27,7 +27,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import tools.jackson.databind.json.JsonMapper;
 
 /** Test-only OIDC wire fixture. Spring performs every exchange and validation using HTTP and JWKS. */
-final class OidcHttpProvider implements AutoCloseable {
+public final class OidcHttpProvider implements AutoCloseable {
     enum Variant {
         VALID,
         NONCE_MISSING,
@@ -57,7 +57,7 @@ final class OidcHttpProvider implements AutoCloseable {
     final AtomicInteger jwksCalls = new AtomicInteger();
     private volatile Variant variant = Variant.VALID;
 
-    OidcHttpProvider() {
+    public OidcHttpProvider() {
         try {
             key = new RSAKeyGenerator(2048).keyID("test-signing-key").generate();
             wrongKey = new RSAKeyGenerator(2048).keyID("test-signing-key").generate();
@@ -71,7 +71,7 @@ final class OidcHttpProvider implements AutoCloseable {
         }
     }
 
-    String issuer() {
+    public String issuer() {
         return "http://127.0.0.1:" + server.getAddress().getPort() + "/default";
     }
 

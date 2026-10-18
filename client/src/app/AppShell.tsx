@@ -40,6 +40,14 @@ export function AppShell() {
       </AppBar>
       <Container component="main" maxWidth="md" sx={{ flexGrow: 1, py: { xs: 3, sm: 5 } }}>
         <Stack spacing={3}>
+          <Stack component="nav" aria-label="Navegación principal" direction="row" spacing={2}>
+            <Link component={RouterLink} to="/">
+              Inicio
+            </Link>
+            <Link component={RouterLink} to="/reference">
+              Referencia
+            </Link>
+          </Stack>
           <SessionAlerts />
           {status === 'loading' ? (
             <Stack direction="row" spacing={1.5} role="status" sx={{ alignItems: 'center' }}>
