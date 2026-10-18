@@ -8,13 +8,13 @@
 
 ## Secuencia contratada
 
-El objetivo vigente es completar este mismo starter de A a E. A y B están terminadas con merge/CI comprobados. C está refinada para implementar en sesión nueva, sin código ni pruebas propias todavía. Cada parte requiere revisión, squash merge confirmado y CI vigente antes de activar la siguiente.
+El objetivo vigente es completar este mismo starter de A a E. A y B están terminadas con merge/CI comprobados. C está implementada y en revisión independiente, con evidencia propia en T-002. Cada parte requiere revisión, squash merge confirmado y CI vigente antes de activar la siguiente.
 
 | Parte | Estado real | Resultado en palabras simples |
 |---|---|---|
 | A | done; PR #1 MERGED y CI verificada | Extraer y neutralizar la base, conservar versiones y contratos |
 | B | done; PR #2 MERGED y CI FULL PR/main verificadas | Levantar, comprobar, detener y retomar la aplicación conectada a su DB |
-| C | ready; T-002 / S-003 v1, implementación pendiente | Incorporar un ejemplo removible completo con permisos y pruebas |
+| C | in_review; T-002 / S-003 v1, FULL local verde, CI/revisión final requeridas | Incorporar un ejemplo removible completo con permisos y pruebas |
 | D | draft; espera C MERGED | Personalizar la base con un inicializador y habilitarla como template beta |
 | E | draft; espera D MERGED | Comprobar desde otra copia limpia que sirve para empezar otra aplicación |
 

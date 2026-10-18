@@ -1,17 +1,17 @@
 # Tablero vivo
 
-Próxima acción: baseline propia FULL de T-002 (C), luego C1→C4 conforme S-003 v1. B done con PR/main FULL verdes. Precondición y único prompt en STATUS.
+Próxima acción: revisar T-002 (C) en sesión independiente tras CI FULL final verde conforme S-003 v1. B done con PR/main FULL verdes. Precondición y único prompt en STATUS.
 
 ## En vuelo
 | Tarea | Estado | Salida |
 |---|---|---|
-| [T-002](tasks/T-002-reference-security.md) | in_progress | C: precondiciones conciliadas, baseline propia FULL antes de código; C1→C4 secuenciales |
+| [T-002](tasks/T-002-reference-security.md) | in_review | C1→C4 implementadas; FULL propio verde, CI final/revisión independiente requeridas |
 
 ## Listas
 Ninguna.
 
 ## Bloqueadas
-D/E permanecen draft, dependientes del merge de su predecesora; ver ROADMAP. C en implementación; D espera su merge.
+D/E permanecen draft, dependientes del merge de su predecesora; ver ROADMAP. C en revisión; D espera su merge.
 
 ## Por refinar
 - Eficiencia evaluada en el [corte de B](ROADMAP.md#revisión-de-ciclo--cierre-de-b--2026-10-18): mantener pendiente medición saneada duración/exit por fase y costo de builds/cachés; después evaluar entrada compartida para señal dirigida, solo con equivalencia demostrada y negativo real/FULL/CI intactos. [Observación y tiempos](https://github.com/MatiasNicolasAcevedo/starter-spring-react/pull/2#issuecomment-6244875257); sin ahorro ni optimización acreditados. Fuera de T-002; no modificar suites, aceptación, umbrales, retries o deadlines por esta anotación.

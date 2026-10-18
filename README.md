@@ -2,7 +2,7 @@
 
 Base genérica Java 21 / Spring Boot 4.1.1, React/TypeScript/Vite y PostgreSQL 18.6. MIT · Matias Nicolas Acevedo.
 
-**Estado: A y B terminadas y mergeadas; C refinada, pendiente de implementación.** No es beta ni template validado. Estado y contratos B…E en [ROADMAP](docs/ROADMAP.md); pruebas propias y cierre de B en [T-001](docs/tasks/T-001-local-stack.md). Origen y límites de continuidad: [PROVENANCE](docs/PROVENANCE.md).
+**Estado: A y B terminadas y mergeadas; C implementada, en revisión independiente.** No es beta ni template validado. Estado y contratos B…E en [ROADMAP](docs/ROADMAP.md); pruebas propias de C en [T-002](docs/tasks/T-002-reference-security.md). Origen y límites de continuidad: [PROVENANCE](docs/PROVENANCE.md).
 
 **Destino:** crear aplicaciones con «Use this template → Create a new repository», personalizar y verificar la base, y empezar el primer flujo. D integrará el formulario de contexto y la guía breve de adopción/crecimiento; E comprobará el recorrido sin kit personal. Objetivo aceptado y condiciones de retiro de `plantilla/`: [PROJECT_CONTEXT](PROJECT_CONTEXT.md#adopción-futura).
 
@@ -30,4 +30,4 @@ COMPOSE_ENV_FILES=.env.example COMPOSE_PROJECT_NAME=starter-verify-mi-prueba STA
 
 FULL ejecuta docs, backend con PostgreSQL Testcontainers, cliente (typecheck/lint/formato/tests/build) y E2E real con cleanup. Usar proyectos propios y retirar únicamente red/caché del gate según SETUP. Suites sueltas son iteración y no habilitan merge.
 Inventario completo: [DEPENDENCIES](docs/DEPENDENCIES.md). Reglas: [AGENTS](AGENTS.md), [AUTONOMY](docs/AUTONOMY.md). Futura adopción: contexto propio y T-000 nueva, revalidando los 22 criterios de HANDOFF; no heredar estados/evidencia ni ajustes GitHub.
-Validación propia de B: FULL local R2 exit0 y CI FULL final PR/main success; alcance, fechas y evidencia por SHA en T-001 y PR #2. C aún no implementada ni validada. Sin garantía de adopción hasta E MERGED y validada.
+Validación propia de B: FULL local R2 exit0 y CI FULL final PR/main success; evidencia por SHA en T-001 y PR #2. Referencia privada `/reference`, conexiones y retiro seguro: [REFERENCE](docs/REFERENCE.md). C tiene FULL local propio verde; CI final y revisión independiente son precondiciones de entrega registradas en T-002/PR #3. Sin garantía de adopción hasta E MERGED y validada.

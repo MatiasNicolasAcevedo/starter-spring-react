@@ -14,7 +14,7 @@ navegador → client (SPA/proxy) → server (MVC/Security/JPA) → db
 Paquete neutral `com.example.starter`, groupId com.example, artifactId starter-server. Feature contiene controller/DTO/servicio/persistencia; separar web/application/persistence/domain al crecer. Sin ciclos ni acceso al repositorio de otra feature.
 identity crea/recupera app_user por issuer/subject, UUID v7 y constraint única; email/nombre mutables sin otorgar permisos. security mantiene OIDC/sesión/CSRF/origen. shared/error ofrece ProblemDetail con errors de campo ordenados. system expone GET /api/v1/system/info con nombre/versión reales.
 Flyway V1 se conserva, JPA validate y open-in-view=false. Instant/TIMESTAMPTZ y JVM UTC; Clock inyectado. DB de pruebas efímera separada del volumen de desarrollo. Sin tablas/reglas del dominio anterior.
-La feature CRUD removible, autorización por dueño y migración propia pertenecen a C; todavía no existen. B incorpora readiness DB y la pantalla conectada; evidencia propia y estado de integración en T-001.
+La feature CRUD privada `reference` agrega V2, consultas por dueño y contrato S-003. Conexiones y retiro seguro en [REFERENCE](REFERENCE.md); estado/evidencia de C en T-002. B incorpora readiness DB y la pantalla conectada; evidencia propia en T-001.
 
 ## Seguridad
 Contrato heredado: [auth](specs/S-001-auth-google.md), ADR 0002 y ADR 0003. Revalidar las suites en esta base.
