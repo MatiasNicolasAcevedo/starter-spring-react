@@ -1,17 +1,17 @@
 # Tablero vivo
 
-Próxima acción: revisar T-002 (C) en sesión independiente tras CI FULL final verde conforme S-003 v1. B done con PR/main FULL verdes. Precondición y único prompt en STATUS.
+Próxima acción: corregir R1-01 de T-002 (C) en sesión implementer nueva conforme S-003 v1 y revisión R1. B done con PR/main FULL verdes. Precondición y único prompt en STATUS.
 
 ## En vuelo
 | Tarea | Estado | Salida |
 |---|---|---|
-| [T-002](tasks/T-002-reference-security.md) | in_review | C1→C4 implementadas; FULL propio verde, CI final/revisión independiente requeridas |
+| [T-002](tasks/T-002-reference-security.md) | changes_requested | R1-01: páginas válidas grandes devuelven 403; FULL reviewer verde y corrección requerida en la misma rama/PR |
 
 ## Listas
 Ninguna.
 
 ## Bloqueadas
-D/E permanecen draft, dependientes del merge de su predecesora; ver ROADMAP. C en revisión; D espera su merge.
+D/E permanecen draft, dependientes del merge de su predecesora; ver ROADMAP. C con corrección R1-01 pendiente; D espera su merge.
 
 ## Por refinar
 - Eficiencia evaluada en el [corte de B](ROADMAP.md#revisión-de-ciclo--cierre-de-b--2026-10-18): mantener pendiente medición saneada duración/exit por fase y costo de builds/cachés; después evaluar entrada compartida para señal dirigida, solo con equivalencia demostrada y negativo real/FULL/CI intactos. [Observación y tiempos](https://github.com/MatiasNicolasAcevedo/starter-spring-react/pull/2#issuecomment-6244875257); sin ahorro ni optimización acreditados. Fuera de T-002; no modificar suites, aceptación, umbrales, retries o deadlines por esta anotación.
@@ -24,4 +24,4 @@ D/E permanecen draft, dependientes del merge de su predecesora; ver ROADMAP. C e
 | [T-001](tasks/T-001-local-stack.md) | done | B: PR #2 MERGED, squash/CI FULL final PR y main comprobados; evidencia canónica en tarea |
 | [T-000](tasks/T-000-starter-extraction.md) | done | A: PR #1 MERGED, squash 47184f725f8a89528acac0aa3e7383f2334258de; FULL PR 39044690435 y main 39045270616 verificadas success, seis jobs verdes |
 
-Objetivo y estado de A…E: ROADMAP. Única tarea activa T-002; cobertura y logout en vuelo contratados en S-003 C-AC-07/09. HANDOFF 0/22 NO_LISTO; evidencia de A/B en T-000/T-001.
+Objetivo y estado de A…E: ROADMAP. Única tarea activa T-002; R1 independiente y evidencia propia en T-002; corrección R1-01 antes de R2. Cobertura y logout en vuelo contratados en S-003 C-AC-07/09. HANDOFF 0/22 NO_LISTO; evidencia de A/B en T-000/T-001.

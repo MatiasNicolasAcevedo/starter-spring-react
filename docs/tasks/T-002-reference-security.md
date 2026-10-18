@@ -1,10 +1,10 @@
 ---
 id: T-002
-status: in_review
+status: changes_requested
 priority: P1
 size: M
 executor: frontier
-role: implementer
+role: reviewer
 milestone: M0
 counts_for_cycle: false
 product_cycle: null
@@ -130,3 +130,35 @@ Exigir preflight0/0/0 de ambos nombres nuevos, `.env.example`/fixtures ficticias
 | C-AC-10 | [Guía de retiro](../REFERENCE.md), OpenAPI de código y cuatro casos previos intactos; FULL/cleanup/huella propios; CI final/revisión como precondición observable |
 
 Tarea/STATUS/BACKLOG/HANDOFF transicionan juntos a **in_review**, no done. Validación de cierre: docs-check exit0 (43 Markdown/5 tareas/0 de 22), matrices CI/documentales 56/56 sin fallos/omitidos y diff-check verde; kit ignorado/fuera de Git/índice. PR ready tras conciliar la ejecución push vigente según TR-07; esperar **CI FULL completed/success del HEAD final exacto**, política/base/HEAD en agregado y classify/docs-check/server/client/e2e/verify-required success sin omisiones. Run/SHA/resultado se registran en PR #3 sin commit autorreferencial. Árbol final limpio y HEAD local/tracking/remoto/PR idénticos. Único prompt vigente en STATUS para sesión reviewer nueva; esta sesión no publica APROBADO ni mergea. D/E draft, HANDOFF **0/22 NO_LISTO**, sin beta/template/adopción validada. Google real pendiente externo del dueño; ningún acceso a origen/recursos ajenos/protecciones. Único límite posterior a E en PROVENANCE.
+
+## Revisión independiente R1 · 2026-10-18
+Reviewer en sesión nueva, distinta de implementación; Codex desktop/API y terminal PowerShell/Git Bash, familia expuesta GPT-6. Identificador runtime exacto y esfuerzo efectivo no expuestos; Sol/high solicitado, sin atribuir selección, delegar ni abrir otra sesión/modelo. Impacto efectivo de esta sesión: evaluación de comportamiento/API/propiedad/datos/UI y transición documental; ningún cambio ejecutable, de permisos o de datos persistentes.
+
+Precondiciones conciliadas antes de editar: árbol limpio; T-001 done/PR #2 MERGED; S-003 v1 approved; único PR #3 OPEN/ready propio. HEAD local/tracking/remoto/PR `06c0993428a175ae9fe204fb399948d6f82e61cc`, padre exacto `6541ec145da9491b18e87baebb31b88c64368cb6` y delta posterior solo documental; main/base local/tracking/remoto `881b365ab2cd2e3ec87031b44ec58b1ec324a3ef`. CI final inicial [39158688367](https://github.com/MatiasNicolasAcevedo/starter-spring-react/actions/runs/39158688367) completed/success, seis jobs completed/success sin omisiones; agregado FULL/draft=false/base/HEAD exactos. Evidencia implementer local corroborada: manifiestos de 224 fuentes con huella publicada, negativos de propiedad/CSRF/cache/cobertura y ocho namespaces 0/0/0. No sustituye las pruebas propias siguientes.
+
+Checkpoint y FULL propios R1 sobre ese HEAD/base, con preflight de ambos proyectos 0/0/0:
+```bash
+COMPOSE_ENV_FILES=.env.example COMPOSE_PROJECT_NAME=starter-verify-c-review-r1-20261018-01 STARTER_E2E_PROJECT=starter-e2e-c-review-r1-20261018-01 STARTER_SERVER_TESTS=container bash scripts/verify.sh
+```
+**FULL exit0 en 34m37s**, cleanup verify exit0: docs/server/client/e2e OK. Backend **90 unit/slices + 70 IT PostgreSQL**, client **133/133** y typecheck/lint/formato/cobertura/build, Playwright **15/15** en 1280/375; reportes sin fallos/errores/omitidos. JaCoCo reference/application **45/45 líneas y 20/20 ramas**, mínimos client 80/70 aprobados. Regresiones auth/OIDC/perfiles, lifecycle B, ambos proxies, copia sin kit, señales y Swagger ejecutadas; SIGTERM de proxies exit143 y labels0/0/0 al retorno antes de emergencia. Capturas propias saneadas desktop/móvil inspeccionadas, legibles y sin overflow.
+
+**224 fuentes técnicas idénticas** antes/después; ambos manifiestos SHA256 `2522f7df93703c03be20d5458f316bd603630c4c782ef7bb1d8c7555acd18cea`, también coincidentes con el código probado del implementer. Comprobación final independiente de los **ocho namespaces observados 0/0/0**. Evidencia local ignorada en TEMP del host (`C:/Users/matia/AppData/Local/Temp`): prefijo `starter-c-review-r1-20261018-01`, archivos `.log`, `-checkpoint.txt`, `-result.json`, `-source-before.json`, `-source-after.json` y `-projects.txt`. Export auditado propio: `e2e/artifacts/starter-e2e-c-review-r1-20261018-01/sanitized/`; brutos no publicables.
+
+### R1-01 · P2 · Página válida supera el offset admitido por JPA
+En `ReferenceItemService.list`, líneas 29–30 del HEAD revisado, cualquier page>=0/size1…100 se entrega a PageRequest/JPA. Spring Data JPA rechaza offset>Integer.MAX_VALUE. Probe HTTP independiente, fuera del PR y sin editar fuentes, inició OIDC real con fixture de test y PostgreSQL 18.6 propios, creó un elemento y observó:
+
+| GET autenticado a /api/v1/reference-items | Resultado real |
+|---|---|
+| ?page=100&size=20 | 200, content vacío, totalElements=1, totalPages=1 |
+| ?page=107374183&size=20 | 403 ProblemDetail, instance=/error |
+| ?page=2147483647&size=100 | 403 ProblemDetail, instance=/error |
+
+Las dos últimas entradas son válidas según regla 7 de S-003; incumplen **C-AC-05**, que exige contenido vacío y conteo real fuera de rango. El error de persistencia termina presentado como falta de permiso. Corregir el manejo del offset sin reducir el contrato de paginación y agregar regresión HTTP/PostgreSQL que primero quede roja, incluyendo conteo filtrado por dueño. No habilitar globalmente /error como sustituto de la corrección ni debilitar suites/asserts/umbrales/retries/deadlines.
+
+Probe temporal: `starter-c-review-r1-probe-20261018-01/` en TEMP del host, con fuente Java/launcher/checkpoint, `probe-02.log` y `result.txt`. Instrumentación exit0; la discrepancia HTTP anterior es el resultado del probe, no un test verde de aceptación. Primer intento exit2 antes de Java por CRLF del launcher temporal; corregido solo a LF, sin cambiar PR/tests. Proyecto propio `starter-verify-c-review-r1-probe-20261018-01` y sesión Testcontainers `41d1f13f-e864-4208-a15e-c75ef72172a7` comprobados 0/0/0 al finalizar; montajes de fuentes/cache de solo lectura y DB ficticia eliminada.
+
+Diff publicado completo revisado contra base y C-AC-01…10: propiedad/CSRF/DTO/migración/validación, UI/RHF/Zod/foco/estados, nueve respuestas retenidas y dos identidades, cobertura/negativos y guía de retiro; conservación de auth/OIDC/perfiles/proxies/lifecycle B/Swagger. No se identificaron otros bloqueantes en esta ronda. FULL verde no cubre el borde R1-01 y no acredita C-AC-05 ni cierre global.
+
+Validación de transición: docs-check exit0 (43 Markdown, 5 tareas, HANDOFF 0/22), matrices CI/documentales **56/56**, cero fallos/cancelados/omitidos (`-matrices.log` bajo el mismo prefijo), y diff-check verde. El primer docs-check detectó la ausencia del formato canónico del conteo HANDOFF en STATUS; corregido el documento, sin tocar el validador. Diff de cuatro Markdown revisado; inventario de 224 fuentes no Markdown completo, también sin cambios en los tres Markdown que el clasificador considera técnicos si se modifican. Kit ignorado/fuera de Git e índice verificado antes de commit.
+
+Resultado R1: **changes_requested**, un bloqueante R1-01; sin APROBADO ni merge. Transición exclusivamente documental de tarea/STATUS/BACKLOG/HANDOFF. Publicar veredicto CAMBIOS REQUERIDOS en PR #3 solo después de push, conciliación del nuevo HEAD y CI requerida final; registrar allí SHA/base/run sin otro commit autorreferencial. Próxima acción: implementer en sesión nueva, misma tarea/rama/PR, seguido de reviewer R2 independiente. Máximo dos rondas y tres correcciones distintas por bloqueo; no R3 automático. D/E draft; HANDOFF **0/22 NO_LISTO**; Google real, origen, recursos ajenos y protecciones intactos. Única continuidad posterior a E en PROVENANCE.
