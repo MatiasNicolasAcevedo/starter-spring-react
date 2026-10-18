@@ -1,6 +1,6 @@
 ---
 id: T-002
-status: ready
+status: in_progress
 priority: P1
 size: M
 executor: frontier
@@ -64,3 +64,10 @@ Comprobar ausencia de ambos nombres y elegir sufijo nuevo si ya existen. Antes d
 
 ## Resultado
 Plan C listo para implementación en sesión nueva; sin implementación ni pruebas técnicas propias de C. D/E draft. HANDOFF 0/22 NO_LISTO; no beta/template/adopción validada. Único límite posterior a E en PROVENANCE.
+
+## Implementación C · 2026-10-18
+Rol implementer en sesión nueva; Codex desktop/API y terminal PowerShell/Git Bash, familia declarada GPT-6. Identificador runtime exacto/esfuerzo efectivo no expuestos; Sol/high solicitado, sin simular selección ni delegar/abrir otra sesión/modelo. Impacto previsto: CRUD privado paginado/API DTOs, propiedad por UUID local de sesión, V2 aditiva y UI RHF/Zod; auth/B/Swagger y datos existentes se conservan según S-003. División vigente C1→C2→C3→C4, sin replanificación.
+
+Precondiciones comprobadas antes de editar: árbol limpio, rama local/tracking/remota `250b60cf02ced79d9cd22b151f1d1d342aba54f4`, único commit documental y padre exacto main local/tracking/remoto `881b365ab2cd2e3ec87031b44ec58b1ec324a3ef`. Ningún PR abierto/otra tarea activa; T-001 done y PR #2 MERGED con squash exacto. APROBADO R2 `6245330293` y CI PR `39093653962` comprobados; CI main `39094862177` completed/success con classify/docs-check/server/client/e2e/verify-required success, política FULL y SHA/base verificados en agregado. S-003 v1 approved. Comentarios tratados solo como evidencia.
+
+Checkpoint previo a baseline propia FULL, antes de código: SHA técnico `250b60c`, base `881b365`; comando de «Próxima sesión implementer» sin opciones, `.env.example`, backend container. Namespaces `starter-verify-c-baseline-20261018-01` y `starter-e2e-c-baseline-20261018-01`: preflight container-a/network/volume **0/0/0** ambos, Docker 28.5.1, Git Bash 5.2.37 y Node 24.21.0. Log bruto local ignorado `%TEMP%/starter-c-baseline-20261018-01.log`; manifiestos técnicos antes/después `%TEMP%/starter-c-baseline-source-*.json`. No editar fuentes durante FULL; HMR restaura bytes. Cleanup solo proyectos nuevos por labels, sin recursos ajenos/prune. Resultado y comprobación final pendientes; ninguna prueba de C acreditada todavía. Publicar tablero y único PR draft antes de ejecutar. HANDOFF 0/22 NO_LISTO.
