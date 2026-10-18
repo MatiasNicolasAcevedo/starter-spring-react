@@ -1,0 +1,59 @@
+# Explicit local development only; dev.sh supplies validated parameters and ownership.
+x-local-labels: &local-labels
+  io.starter.local.owner: "v1"
+  io.starter.local.source: ${STARTER_LOCAL_SOURCE:?dev.sh required}
+  io.starter.local.mode: local
+  io.starter.local.proxy: ${STARTER_LOCAL_PROXY:?dev.sh required}
+  io.starter.local.origin: ${APP_PUBLIC_URL:?dev.sh required}
+  io.starter.local.oidc-port: ${LOCAL_OIDC_PORT:?dev.sh required}
+
+services:
+  db:
+    labels: *local-labels
+  oidc:
+    labels: *local-labels
+  server:
+    labels: *local-labels
+    environment:
+      APP_PUBLIC_URL: ${APP_PUBLIC_URL:?dev.sh required}
+      STARTER_API_DOCS_ENABLED: ${STARTER_API_DOCS_ENABLED:-false}
+  client:
+    labels: *local-labels
+    environment:
+      APP_PUBLIC_URL: ${APP_PUBLIC_URL:?dev.sh required}
+  client-dev:
+    labels: *local-labels
+    environment:
+      APP_PUBLIC_URL: ${APP_PUBLIC_URL:?dev.sh required}
+  local-probe:
+    profiles: ["local"]
+    image: node:24.21.0-alpine
+    labels: *local-labels
+    working_dir: /repo
+    command: ["node", "scripts/probe-dev-stack.mjs"]
+    environment:
+      APP_PUBLIC_URL: ${APP_PUBLIC_URL:?dev.sh required}
+      STARTER_LOCAL_PROXY: ${STARTER_LOCAL_PROXY:?dev.sh required}
+      LOCAL_OIDC_PORT: ${LOCAL_OIDC_PORT:?dev.sh required}
+    volumes:
+      - ./scripts/probe-dev-stack.mjs:/repo/scripts/probe-dev-stack.mjs:ro
+  local-browser:
+    profiles: ["local"]
+    build:
+      context: ./e2e
+    labels: *local-labels
+    init: true
+    shm_size: 1gb
+    command: ["node", "harness/local-stack.mjs"]
+    environment:
+      APP_PUBLIC_URL: ${APP_PUBLIC_URL:?dev.sh required}
+      STARTER_LOCAL_PROXY: ${STARTER_LOCAL_PROXY:?dev.sh required}
+    volumes:
+      - ${STARTER_LOCAL_ARTIFACTS:-./e2e/artifacts/local-browser}:/artifacts
+
+networks:
+  default:
+    labels: *local-labels
+volumes:
+  db-data:
+    labels: *local-labels

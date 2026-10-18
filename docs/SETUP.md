@@ -7,21 +7,26 @@ Docker Desktop abierto (Linux/WSL2), Compose V2 y Git Bash. Node >=24 en host pa
 En PowerShell usar `& "C:\Program Files\Git\bin\bash.exe" scripts/verify.sh`. No ejecutar scripts con otro shell ni modificar configuración global.
 
 ## Primer uso local sin Google
-Git Bash, desde raíz: `bash scripts/dev-auth.sh nginx starter-dev-auth-local-nginx session`. O `bash scripts/dev-auth.sh vite starter-dev-auth-local-vite session`.
-Se usan únicamente fixtures ficticias y overlay compose.dev-auth.yml + compose.auth-test.yml, perfil e2e explícito. UI loopback 5175 (nginx) o 5176 (Vite), mismo origen en proxy/backend/callback; proveedor local http://host.docker.internal:8090/default. Ctrl-C/stop elimina datos ficticios y recursos propios: este harness no es desarrollo persistente.
-Desde otra terminal, mismo modo/proyecto: acciones status/restart/rebuild/stop. El watcher observa la red, que sobrevive a recreate; no el instante en que el proxy está running. Nunca editar Bash mientras está corriendo.
-B adapta esta entrada a dev.sh up/check/down con persistencia y health DB, conservando sus negativos. No existe todavía dev.sh.
+Comandos persistentes mínimos en [README](../README.md#modo-local-explícito-sin-credenciales). Cada acción exige --mode local, --proxy nginx|vite y --project starter-dev- seguido de un sufijo propio. El namespace starter-dev-auth- está reservado al harness efímero. Docker Desktop/Compose V2/Git Bash bastan para up/check/down; Node >=24 host sigue siendo requisito separado del controlador FULL/E2E.
+
+La fixture scripts/fixtures/local.env.example contiene solo CLIENT_PORT=5175, CLIENT_DEV_PORT=5176, LOCAL_OIDC_PORT=8090 y STARTER_API_DOCS_ENABLED=false. Para coexistencia, copiar sus cuatro parámetros a un archivo local y pasarlo por --env-file en **cada acción**; elegir puertos distintos libres (1024…65535). El script acepta solo esas claves literales, nunca ejecuta su contenido, rechaza .env y claves Google/APP_PUBLIC_URL/perfiles. Construye el origen HTTP loopback y callback según el proxy. Swagger se activa únicamente cambiando el interruptor a true; URL /api/docs/swagger-ui.html. La fixture de ensayo usa 15175/15176/18090 y Swagger true, exclusivamente datos ficticios.
+
+up construye y espera el stack, o comprueba uno propio ya activo sin recrearlo; check usa el runner Node fijado para comprobar JSON de system/info, readiness DB y discovery/JWKS del issuer exacto sin login. HTML 200, health DOWN, issuer ajeno y respuestas fuera de esquema fallan con diagnóstico fijo. down retira contenedores/red propios y conserva su volumen con huella de source/mode/proxy/origin/puerto OIDC. Usar los mismos parámetros y ruta de checkout para retomar; ante otra huella se rechaza antes de mutar. No ofrece borrado de datos. Un fallo de arranque retira solo recursos creados en ese intento y conserva volúmenes propios previos. Si informa rollback incompleto, inspeccionar solo labels del proyecto registrado; nunca prune.
+
+OIDC local conserva http://host.docker.internal:PUERTO/default desde navegador y backend. Los runners usan DNS Docker y el origen público exacto, sin hosts globales ni desactivar validaciones. Un navegador host es opcional. En Windows, para login manual usar un perfil de navegador efímero propio y resolución por proceso --host-resolver-rules="MAP host.docker.internal 127.0.0.1" (TR-11); no afecta otros perfiles ni el sistema. Las sondas/navegador containerizados son el ensayo portable. No usar un navegador preexistente con cookies personales para automatización.
+
+El harness heredado sigue separado: bash scripts/dev-auth.sh nginx starter-dev-auth-local-nginx session (o vite con su namespace). Perfil e2e y fixtures ficticias explícitas; Ctrl-C/stop elimina su DB. Acciones status/restart/rebuild/stop conservan la sesión efímera y sus negativos. No editar scripts Bash mientras estén corriendo.
 
 ## Comandos de verificación aislada
 ```bash
-COMPOSE_ENV_FILES=.env.example COMPOSE_PROJECT_NAME=starter-a-gate bash scripts/verify.sh
+COMPOSE_ENV_FILES=.env.example COMPOSE_PROJECT_NAME=starter-verify-mi-prueba STARTER_E2E_PROJECT=starter-e2e-mi-prueba STARTER_SERVER_TESTS=container bash scripts/verify.sh
 # Al terminar, solo del proyecto propio recién creado:
-docker compose --env-file .env.example -p starter-a-gate --profile verify down --volumes --remove-orphans
+docker compose --env-file .env.example -p starter-verify-mi-prueba --profile verify down --volumes --remove-orphans
 ```
-Antes de usar ese nombre, comprobar que no tiene recursos: listar container (incluidos detenidos), network y volume con label=com.docker.compose.project=starter-a-gate. Si existe, elegir nombre nuevo; nunca adoptar o borrar un stack previo.
+Antes de usar ese nombre, comprobar que no tiene recursos: listar container (incluidos detenidos), network y volume con label=com.docker.compose.project=starter-verify-mi-prueba. Si existe, elegir nombre nuevo; nunca adoptar o borrar un stack previo.
 El gate no opera DB ordinaria: server-tests usa Testcontainers y caché propia; E2E genera namespace reservado starter-e2e-<sufijo>, comprueba ausencia antes del trap y verifica cero recursos al salir. No usar prune ni down -v ordinario.
 Suites: verify.sh --docs/--server/--client/--e2e; --fast es parcial. Diagnóstico directo `node scripts/docs-check.mjs`; matrices `node --test "scripts/ci/*.test.mjs"`.
-Proveedor aislado `node scripts/test-oidc-provider-stack.mjs`; frontera proxies `node scripts/test-auth-proxies.mjs`; UI real Windows `node scripts/test-auth-ui-smoke.mjs [--vite]`; desarrollo `node scripts/test-dev-auth.mjs nginx|vite`. Los scripts de navegador host requieren `npm ci --prefix e2e --no-audit --no-fund` y Edge Windows preexistente; el runner E2E Chromium containerizado es el camino portable, sin navegador instalado en host.
+Proveedor aislado `node scripts/test-oidc-provider-stack.mjs`; frontera proxies `bash scripts/test-auth-proxies.sh`; UI real Windows `node scripts/test-auth-ui-smoke.mjs [--vite]`; desarrollo `node scripts/test-dev-auth.mjs nginx|vite`. Los scripts de navegador host requieren `npm ci --prefix e2e --no-audit --no-fund` y Edge Windows preexistente; el runner E2E Chromium containerizado es el camino portable, sin navegador instalado en host.
 Regresión de proxy `node scripts/test-proxy-outage.mjs` requiere un proyecto de ensayo propio healthy y COMPOSE_PROJECT_NAME propio: detiene/restaura su server/client, jamás dirigirla a datos del dueño.
 
 ## Puertos, variables y origen
@@ -56,5 +61,10 @@ Perfil real apagado/restringido según ADR, CSRF intacto en mutaciones. Probar n
 | TR-10 | headless window-size a 375 recorta por mínimo 504 | CDP Emulation.setDeviceMetricsOverride para smokes; Playwright viewport 375/1280 |
 | TR-11 | host.docker.internal Windows no apunta a loopback publicado | Resolución por proceso del hostname exacto en probe/Edge; preservar URL/Host/issuer/claims. Docker usa alias de red; sin hosts globales ni desactivar validaciones |
 | TR-12 | TEMP Git Bash aparece /tmp y control E2E no ve request.json | Con MSYS_NO_PATHCONV, convertir solo STARTER_E2E_ARTIFACTS con cygpath -m; Node Windows y bind Docker usan misma ruta nativa. Linux conserva ruta. Verificar bind/sonda bidireccional; no aumentar timeouts |
+| TR-13 | Docker reasigna el puerto host dinámico al stop/start; el datasource de Testcontainers conserva el anterior | ReadinessIT interrumpe PostgreSQL con pause/unpause en la misma dirección; el ensayo Compose prueba stop/start por servicio interno. No ampliar timeouts ni cambiar el datasource para ocultar el fallo. Reproducción propia en T-001 |
+| TR-14 | El ensayo contaba como recuperación el check negativo con la DB aún detenida | Sincronizar navegador/controlador antes de start: la ventana de 30 s incluye arranque y recuperación, después del check negativo. Mantener caída y recuperación separadas y los límites intactos; evidencia en T-001 |
+| TR-15 | En Linux Docker crea un bind source ausente como root y el host no puede escribir IPC/HMR | El ensayo crea su directorio nuevo de artefactos desde el host antes del primer bind, después de validar ausencia e instalar cleanup. No cambiar permisos globales; reproducción root/UID 1000 en T-001 |
+
+TR-16: en Windows, TERM externo mata Node nativo sin ejecutar su manejador/finally. La entrada de proxies es `bash scripts/test-auth-proxies.sh`: el propietario Bash escribe la solicitud de parada, espera a que Compose termine y el worker la reconozca entre operaciones, completa cleanup y comprueba labels cero antes de devolver 130/143/129. No matar Node a mitad de un up ni confiar solo en su manejador. `test-auth-proxies.mjs` conserva la matriz; el gate usa siempre el propietario Bash. Evidencia roja/verde en T-001.
 
 Cleanup se instala antes de build/up, después de rechazar namespace ajeno y recursos preexistentes. Preservar fallo/señal original; error de limpieza también rechaza verde. Revisar labels en container -a, network y volume; cero residuales propios. No editar scripts Bash en ejecución.

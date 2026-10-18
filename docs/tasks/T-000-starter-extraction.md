@@ -1,6 +1,6 @@
 ---
 id: T-000
-status: mergeable
+status: done
 executor: frontier
 role: merger
 milestone: M0
@@ -45,7 +45,7 @@ Primer reporte de PR #1, run 39042564145: classify/docs/server/client/e2e SUCCES
 Estado final de implementación: in_review, próximo rol reviewer en sesión distinta. Últimos cambios solo documentales: estado/contratos/checkpoint/registro de protecciones; docs y matrices se revalidan antes del push. HEAD documental final, base y CI FULL exacta se publican en el comentario de cierre del PR una vez comprobados, sin atribuir el run draft como aprobación ni otro commit autorreferencial. Si esa publicación no existe o no coincide con HEAD, la precondición de revisión no se cumple.
 
 ## Resultado
-Implementación A revisada en sesión independiente R1, sin bloqueantes; transición documental a mergeable en [PR #1](https://github.com/MatiasNicolasAcevedo/starter-spring-react/pull/1). El veredicto APROBADO solo queda vigente al publicarse en el PR con HEAD documental final, base y CI FULL verde. No equivale a MERGED ni done. B…E siguen draft sin ejecución; no beta/template ni adopción validada.
+Implementación A revisada en sesión independiente R1 y cerrada: [PR #1](https://github.com/MatiasNicolasAcevedo/starter-spring-react/pull/1) MERGED el 2026-10-17 a las 15:29:28 UTC; squash `47184f725f8a89528acac0aa3e7383f2334258de`. Reconciliación remota propia en sesión planner nueva, detallada al final. A done; B queda para planificación e implementación secuenciales. Sin beta/template ni adopción validada.
 
 ## Revisión independiente R1 · 2026-10-17
 Rol reviewer, con continuidad merger solo para este PR. Sesión distinta de la implementación; Codex desktop/API, familia declarada GPT-6. Identificador runtime exacto y esfuerzo efectivo no expuestos; no se atribuye Sol/high ni se simula selección. Sin delegación ni otra sesión/modelo.
@@ -54,3 +54,13 @@ Impacto de esta transición: solo tarea/STATUS/BACKLOG/HANDOFF; sin cambios de c
 Validación propia: COMPOSE_ENV_FILES=.env.example COMPOSE_PROJECT_NAME=starter-a-review-20261017 STARTER_E2E_PROJECT=starter-e2e-a-review-20261017 STARTER_SERVER_TESTS=container, Git Bash scripts/verify.sh sin opciones, exit 0: docs/server/client/e2e OK. Backend 81 unitarios/slices + 60 IT PostgreSQL 18.6, sin fallos/omitidos, Spotless/JaCoCo; client 100 tests/11 archivos, typecheck/lint/formato/build; Playwright 11/11 a 1280/375 y Swagger desktop, canarios del saneador y export auditado tests=11/failures=0. Matrices CI/docs 56/56, exit 0. POM efectivo regenerado por runner y dependency-inventory.py exit 0: Maven 20/client 32/E2E 1, parent/plugins/wrappers/locks conservados. Primer intento de help:effective-pom rechazado por entrecomillado PowerShell del argumento -Doutput; corregido sin tocar archivos del PR ni suites.
 Logs locales ignorados: TEMP/starter-A-review-full.log, starter-A-review-matrices.log, starter-A-review-effective.log y starter-A-review-cleanup.log; POM server/target/starter-review-effective.xml; reporte e2e/artifacts/starter-e2e-a-review-20261017/sanitized/junit.xml. Cleanup exit 0; labels de ambos proyectos inspeccionados con container -a/network/volume=0/0/0. Sin Google real, hosts globales ni recursos ajenos.
 Checkpoint antes del push/CI: revisar únicamente el diff documental, docs-check y matrices; publicar, comprobar HEAD nuevo local/remoto/PR y esperar FULL de ese HEAD contra la misma base. Recién entonces comentar veredicto con ambos SHA. Si falla CI o cambia base/HEAD, no aprobar ni mergear. Tras APROBADO, ningún commit adicional; merger reconsulta controles y usa squash ligado al SHA. Tras MERGED y CI main verde, la próxima sesión reconcilia T-000 y revisa ciclo antes de refinar B en su rama exacta; esta sesión no inicia B.
+
+## Reconciliación posterior al merge · 2026-10-17
+Sesión nueva, rol planner; herramienta Codex desktop/API con terminal PowerShell/Git Bash, familia declarada GPT-6. Identificador runtime exacto y esfuerzo efectivo no expuestos: no se atribuye Sol/high ni se simula selección. Sin delegación ni apertura de otra sesión/modelo.
+
+Antes de editar: árbol limpio en main; HEAD/main/origin/main y `git ls-remote origin refs/heads/main` coinciden con el squash completo anterior. `gh pr view 1` confirma MERGED y HEAD final `1ba7ad80d045b458f535efda5aa6b184211b6f9f`; `gh pr list --state open` devuelve `[]`. STATUS/BACKLOG solo tenían T-000 mergeable pendiente de esta reconciliación. Consultas iniciales bloqueadas por conectividad del sandbox; repetidas con acceso de red, sin cambios en archivos ni controles.
+
+Ambas CI consultadas con `gh run view`, completed/success: [FULL PR 39044690435](https://github.com/MatiasNicolasAcevedo/starter-spring-react/actions/runs/39044690435) sobre `1ba7ad80d045b458f535efda5aa6b184211b6f9f`; [FULL main 39045270616](https://github.com/MatiasNicolasAcevedo/starter-spring-react/actions/runs/39045270616) sobre `47184f725f8a89528acac0aa3e7383f2334258de`. En cada una classify/docs-check/server/client/e2e/verify-required completed/success; no se acredita el draft como FULL. No se vuelve a revisar ni mergear A en esta sesión.
+
+Primer commit de `chore/t-001-local-stack`, creada desde ese main: tarea A done y STATUS/BACKLOG/HANDOFF conciliados juntos. Impacto exclusivamente documental: sin cambios de comportamiento, API, permisos/propiedad, datos ni UI. HANDOFF conserva 0/22 y NO_LISTO; evidencia de A acotada a A, sin crédito por herencia. Siguiente paso de esta sesión: revisión del ciclo por cierre de A y refinamiento exclusivo de B antes de implementar; C…E siguen draft.
+Validación de reconciliación: `node scripts/docs-check.mjs` exit 0 (40 Markdown, 5 tareas, 0/22); `git diff --check` exit 0. Ningún stack ni dato creado; cleanup no aplica. Kit ignorado y fuera del árbol versionado, staging limitado a estas cuatro rutas.

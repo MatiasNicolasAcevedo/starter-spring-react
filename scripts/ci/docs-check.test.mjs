@@ -56,10 +56,13 @@ test('backlog and task state must agree', () => {
   rejects(/frontmatter dice blocked/);
 });
 test('a second active task is rejected', () => {
+  // Arrange two active tasks regardless of the live board's current lifecycle state.
+  change('docs/tasks/T-000-starter-extraction.md', text => text.replace(/^status: \w+/m, 'status: in_progress'));
   const path = join(temporary, 'docs/tasks/T-001-local-stack.md');
   const old = readFileSync(path, 'utf8');
   try {
-    writeFileSync(path, old.replace('status: draft', 'status: in_progress'));
+    writeFileSync(path, old.replace(/^status: \w+/m, 'status: in_progress'));
+    assert.match(readFileSync(path, 'utf8'), /^status: in_progress$/m);
     rejects(/más de una tarea en vuelo/);
   } finally { writeFileSync(path, old); }
 });

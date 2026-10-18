@@ -10,7 +10,7 @@ Iteración en el host: `npm ci`, `npm test`, `npm run format`. Dependencias nuev
 Stack: `docker compose up -d --build --wait` → http://127.0.0.1:5173 exige `GOOGLE_CLIENT_ID`/`GOOGLE_CLIENT_SECRET` reales en `.env`
 (perfil `google`, sin fallback; no leerlos ni imprimirlos); HMR opcional con el perfil `dev` (docs/SETUP.md).
 Sin credenciales: gate client y `node scripts/test-auth-ui-smoke.mjs [--vite]` (stack aislado con proveedor OIDC local).
-Proxy de `/api/`, `/oauth2/`, `/login/oauth2/code/`, `/logout`: mantener iguales `nginx.conf` y `vite.config.ts`.
+Proxy de `/api/`, `/oauth2/`, `/login/oauth2/code/`, `/logout` y GET exacto `/actuator/health/readiness`: mantener iguales `nginx.conf` y `vite.config.ts`; el resto de Actuator se rechaza sin fallback SPA.
 
 ## Estructura
 `src/app/` router, providers y tema · `src/features/<feature>/` páginas, componentes, hooks, tipos y tests ·

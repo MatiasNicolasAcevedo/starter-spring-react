@@ -26,7 +26,9 @@ export async function readiness(page: Page) {
       if (metadata.issuer !== issuer || !metadata.jwks_uri.startsWith(`${issuer}/`)) return false;
       const jwks = await page.request.get(metadata.jwks_uri, { timeout: 3000 });
       const api = await page.request.get('/api/v1/system/info', { timeout: 3000 });
-      return jwks.status() === 200 && api.status() === 200;
+      const health = await page.request.get('/actuator/health/readiness', { timeout: 5000 });
+      return jwks.status() === 200 && api.status() === 200 && health.status() === 200
+        && JSON.stringify(await health.json()) === JSON.stringify({ status: 'UP' });
     } catch { return false; }
   }, { timeout: 60_000, message: 'Real provider/JWKS/API readiness' }).toBe(true);
 }
@@ -39,6 +41,7 @@ export const test = base.extend<{ identity: string }>({
     try { await use(identity); }
     finally {
       // Every case restores its own backend, even after assertion failure/outage.
+      await control('start-db');
       await control('start');
       await readiness(page);
     }

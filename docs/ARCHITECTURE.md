@@ -14,7 +14,7 @@ navegador → client (SPA/proxy) → server (MVC/Security/JPA) → db
 Paquete neutral `com.example.starter`, groupId com.example, artifactId starter-server. Feature contiene controller/DTO/servicio/persistencia; separar web/application/persistence/domain al crecer. Sin ciclos ni acceso al repositorio de otra feature.
 identity crea/recupera app_user por issuer/subject, UUID v7 y constraint única; email/nombre mutables sin otorgar permisos. security mantiene OIDC/sesión/CSRF/origen. shared/error ofrece ProblemDetail con errors de campo ordenados. system expone GET /api/v1/system/info con nombre/versión reales.
 Flyway V1 se conserva, JPA validate y open-in-view=false. Instant/TIMESTAMPTZ y JVM UTC; Clock inyectado. DB de pruebas efímera separada del volumen de desarrollo. Sin tablas/reglas del dominio anterior.
-La feature CRUD removible, autorización por dueño y migración propia pertenecen a C; todavía no existen. Health con contribución DB y pantalla conectada pertenecen a B; no se atribuyen al health actual.
+La feature CRUD removible, autorización por dueño y migración propia pertenecen a C; todavía no existen. B incorpora readiness DB y la pantalla conectada; evidencia propia y estado de integración en T-001.
 
 ## Seguridad
 Contrato heredado: [auth](specs/S-001-auth-google.md), ADR 0002 y ADR 0003. Revalidar las suites en esta base.
@@ -43,5 +43,12 @@ Operación: el contenedor `client` (target `runtime`) sirve el build con nginx y
 
 
 ## Pruebas y operación
-[TESTING](TESTING.md) conserva FULL, negativos y políticas CI; [SETUP](SETUP.md) conserva comandos y trampas. README diferencia el harness local efímero existente del futuro dev.sh persistente.
+[TESTING](TESTING.md) conserva FULL, negativos y políticas CI; [SETUP](SETUP.md) conserva comandos y trampas. README diferencia el harness local efímero de dev.sh persistente; comandos y parámetros tienen su fuente canónica en SETUP.
 ADR 0001: versiones/Java/PostgreSQL/build; ADR 0002: OIDC/sesión/CSRF/proxies; ADR 0003: Swagger opt-in loopback/GET/api/docs. Todas heredadas; cambios futuros requieren tarea/ADR/pruebas, sin reinterpretar evidencia previa como ejecución actual.
+
+## Disponibilidad y desarrollo local (B)
+GET /actuator/health/readiness agrega readinessState y db explícitamente; liveness conserva independencia de DB. Backend admite solo GET de health/root, readiness y liveness internos. Los proxies publican exclusivamente GET readiness y rechazan el resto de Actuator antes del fallback SPA, reconstruyendo metadata desde el origen validado. JSON público contiene solo status, sin componentes/detalles; la caída de DB devuelve 503. Adquisición Hikari 2 s, validación 1 s y connectTimeout/socketTimeout PostgreSQL 2 s acotan el probe y su recuperación; afectan también las conexiones ordinarias de esta base sin dominio. Los loggers del health/pool no publican causas de driver de la caída. Contexto de la decisión: [grupos health de Spring Boot](https://docs.spring.io/spring-boot/reference/actuator/endpoints.html).
+
+La UI combina system/info con readiness UP mediante HTTP/Zod/Query; revalida readiness cada 5 s, sin retries y con timeout de petición 5 s. Un error de refetch tiene prioridad sobre datos de cache anteriores. El reintento solicita ambos contratos; conserva el botón montado y lo deshabilita durante fetch. No cambia sesión/CSRF/cache privada.
+
+El desarrollo persistente usa entrada dev.sh separada del harness efímero. Cada recurso tiene labels de propiedad, source/mode/proxy/origin/puerto OIDC y proyecto Compose. El CLI valida esos recursos antes de mutar y verifica puertos antes de build/up; rollback retira solo IDs nuevos, down conserva volumen. Fixtures y runners reutilizan las versiones inventariadas. Guía y límites de operación en SETUP; criterios/ensayos en S-002/T-001, sin duplicar evidencia aquí.

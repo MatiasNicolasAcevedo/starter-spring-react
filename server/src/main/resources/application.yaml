@@ -5,6 +5,14 @@ spring:
     default: google
   application:
     name: starter-server
+  datasource:
+    hikari:
+      # Bound health acquisition/validation and driver I/O inside the 30 s UI outage window.
+      connection-timeout: 2000
+      validation-timeout: 1000
+      data-source-properties:
+        connectTimeout: 2
+        socketTimeout: 2
   autoconfigure:
     # Sin usuarios en memoria ni contraseña generada en logs: la identidad llega solo por OIDC (base heredada).
     exclude: org.springframework.boot.security.autoconfigure.UserDetailsServiceAutoConfiguration
@@ -72,3 +80,14 @@ management:
       probes:
         enabled: true
       show-details: never
+      show-components: never
+      group:
+        readiness:
+          include: readinessState,db
+
+# Health status remains observable without publishing driver causes, SQL or database coordinates in outage logs.
+logging:
+  level:
+    org.springframework.boot.jdbc.health.DataSourceHealthIndicator: ERROR
+    com.zaxxer.hikari.pool.PoolBase: ERROR
+    com.zaxxer.hikari.pool.ProxyConnection: ERROR

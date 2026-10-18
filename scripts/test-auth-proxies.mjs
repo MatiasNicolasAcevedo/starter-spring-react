@@ -2,11 +2,12 @@
 // All Compose inputs are fictitious/versioned, projects unique; cleanup never targets development volumes.
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
+import { existsSync, readFileSync } from 'node:fs';
 import http from 'node:http';
 import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
-const project = `starter-auth-proxy-${process.pid}`;
+const project = process.env.STARTER_PROXY_PROJECT || `starter-auth-proxy-${Date.now()}-${process.pid}`;
 const base = ['compose', '--env-file', 'scripts/fixtures/auth-test.env.example', '-p', project,
   '-f', 'docker-compose.yml', '-f', 'compose.auth-test.yml'];
 const echoFile = ['-f', 'scripts/fixtures/compose.proxy-test.yml'];
@@ -23,17 +24,37 @@ const spoofing = {
 };
 const origins = ['http://127.0.0.1:5175', 'https://demo.example:8443', 'https://demo.example:443'];
 const headersOnly = process.argv.includes('--headers-only');
+const readinessOnly = process.argv.includes('--readiness-only');
 let activeFiles = [];
 let origin = origins[0];
+let signalCode = 0;
+let cleaning = false;
+const interrupted = new Error('Proxy assay interrupted');
+for (const [signal, code] of [['SIGINT', 130], ['SIGTERM', 143], ['SIGHUP', 129]]) {
+  process.on(signal, () => { signalCode ||= code; });
+}
+function checkInterrupted() {
+  const stopFile = process.env.STARTER_PROXY_STOP_FILE;
+  if (stopFile && existsSync(stopFile)) {
+    const requested = Number(readFileSync(stopFile, 'utf8'));
+    assert.ok([130, 143, 129].includes(requested), 'Invalid proxy stop request');
+    signalCode ||= requested;
+  }
+  if (signalCode && !cleaning) throw interrupted;
+}
 
 function compose(args, capture = false) {
-  return execFileSync('docker', [...base, ...activeFiles, '--profile', 'dev', ...args], {
+  if (!cleaning) checkInterrupted();
+  const result = execFileSync('docker', [...base, ...activeFiles, '--profile', 'dev', ...args], {
     cwd: root, encoding: 'utf8', stdio: capture ? 'pipe' : 'inherit',
     env: { ...process.env, APP_PUBLIC_URL: origin },
   });
+  if (!cleaning) checkInterrupted();
+  return result;
 }
 
 function request(port, path, headers = {}, method = 'GET', body = '') {
+  checkInterrupted();
   return new Promise((resolve, reject) => {
     const req = http.request({ hostname: '127.0.0.1', port, path, method,
       headers: { Host: new URL(origin).host, ...headers }, timeout: 5000 }, (res) => {
@@ -88,6 +109,40 @@ async function headerContract(port) {
   console.log(`${port}: entire forwarding namespace sanitized, peer reconstructed, body/cookie/header preserved, Host rejected (${origin})`);
 }
 
+async function readinessBoundary(port, observer = false) {
+  const path = '/actuator/health/readiness';
+  const result = await request(port, path, { ...spoofing, Accept: 'application/json' });
+  assert.equal(result.status, 200, 'Exact readiness GET must reach the backend');
+  assert.match(result.headers['content-type'], /application\/json/);
+  const body = JSON.parse(result.body);
+  if (observer) {
+    const url = new URL(origin);
+    assert.equal(body.path, path);
+    assert.equal(body.method, 'GET');
+    assert.equal(body.headers.host, url.host);
+    assert.equal(body.headers['x-forwarded-host'], url.host);
+    assert.equal(body.headers['x-forwarded-proto'], url.protocol.slice(0, -1));
+    assert.equal(body.headers['x-forwarded-port'], url.port || (url.protocol === 'https:' ? '443' : '80'));
+    assert.ok(body.headers['x-forwarded-for']);
+    assert.ok(!body.headers['x-forwarded-for'].includes('192.0.2.99'));
+    assert.equal(body.headers.forwarded, undefined);
+    assert.deepEqual(Object.keys(body.headers).filter(key => key.startsWith('x-forwarded-')).sort(),
+      ['x-forwarded-for', 'x-forwarded-host', 'x-forwarded-port', 'x-forwarded-proto']);
+  } else assert.deepEqual(body, { status: 'UP' });
+  for (const neighbour of ['/actuator', '/actuator/health', '/actuator/health/liveness',
+    '/actuator/env', '/actuator/metrics', '/actuator/configprops', `${path}/`, `${path}/extra`, `${path}-extra`]) {
+    const denied = await request(port, neighbour, spoofing);
+    assert.ok([400, 401, 403, 404, 405].includes(denied.status), 'Actuator neighbour must be explicitly rejected, without SPA fallback');
+  }
+  for (const method of ['HEAD', 'OPTIONS', 'POST', 'PUT', 'PATCH', 'DELETE']) {
+    const denied = await request(port, path, spoofing, method);
+    assert.ok([400, 401, 403, 404, 405].includes(denied.status), 'Readiness is GET-only at the proxy');
+  }
+  const invalidHost = await request(port, path, { ...spoofing, Host: 'attacker.example' });
+  assert.equal(invalidHost.status, 400);
+  console.log(`${port}: exact GET readiness/Actuator neighbours/methods/metadata/Host boundary passed`);
+}
+
 async function authBoundary(port) {
   const login = await request(port, '/oauth2/authorization/google', spoofing);
   assert.equal(login.status, 302);
@@ -116,6 +171,7 @@ function invalidOrigins() {
   for (const value of ['', 'http://attacker.example', 'https://demo.example/path',
     'https://user@demo.example', 'https://demo.example:0', 'https://demo.example?query=hidden']) {
     for (const service of ['client', 'client-dev']) {
+      checkInterrupted();
       let failure;
       try {
         execFileSync('docker', [...base, '--profile', 'dev', 'run', '--rm', '--no-deps',
@@ -134,32 +190,49 @@ function invalidOrigins() {
 }
 
 // Refuse a reused project BEFORE entering the cleanup scope.
-assert.match(project, /^starter-auth-proxy-\d+$/);
-assert.equal(JSON.parse(compose(['ps', '--all', '--format', 'json'], true) || '[]').length, 0);
+assert.match(project, /^starter-auth-proxy-\d+-\d+$/);
+function assertEmpty() {
+  for (const kind of ['container', 'network', 'volume']) {
+    assert.equal(execFileSync('docker', [kind, 'ls', kind === 'container' ? '-aq' : '-q',
+      '--filter', `label=com.docker.compose.project=${project}`], { encoding: 'utf8' }).trim(), '', 'Proxy assay project must be empty');
+  }
+}
+assertEmpty();
+console.log(`Proxy assay project=${project}`);
 try {
   // Observe both real proxies directly upstream. Unknown forwarding extensions cannot be inferred from callback alone.
   activeFiles = echoFile;
   for (origin of origins) {
     compose(['up', '-d', '--build', '--wait', 'server', 'client', 'client-dev']);
+    for (const port of [5175, 5176]) await readinessBoundary(port, true);
+    if (readinessOnly) break;
     for (const port of [5175, 5176]) await headerContract(port);
   }
   compose(['down', '-v', '--remove-orphans']);
   activeFiles = [];
   // Same boundary, now the real application and a new fictitious PostgreSQL volume, still no mock fallback.
-  for (origin of headersOnly ? [] : origins) {
+  for (origin of headersOnly || readinessOnly ? [] : origins) {
     compose(['up', '-d', '--build', '--wait', 'db', 'server', 'client', 'client-dev']);
     const model = JSON.parse(compose(['config', '--format', 'json'], true));
     assert.ok(!model.services.server.ports?.length, 'Ordinary server must remain internal');
     assert.equal(model.services.server.environment.SERVER_FORWARD_HEADERS_STRATEGY, 'framework');
     for (const port of [5175, 5176]) await authBoundary(port);
+    for (const port of [5175, 5176]) await readinessBoundary(port);
   }
-  if (!headersOnly) invalidOrigins();
+  if (!headersOnly && !readinessOnly) invalidOrigins();
   console.log(`${headersOnly ? 'Header' : 'Proxy'} contract passed; HTTPS simulated over local HTTP. `
     + 'OIDC protocol is out of scope here (OidcLoginIT/OidcFailureIT, test-auth-ui-smoke.mjs).');
+} catch (error) {
+  if (error !== interrupted) throw error;
+  console.log(`Proxy worker interrupted at operation boundary (${signalCode}).`);
+  process.exitCode = signalCode;
 } finally {
+  cleaning = true;
   try {
     compose(['logs', '--no-color', '--tail', '30', 'server', 'client', 'client-dev']);
   } finally {
     compose(['down', '-v', '--remove-orphans']);
+    assertEmpty();
   }
 }
+if (signalCode) process.exitCode = signalCode;

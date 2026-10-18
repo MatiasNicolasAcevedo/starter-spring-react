@@ -45,6 +45,9 @@ Bugfix demuestra rojo antes del arreglo; reglas críticas con negativos que dete
 
 ## Documentación y cierre
 Actualizar tarea, STATUS, BACKLOG y HANDOFF juntos; docs-check antes de publicar.
+Documentación mínima útil: cada regla, contrato y evidencia tiene una fuente canónica; los demás documentos enlazan y resumen solo su estado. STATUS contiene próxima acción/precondición y checkpoint vigente, no una copia del historial ni de los protocolos.
+Agrupar correcciones documentales con el avance al que pertenecen; no abrir sesiones/PRs ni repetir gates solo por reformular texto. Conservar checks exigidos por TESTING, evidencia por SHA y checkpoint antes de operaciones largas. Cada sesión debe producir implementación verificable, una decisión necesaria o un bloqueo concreto; no volver a planificar una tarea ready sin un cambio material.
+Lecciones comprobadas se materializan en código/tests o documentación canónica; propuestas pendientes no son soluciones probadas. El kit es transitorio: D integra el formulario/contexto y guía útil; E prueba adopción sin kit y luego el dueño lo retira según PROJECT_CONTEXT. No mantener dos manuales vivos ni copiar/borrar el kit desde el inicializador.
 No done con PR abierto. No confundir heredado con verificado ni aprobado con MERGED.
 Checkpoint antes de operaciones largas: comandos, logs saneados, SHA, cleanup, pendientes y próximo paso.
 STATUS mantiene un único prompt vigente con precondición observable; si no coincide, sin cambios.
@@ -56,5 +59,5 @@ Buscar con rg y leer por rangos; no cargar node_modules, target, reportes ni loc
 Lockfiles solo con su gestor. Sin actualizaciones a latest durante neutralización.
 No leer/imprimir secretos, .env real, cookies, tokens, claims completos ni datos personales.
 Auth: Google OIDC/sesión backend/CSRF; spec y ADR vigentes, sin auth propia ni tokens en navegador.
-Comando local actual sin Google: bash scripts/dev-auth.sh nginx starter-dev-auth-local-nginx session.
-Este harness efímero conserva su semántica; dev.sh persistente up/check/down es contrato pendiente B.
+Comando local persistente sin Google: bash scripts/dev.sh up --mode local --proxy nginx --project starter-dev-local-nginx; parámetros y retoma en docs/SETUP.md.
+El harness dev-auth.sh conserva su sintaxis/semántica efímera y sus regresiones; no usarlo para datos persistentes.

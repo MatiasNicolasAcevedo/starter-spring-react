@@ -8,9 +8,18 @@ export const systemInfoSchema = z.object({
 })
 
 export type SystemInfo = z.infer<typeof systemInfoSchema>
+const readinessSchema = z.strictObject({ status: z.literal('UP') })
 
 export const systemQueryKeys = {
   info: ['system', 'info'] as const,
+  readiness: ['system', 'readiness'] as const,
+}
+
+export function fetchReadiness(signal?: AbortSignal) {
+  const deadline = AbortSignal.timeout(5000)
+  return http.request('/actuator/health/readiness', readinessSchema, {
+    signal: signal ? AbortSignal.any([signal, deadline]) : deadline,
+  })
 }
 
 export function fetchSystemInfo(signal?: AbortSignal): Promise<SystemInfo> {
