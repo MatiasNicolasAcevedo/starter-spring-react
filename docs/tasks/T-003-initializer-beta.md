@@ -1,10 +1,10 @@
 ---
 id: T-003
-status: in_review
+status: mergeable
 priority: P1
 size: M
 executor: frontier
-role: implementer
+role: reviewer
 milestone: M0
 counts_for_cycle: false
 product_cycle: null
@@ -143,3 +143,21 @@ Huellas ignoradas `fingerprint-before.json`/`fingerprint-after.json` en el mismo
 Dirigidos offline finales antes del gate: `node --test "scripts/ci/*.test.mjs"`94/94, cero fallos/cancelados/omitidos, log `tools-final-source.log`. Cierre documental: docs-check45 Markdown/5 tareas/HANDOFF0/22; primer dirigido93/94 porque al guardar Markdown desde PowerShell se introdujo CRLF y el negativo de eliminar una fila no la eliminaba. Restablecer LF según .gitattributes corrigió la fixture, sin modificar el test;13/13 documentales verdes. Matriz final94/94, cero fallos/cancelados/omitidos en `tools-closure-final.log`; run CI del HEAD/base finales registrado en descripción del PR, junto a `git diff --check` y huella técnica idéntica. No repetir FULL por esos Markdown. Capturas saneadas propias desktop/móvil inspeccionadas: `e2e/artifacts/starter-dev-b1-nginx-1792376544-855/safe-home-1280.png` y `safe-home-375.png` (ignoradas), también estados de caída y proxy Vite en starter-dev-b1-vite-1792376853-2715. Solo UI/identidad ficticias, sin publicar artefactos crudos.
 
 Próximo rol reviewer en sesión nueva, según único prompt de STATUS: revisar diff publicado/evidencia y dirigidos/negativos de riesgos, no exigir otro FULL salvo condición concreta de TESTING. No se emite APROBADO ni se habilita template desde implementación; GitHub sigue público y `isTemplate=false`. Habilitar/comprobar beta del mismo repo solo después de D cerrada/MERGED. T-004 draft, HANDOFF0/22 NO_LISTO; no validar D/E por herencia.
+
+## Revisión independiente R1 · 2026-10-19
+Resultado favorable sin bloqueantes; transición documental a **mergeable**, pendiente de CI/veredicto final sobre el nuevo HEAD antes de merge. Sesión nueva distinta de implementación, rol reviewer; Codex desktop/API, PowerShell/Git Bash, familia expuesta GPT-6. Identificador runtime exacto y esfuerzo efectivo no expuestos; Sol/high solicitado, sin simular selección, delegar ni abrir sesiones/modelos. Impacto de la revisión: comprobación de CLI/identidad/reset y API/UI afectadas; solo tarea/STATUS/BACKLOG editados, sin cambios ejecutables, permisos, propiedad, datos o UI.
+
+Precondición comprobada antes de editar: árbol limpio y rama exacta; HEAD local/tracking/remoto/PR#4 `2ab8055262e1fd7167848f866711a5334498a86f`; base main local/tracking/remoto/PR `193f5a763af9ae61726daf20d30ae4ce8d5ce59d`. PR#4 único abierto, propio y ready; T-002 done/PR#3 MERGED, S-004 v1 approved y T-004 draft. CI liviana [39324133003](https://github.com/MatiasNicolasAcevedo/starter-spring-react/actions/runs/39324133003) completed/success sobre esos HEAD/base; run draft cancelado sustituido, sin contarlo como verde. Revisión del diff publicado completo (43 archivos), contrato, evidencia y protecciones en lectura; sin conversaciones bloqueantes.
+
+| Comprobación propia del reviewer | Resultado |
+|---|---|
+| Evidencia FULL del implementer | Log local de 40m58s inspeccionado: docs/server/client/e2e OK, backend91+75/client133; copia personalizada91+75/133, Playwright15/15, result=0/cleanupFailure=0. No es un FULL ejecutado por reviewer |
+| Correspondencia de fuentes | Mapas completos antes/después idénticos281;235 fuentes técnicas del working tree y de commits361a916/2ab8055 coinciden con el FULL, aplicando filtros EOL de Git. SHA256 técnico449513a4cf8d1e3a444d9cdc877951695f88371761f2a8c9b005ac0904164def. Única diferencia blob/working tree: server/mvnw.cmd sin cambios, CRLF declarado; contenido normalizado idéntico |
+| Dirigidos offline | `node --test "scripts/ci/*.test.mjs"`:94/94, cero fallos/cancelados/omitidos; incluye matriz CLI30/30 y13 negativos/controles documentales. Log ignorado reviewer-tools.log |
+| Mutantes críticos en copias propias |5/5 detectados: escrituras en dry-run, namespace java.*, omisión del rechazo de archivos inicializados modificados, hardlink que alteraría bytes externos y ausencia de reset de los22 criterios. Controles originales pasan; mutantes muestran el fallo esperado. Logs reviewer-mutants.log/reviewer-reset-mutant.log |
+| Copia/reset/guardias | Apply/dry-run/idempotencia, centinelas/lista, Java main/test, colisiones/enlaces/ignorados/estado parcial; copia sin Git/kit, contexto/T-000/AUTONOMY propios y docs-check. Matriz ejecutada, build de copia corroborado en FULL, sin repetirlo por rutina |
+| Cleanup | Reconsulta solo de labels exactos starter-verify-d-20261018-231126 y starter-e2e-d-20261018-231126: containers/networks/volumes0/0/0; copias temporales propias de los probes retiradas; ningún recurso Docker creado por reviewer |
+
+Primer intento de herramientas restringido por sandbox (fixtures Git/enlaces/Bash); misma orden fuera del sandbox94/94. Un error de sustitución del probe revisor de reset se corrigió únicamente en el comando temporal y se completó su control/negativo; no fue defecto ni corrección del producto. No se cambiaron tests/assertions/suites/umbrales/retries/deadlines ni fuentes publicadas. API conserva schema/rutas/auth; solo nombre configurado; UI/título leen identidad pública. Dependencias/locks/wrappers/migraciones/propiedad intactos. No hay condición de TESTING para repetir FULL.
+
+Antes de publicar: docs-check, dirigidos documentales y diff-check; kit ignorado/ausente de Git e índice. Este commit cambia HEAD solo por tres Markdown; el SHA final, CI liviana exacta y veredicto APROBADO se registrarán en PR#4 después de comprobarlos. No commits después del veredicto ni en rama mergeada. Continuación merger autorizada para este mismo PR conforme AUTONOMY, squash ligado al SHA revisado sin bypass. Solo tras MERGED/squash/árbol comprobados habilitar/comprobar isTemplate del mismo repo y registrar cierre en PR; conciliación documental/corte de D en el primer avance posterior según merger, sin ejecutar E aquí. HANDOFF0/22 NO_LISTO, T-004 draft; límites beta: OIDC ficticio/local, Google real pendiente del dueño y adopción E no validada. Continuidad posterior exclusivamente PROVENANCE.
