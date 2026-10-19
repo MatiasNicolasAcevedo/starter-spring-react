@@ -11,6 +11,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
 
+const projectName = JSON.parse(readFileSync(new URL('../project-identity.json', import.meta.url), 'utf8')).name;
 const args = process.argv.slice(2);
 const vite = args.includes('--vite');
 const shotsIndex = args.indexOf('--screenshots');
@@ -199,7 +200,7 @@ try {
 
   // 2. /login and keyboard entry through the real provider.
   await clickByText('Ingresar');
-  await until('/login page', async () => (await path()) === '/login' && (await text()).includes('Ingresar a Starter'));
+  await until('/login page', async () => (await path()) === '/login' && (await text()).includes(`Ingresar a ${projectName}`));
   await bothLayouts('Login page', '02-login');
   await evaluate('document.activeElement?.blur(); document.body.focus()');
   let focused = '';
@@ -252,7 +253,7 @@ try {
   assert.ok(!(await text()).includes('La sesión terminó'), 'expiry notice gone after a new login');
   const tokenBefore = await xsrf();
   await clickByText('Cerrar sesión', 'header button');
-  await until('logout lands on /login', async () => (await path()) === '/login' && (await text()).includes('Ingresar a Starter'));
+  await until('logout lands on /login', async () => (await path()) === '/login' && (await text()).includes(`Ingresar a ${projectName}`));
   assert.ok(responses.some((r) => r.path === '/logout' && r.status === 204), 'POST /logout 204');
   assert.ok(!(await bannerHas('Persona Demo')));
   const tokenAfter = await until('anonymous CSRF cookie after logout', xsrf);

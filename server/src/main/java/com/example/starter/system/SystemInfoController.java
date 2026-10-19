@@ -13,12 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/system")
 class SystemInfoController {
 
-    static final String APPLICATION_NAME = "Starter";
-
     private final SystemInfoResponse info;
 
-    SystemInfoController(@Value("${starter.version}") String version) {
-        this.info = new SystemInfoResponse(APPLICATION_NAME, version);
+    SystemInfoController(@Value("${starter.name}") String name, @Value("${starter.version}") String version) {
+        this.info = new SystemInfoResponse(name, version);
     }
 
     @GetMapping("/info")

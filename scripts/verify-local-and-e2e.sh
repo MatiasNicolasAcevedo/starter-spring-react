@@ -19,6 +19,8 @@ run() {
   return "$code"
 }
 run node --test scripts/probe-dev-stack.test.mjs
+run node --test scripts/test-init-project.mjs
+run bash scripts/test-init-copy.sh
 run bash scripts/test-local-guards.sh
 run bash scripts/test-dev-stack.sh nginx
 run bash scripts/test-dev-stack.sh vite

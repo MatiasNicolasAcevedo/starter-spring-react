@@ -12,6 +12,7 @@ import com.example.starter.security.AuthController;
 import com.example.starter.security.SecurityConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
@@ -28,6 +29,9 @@ class SystemInfoControllerTest {
     @MockitoBean
     private IdentityService identityService;
 
+    @Value("${starter.name}")
+    private String applicationName;
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -36,7 +40,7 @@ class SystemInfoControllerTest {
         mockMvc.perform(get("/api/v1/system/info").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.name").value("Starter"))
+                .andExpect(jsonPath("$.name").value(applicationName))
                 // Versión filtrada desde el POM; nunca el placeholder sin resolver.
                 .andExpect(jsonPath("$.version").value(matchesPattern("\\d+\\.\\d+\\.\\d+.*")));
     }

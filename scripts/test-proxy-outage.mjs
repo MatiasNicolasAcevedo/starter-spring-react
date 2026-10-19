@@ -3,9 +3,11 @@
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import http from 'node:http';
+import { readFileSync } from 'node:fs';
 import { setTimeout as delay } from 'node:timers/promises';
 import { fileURLToPath } from 'node:url';
 
+const projectName = JSON.parse(readFileSync(new URL('../project-identity.json', import.meta.url), 'utf8')).name;
 const ROOT = fileURLToPath(new URL('../', import.meta.url));
 
 function compose(...args) {
@@ -39,7 +41,7 @@ function request() {
 async function success() {
   const result = await request();
   assert.equal(result.status, 200);
-  assert.equal(JSON.parse(result.body).name, 'Starter');
+  assert.equal(JSON.parse(result.body).name, projectName);
 }
 
 async function recovery() {

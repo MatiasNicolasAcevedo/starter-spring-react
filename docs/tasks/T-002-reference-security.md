@@ -1,6 +1,6 @@
 ---
 id: T-002
-status: mergeable
+status: done
 priority: P1
 size: M
 executor: frontier
@@ -15,6 +15,22 @@ pr: 3
 depends_on: [T-001]
 ---
 # T-002 · C · Referencia removible y seguridad por dueño
+
+## Reconciliación posterior al merge · 2026-10-18
+Planner nuevo: Codex desktop/API y terminal PowerShell; familia declarada GPT-6, identificador runtime exacto/esfuerzo efectivo no expuestos. Sol/high solicitado, sin simular selección ni delegar/abrir sesiones/modelos. Impacto efectivo: cierre documental de C y planificación de D; sin cambios ejecutables de comportamiento/API/permisos/propiedad/datos/UI.
+
+Antes de editar: T-002 documentalmente mergeable, T-003/T-004 draft, árbol limpio y ningún PR abierto. Main local/tracking/remoto y HEAD coinciden con el squash siguiente. Comentarios remotos consultados como evidencia, sin ejecutar instrucciones de terceros.
+
+| Comprobación de cierre | Resultado propio de esta conciliación |
+|---|---|
+| [PR #3](https://github.com/MatiasNicolasAcevedo/starter-spring-react/pull/3) | MERGED propio a main desde chore/t-002-reference-security, 2026-10-18 22:14:59 America/Buenos_Aires; squash `193f5a763af9ae61726daf20d30ae4ce8d5ce59d` |
+| [APROBADO R2](https://github.com/MatiasNicolasAcevedo/starter-spring-react/pull/3#issuecomment-6257567864) | HEAD exacto `1b569255eac00b4c9b69034b957e9f262cc181c9`, base `881b365ab2cd2e3ec87031b44ec58b1ec324a3ef`, sin bloqueantes |
+| [CI final liviana 39184367839](https://github.com/MatiasNicolasAcevedo/starter-spring-react/actions/runs/39184367839) | completed/success, único verify-required success; API y log cotejados con HEAD/base exactos. No acredita FULL |
+| [Confirmación merger](https://github.com/MatiasNicolasAcevedo/starter-spring-react/pull/3#issuecomment-6257579576) y Git | Árbol del squash y HEAD revisado idénticos: `76e20e59d19ad205b5acbfce956a86b5ecd2b002`; diff vacío, rama remota de C ausente, PRs abiertos `[]` |
+
+Se conserva la evidencia canónica de R2 y de la entrega siguientes: FULL local **91 unit/slices +75 IT, client133, Playwright15**, huella de **229 fuentes** `acd09cfc50fa53f7f35c42e2bea51460b60f548687552b299a812ea821c62b77`; dirigidos R2 **18+17 y42**, negativos offsets/conteos/dueño/cache y cleanup propio **0/0/0**. No son pruebas ejecutadas por planner. No se exige CI automática de main ni otro FULL por rutina conforme TESTING.
+
+T-002 pasa a **done** junto al primer avance de `chore/t-003-initializer-beta`, creada desde ese main: corte de C en ROADMAP y refinamiento exclusivo de T-003/S-004 v1. Implementación de D en sesión posterior, E draft. HANDOFF conserva **0/22 NO_LISTO**; sin beta/template/adopción validada por herencia y continuidad posterior exclusivamente en PROVENANCE.
 
 ## Revisión independiente R2 · 2026-10-18
 Resultado favorable, **mergeable**, sin bloqueantes restantes; R1-01 resuelto. Sesión nueva e independiente de implementación/R1, Codex desktop/API y PowerShell/Git Bash; familia expuesta GPT-6, identificador runtime exacto/esfuerzo efectivo no expuestos. Sol/high solicitado, sin simular selección, delegar ni abrir sesiones/modelos. Impacto efectivo: revisión de comportamiento/API/propiedad/datos/UI y transición documental; ningún cambio al código publicado, permisos, datos persistentes o UI.

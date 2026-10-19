@@ -1,3 +1,4 @@
+import projectIdentity from '../project-identity.json'
 import { HttpResponse } from 'msw'
 import type { AuthUser } from '../features/auth/api'
 import type { SystemInfo } from '../features/system/api'
@@ -6,7 +7,7 @@ import type { FieldError, ProblemDetail } from '../services/http'
 // Datos ficticios para pruebas; nunca datos reales.
 
 export function buildSystemInfo(overrides: Partial<SystemInfo> = {}): SystemInfo {
-  return { name: 'Starter', version: '0.0.1-TEST', ...overrides }
+  return { name: `${projectIdentity.name}`, version: '0.0.1-TEST', ...overrides }
 }
 
 /** Forma exacta de `GET /api/v1/auth/me` (server: security/AuthMeResponse). */

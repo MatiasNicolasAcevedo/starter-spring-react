@@ -20,6 +20,7 @@ import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpMethod;
@@ -47,6 +48,9 @@ class ApiDocsEnabledIT {
         "/api/docs/swagger-ui/index.html",
         "/api/docs/swagger-ui/swagger-initializer.js"
     };
+
+    @Value("${starter.name}")
+    private String applicationName;
 
     @Autowired
     private WebApplicationContext context;
@@ -190,7 +194,7 @@ class ApiDocsEnabledIT {
     void apiContractIsUnchangedWhileDocumentationIsOn() throws Exception {
         mockMvc.perform(get("/api/v1/system/info"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("Starter"));
+                .andExpect(jsonPath("$.name").value(applicationName));
         mockMvc.perform(get("/api/v1/auth/me"))
                 .andExpect(status().isUnauthorized())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_PROBLEM_JSON))

@@ -1,7 +1,7 @@
 // Real workspace mutations prove that a generic handoff cannot inherit verification.
 import { after, afterEach, test } from 'node:test';
 import assert from 'node:assert/strict';
-import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { resolve, join, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -9,10 +9,15 @@ import { spawnSync } from 'node:child_process';
 
 const root = resolve(fileURLToPath(new URL('../..', import.meta.url)));
 const temporary = mkdtempSync(join(tmpdir(), 'starter-docs-check-'));
-const excluded = new Set(['.git', 'plantilla', 'node_modules', 'target', 'dist', 'coverage', 'artifacts', '__pycache__']);
-cpSync(root, temporary, { recursive: true, filter: (source) => !excluded.has(basename(source)) });
+const excluded = new Set(['.git', 'plantilla', 'node_modules', 'target', 'dist', 'coverage', 'artifacts', '__pycache__',
+  '.orchestrator', '.idea', '.vscode', 'playwright-report', 'test-results', 'blob-report']);
+cpSync(root, temporary, { recursive: true, filter: source => {
+  const name = basename(source);
+  return !excluded.has(name) && !(name.startsWith('.env') && !name.endsWith('.example')) && !/\.(log|local|pem|p12|jks)$/.test(name);
+} });
+const firstTask = 'docs/tasks/' + readdirSync(join(temporary, 'docs/tasks')).find(name => /^T-000-.*\.md$/.test(name));
 const originals = new Map(['docs/HANDOFF.md', 'docs/STATUS.md', 'docs/BACKLOG.md',
-  'docs/tasks/T-000-starter-extraction.md', '.github/workflows/ci.yml', '.github/workflows/full.yml',
+  firstTask, '.github/workflows/ci.yml', '.github/workflows/full.yml',
   'scripts/verify.sh'].map(path => [path, readFileSync(join(temporary, path), 'utf8')]));
 const change = (path, transform) => writeFileSync(join(temporary, path), transform(originals.get(path)));
 const run = () => spawnSync(process.execPath, ['scripts/docs-check.mjs'], { cwd: temporary, encoding: 'utf8' });
@@ -57,7 +62,8 @@ test('unknown criteria reject the handoff', () => {
   rejects(/criterio desconocido O-09/);
 });
 test('inherited evidence cannot be declared verified', () => {
-  change('docs/HANDOFF.md', text => text.replace('| heredado |', '| verificado |'));
+  change('docs/HANDOFF.md', text => text.replace(/^(\| C-01 \|[^|]*\|)[^|]*\|[^|]*\|/m,
+    '$1 verificado | Heredada: sin ejecución propia |'));
   rejects(/requiere evidencia propia fechada/);
 });
 test('a completed verdict cannot bypass pending criteria and tasks', () => {
@@ -69,17 +75,17 @@ test('STATUS must report the actual handoff count', () => {
   rejects(/distinto de HANDOFF/);
 });
 test('backlog and task state must agree', () => {
-  change('docs/tasks/T-000-starter-extraction.md', text => text.replace(/status: \w+/, 'status: blocked'));
+  change(firstTask, text => text.replace(/status: \w+/, 'status: blocked'));
   rejects(/frontmatter dice blocked/);
 });
 test('a second active task is rejected', () => {
   // Arrange two active tasks regardless of the live board's current lifecycle state.
-  change('docs/tasks/T-000-starter-extraction.md', text => text.replace(/^status: \w+/m, 'status: in_progress'));
-  const path = join(temporary, 'docs/tasks/T-001-local-stack.md');
-  const old = readFileSync(path, 'utf8');
+  change(firstTask, text => text.replace(/^status: \w+/m, 'status: in_progress'));
+  const path = join(temporary, 'docs/tasks/T-999-negative-fixture.md');
+  const old = originals.get(firstTask).replace(/^id: T-000$/m, 'id: T-999').replace(/^depends_on:.*$/m, 'depends_on: []');
   try {
     writeFileSync(path, old.replace(/^status: \w+/m, 'status: in_progress'));
     assert.match(readFileSync(path, 'utf8'), /^status: in_progress$/m);
     rejects(/más de una tarea en vuelo/);
-  } finally { writeFileSync(path, old); }
+  } finally { rmSync(path); }
 });

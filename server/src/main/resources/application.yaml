@@ -31,6 +31,7 @@ spring:
       enabled: true
 
 starter:
+  name: "Starter"
   # Versión del artefacto Maven, filtrada en el build por spring-boot-starter-parent (delimitador @).
   version: "@project.version@"
   api-docs:
