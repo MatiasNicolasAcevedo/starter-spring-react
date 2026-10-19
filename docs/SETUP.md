@@ -25,7 +25,7 @@ docker compose --env-file .env.example -p starter-verify-mi-prueba --profile ver
 ```
 Antes de usar ese nombre, comprobar que no tiene recursos: listar container (incluidos detenidos), network y volume con label=com.docker.compose.project=starter-verify-mi-prueba. Si existe, elegir nombre nuevo; nunca adoptar o borrar un stack previo.
 El gate no opera DB ordinaria: server-tests usa Testcontainers y caché propia; E2E genera namespace reservado starter-e2e-<sufijo>, comprueba ausencia antes del trap y verifica cero recursos al salir. No usar prune ni down -v ordinario.
-Suites: verify.sh --docs/--server/--client/--e2e; --fast es parcial. Diagnóstico directo `node scripts/docs-check.mjs`; matrices `node --test "scripts/ci/*.test.mjs"`.
+Iteración: pruebas dirigidas de la capa afectada; suites verify.sh --docs/--server/--client/--e2e y --fast son parciales. Un FULL al cerrar fuentes técnicas; al primer fallo no inicia suites posteriores. CI automática liviana y remoto FULL solo manual, según TESTING. Diagnóstico directo `node scripts/docs-check.mjs`; matrices `node --test "scripts/ci/*.test.mjs"`.
 Proveedor aislado `node scripts/test-oidc-provider-stack.mjs`; frontera proxies `bash scripts/test-auth-proxies.sh`; UI real Windows `node scripts/test-auth-ui-smoke.mjs [--vite]`; desarrollo `node scripts/test-dev-auth.mjs nginx|vite`. Los scripts de navegador host requieren `npm ci --prefix e2e --no-audit --no-fund` y Edge Windows preexistente; el runner E2E Chromium containerizado es el camino portable, sin navegador instalado en host.
 Regresión de proxy `node scripts/test-proxy-outage.mjs` requiere un proyecto de ensayo propio healthy y COMPOSE_PROJECT_NAME propio: detiene/restaura su server/client, jamás dirigirla a datos del dueño.
 

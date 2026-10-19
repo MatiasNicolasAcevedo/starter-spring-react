@@ -21,3 +21,5 @@ En E se comprobará el recorrido literal desde una copia limpia sin kit. Tras E 
 ## Decisiones trazadas
 2026-10-17: mantener versiones y dependencias del snapshot; no actualizar latest. Modo local explícito sin credenciales y Google real sin fallback. Una tarea/PR activos, revisión distinta y squash protegido.
 2026-10-17: el dueño acepta el starter autosuficiente como única base de nuevas aplicaciones; integrar y pulir el formulario de contexto en D, probar adopción sin kit en E y retirar después el kit local. Priorizar adopción ágil y documentación canónica; el detalle se trabaja dentro de D/E, sin frenar ni ampliar la implementación B.
+
+2026-10-18: el dueño prioriza MVP pequeños, claridad y menor tiempo/costo. Validación pesada local, CI automática liviana y FULL remoto manual; política canónica en docs/TESTING.md. Cierra C, después D mínima (personalización/formulario/guía) y E (un ensayo de adopción); sin automatizaciones semanales, dispatcher ni infraestructura adicional como condición de cierre. El trabajo de producto no cambia de stack/auth ni pierde pruebas de seguridad. Mapa de pendientes en docs/ROADMAP.md.

@@ -12,6 +12,8 @@ Client en `client/src/features/reference/`: API valida con Zod, hooks usan keys 
 
 `services/http.ts` acepta una guardia opcional `sessionIsCurrent` para requests privados: un 401 tardío de A se rechaza ante su caller pero no publica expiración de B. Sin guardia mantiene la conducta de auth existente. El proveedor de sesión conserva cancelación/limpieza y el shell remonta por identidad; limpiar MutationCache por sí solo no cancela una mutación. La feature nunca escribe su respuesta en cache; tampoco renueva CSRF de otra identidad ni muestra mensajes tardíos en ella.
 
+La paginación backend liga el offset `long` y el límite en SQL PostgreSQL, con orden fijo y filtro por dueño; el conteo usa el mismo UUID de dueño. `PageRequest`/`PageImpl` calculan offset y metadata sin aplicar el offset mediante JPA (`setFirstResult` solo acepta int). Las páginas válidas fuera de rango conservan contenido vacío y conteo real, incluso más allá de ese límite; no restringir la entrada ni abrir `/error` para resolver un límite de persistencia. Regresión HTTP/PostgreSQL y evidencia R1-01 en T-002.
+
 ## Sustituir o retirar
 
 1. Crear la spec/tarea del flujo nuevo y decidir su propiedad/datos. Reemplazar la referencia conservando identidad, sesión, CSRF, system/readiness, proxies y formularios compartidos. No derivar permisos de atributos del proveedor.

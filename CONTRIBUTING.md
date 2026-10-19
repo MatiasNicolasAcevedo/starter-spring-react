@@ -16,7 +16,7 @@ Proyecto personal con trabajo de agentes bajo [docs/AUTONOMY.md](docs/AUTONOMY.m
 - Antes de commitear: `git diff --cached --name-only` revisado; ningún secreto, `.env`, dato real ni archivo del kit local `plantilla/`.
 
 ## Calidad
-- Gate local antes de cada push: `bash scripts/verify.sh` (o la suite afectada durante la iteración). La CI confirma; no se usa para depurar a prueba y error.
-- Check requerido `verify-required`: informa la política (`DRAFT`, `DOCS_ONLY`, `BOOTSTRAP`/`FULL`) y sus suites. Detalle en [docs/TESTING.md](docs/TESTING.md).
+- Iteración con pruebas locales dirigidas; un FULL local al cerrar cambios técnicos. Documentación posterior: docs-check y huella técnica idéntica, sin repetir FULL. CI automática liviana; detalle en TESTING.
+- Check requerido `verify-required`: valida herramientas/documentación y publica la política local del diff; no acredita FULL. La evidencia local y revisión independiente son obligatorias para merge. Detalle en [docs/TESTING.md](docs/TESTING.md).
 - No se borran ni deshabilitan tests, no se debilitan asserts ni se bajan umbrales para obtener verde.
 - Cambios de CI, seguridad, configuración y migraciones van en tareas explícitas con pruebas reforzadas.

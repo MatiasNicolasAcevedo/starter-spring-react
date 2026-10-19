@@ -21,9 +21,9 @@ Contrato futuro, sin ejecución en A. Solo activar tras MERGED + CI de la predec
 Sin otros repos, Google real, datos/volúmenes ajenos, hosts globales ni ajustes fuera de la autorización.
 
 ## Aceptación y pruebas
-Todas las salidas/pruebas de su fila de ROADMAP; conservar suites heredadas, negativos de seguridad y cleanup por labels. Gate según diff, FULL obligatorio en beta y adopción; CI y revisión en sesión distinta sobre SHA publicado.
+Todas las salidas/pruebas de su fila de ROADMAP; conservar suites heredadas, negativos de seguridad y cleanup por labels. FULL local al cerrar fuentes técnicas y CI liviana según TESTING; revisión independiente con evidencia y dirigidos sobre SHA/base publicados, sin repetir FULL por rutina. Decisión del dueño 2026-10-18: alcance mínimo para MVP, sin automatizaciones semanales/dispatcher como condición de cierre.
 
-- Ensayo sin `plantilla/`: obtener el formulario del propio repo, completar contexto ficticio distinto, personalizar y seguir README literal hasta stack/health/Swagger/login, retoma persistente y FULL/CI. No crear otro repo sin decisión del dueño; ensayar en la copia temporal autorizada y verificar las instrucciones del camino GitHub template con sus límites explícitos.
+- Ensayo sin `plantilla/`: obtener el formulario del propio repo, completar contexto ficticio distinto, personalizar y seguir README literal hasta stack/health/Swagger/login, retoma persistente, FULL local y CI liviana. No crear otro repo sin decisión del dueño; ensayar en la copia temporal autorizada y verificar las instrucciones del camino GitHub template con sus límites explícitos.
 - Guía de arquitectura/crecimiento suficiente para identificar dónde va el primer flujo, sus permisos/migración/pruebas y qué cambios requieren decisión, sin reconstruir infraestructura común ni pedir instrucciones del kit.
 - Cero dependencias operativas o enlaces necesarios al kit; distinguir sus menciones de exclusión/procedencia de dependencias reales. Tras E MERGED y validada, el dueño puede eliminar su copia local; este ensayo y el inicializador no la borran. Conservar el cierre y único límite posterior en PROVENANCE.
 
