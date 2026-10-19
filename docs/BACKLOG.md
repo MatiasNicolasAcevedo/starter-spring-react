@@ -5,7 +5,7 @@ Próxima acción: T-003 (D) in_progress/S-004 v1 approved; D1→D4 en la rama pu
 ## En vuelo
 | Tarea | Estado | Salida |
 |---|---|---|
-| [T-003](tasks/T-003-initializer-beta.md) | in_progress | S-004 v1: D1→D4 secuenciales; inicializador, formulario y guía breve. Pruebas/beta pendientes |
+| [T-003](tasks/T-003-initializer-beta.md) | in_progress | S-004 v1: inicializador/formulario/guía y copia compilable verdes; D4 FULL/publicación pendientes |
 
 ## Listas
 Ninguna otra tarea ready.

@@ -1,3 +1,4 @@
+import projectIdentity from '../../project-identity.json'
 import { act, screen, waitFor } from '@testing-library/react'
 import { HttpResponse, http as mock } from 'msw'
 import { describe, expect, it, vi } from 'vitest'
@@ -70,7 +71,7 @@ describe.each(['logout', 'expiry', 'switch'] as const)(
         expect(screen.getByRole('button', { name: 'Guardando…' })).toBeDisabled()
         if (transition === 'logout') {
           await user.click(screen.getByRole('button', { name: 'Cerrar sesión' }))
-          await screen.findByRole('heading', { name: 'Ingresar a Starter' })
+          await screen.findByRole('heading', { name: `Ingresar a ${projectIdentity.name}` })
         } else if (transition === 'expiry') {
           auth.expireSession()
           await act(async () => {

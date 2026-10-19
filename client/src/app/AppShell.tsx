@@ -1,3 +1,4 @@
+import projectIdentity from '../project-identity.json'
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
@@ -31,7 +32,7 @@ export function AppShell() {
             variant="h6"
             sx={{ fontWeight: 600, flexShrink: 0 }}
           >
-            Starter
+            {projectIdentity.name}
           </Link>
           <Box sx={{ flexGrow: 1, minWidth: 0, display: 'flex', justifyContent: 'flex-end' }}>
             <SessionControls />

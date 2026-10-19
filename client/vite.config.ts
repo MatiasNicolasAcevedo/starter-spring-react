@@ -124,6 +124,8 @@ export default defineConfig(({ command, mode }) => {
         process.env.STARTER_WATCH_POLLING === 'true' ? { usePolling: true, interval: 300 } : {},
     },
     test: {
+      // Bound concurrent jsdom/MUI cold starts; preserve every case, deadline and coverage rule.
+      maxWorkers: 4,
       environment: 'jsdom',
       setupFiles: ['./src/test/setup.ts'],
       include: ['src/**/*.test.{ts,tsx}'],

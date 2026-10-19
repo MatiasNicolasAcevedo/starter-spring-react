@@ -197,7 +197,7 @@ if (existsSync(join(ROOT, 'docs/STATUS.md'))) {
     if (id && !prompt.includes(id)) fail('docs/STATUS.md', `el prompt no menciona ${id}`);
     if (/T-NNN|S-NNN|<[a-z][^>]*>|\bTODO\b|\bTBD\b/.test(prompt)) fail('docs/STATUS.md', 'el prompt contiene placeholders');
   }
-  const count = status.match(/HANDOFF del starter:\s*(\d+)\/22 verificados/)?.[1];
+  const count = status.match(/HANDOFF del (?:starter|producto):\s*(\d+)\/22 verificados/)?.[1];
   if (verified !== null && Number(count) !== verified) fail('docs/STATUS.md', `conteo ${count}/22 distinto de HANDOFF ${verified}/22`);
   if (existsSync(join(ROOT, 'docs/BACKLOG.md'))) {
     const next = read('docs/BACKLOG.md').match(/^Próxima acción:[^\n]*/m)?.[0] ?? '';
@@ -213,7 +213,12 @@ if (existsSync(join(ROOT, 'docs/ROADMAP.md'))) {
 
 // 9. Coherencia de configuración versionada
 const pgCompose = existsSync(join(ROOT, 'docker-compose.yml')) && read('docker-compose.yml').match(/image:\s*(postgres:[^\s]+)/)?.[1];
-const tcFile = 'server/src/test/java/com/example/starter/TestcontainersConfiguration.java';
+let javaPackage = '';
+try { javaPackage = JSON.parse(read('project-identity.json')).packageName; } catch { fail('project-identity.json', 'identidad pública ausente o inválida'); }
+if (typeof javaPackage !== 'string' || !/^[a-z][a-z0-9_]*(?:\.[a-z][a-z0-9_]*)+$/.test(javaPackage)) {
+  fail('project-identity.json', 'paquete Java inválido'); javaPackage = 'invalid';
+}
+const tcFile = `server/src/test/java/${javaPackage.replaceAll('.', '/')}/TestcontainersConfiguration.java`;
 const pgTc = existsSync(join(ROOT, tcFile)) && read(tcFile).match(/POSTGRES_IMAGE\s*=\s*"([^"]+)"/)?.[1];
 if (!pgCompose || pgCompose !== pgTc) fail('docker-compose.yml', `imagen PostgreSQL distinta de Testcontainers (${pgCompose} vs ${pgTc})`);
 const phaseCi = existsSync(join(ROOT, '.github/workflows/ci.yml')) && read('.github/workflows/ci.yml').match(/GATE_PHASE:\s*(\w+)/)?.[1];

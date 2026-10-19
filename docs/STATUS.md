@@ -5,10 +5,10 @@
 |---|---|
 | Tarea y contrato | [T-003](tasks/T-003-initializer-beta.md) · D; [S-004 v1](specs/S-004-initializer-beta.md) |
 | Estado | in_progress |
-| Acción actual | Implementer activo: D1→D4 secuenciales según T-003 |
-| Rama / PR | chore/t-003-initializer-beta · sin PR; este avance pertenece a la futura entrega D |
+| Acción actual | D1/D2/D3 y copia compilable verdes; D4 FULL final pendiente/en ejecución |
+| Rama / PR | chore/t-003-initializer-beta · PR #4 draft |
 | Base | main, 193f5a763af9ae61726daf20d30ae4ce8d5ce59d |
-| Fuentes probadas | Evidencia C conservada en T-002; ninguna implementación/prueba D ejecutada |
+| Fuentes probadas | Copia compilable y dirigidos D verdes; checkpoint FULL en T-003 |
 | Siguiente sesión | Retomar checkpoint de T-003; revisión independiente solo tras cierre técnico |
 | Continuidad | POR_SESION |
 
@@ -20,4 +20,4 @@ Retomar D/T-003 como implementer en esta raíz y rama chore/t-003-initializer-be
 ```
 
 ## Checkpoint vigente
-[Cierre comprobado de C](tasks/T-002-reference-security.md#reconciliación-posterior-al-merge--2026-10-18) y [corte de ciclo](ROADMAP.md#revisión-de-ciclo--cierre-de-c--2026-10-18). Primer avance documental en rama D desde el squash de C; obtener SHA publicado con `git log -1`/tracking/remoto, sin SHA futuro inventado. [T-003](tasks/T-003-initializer-beta.md#checkpoint-planner--2026-10-18) ready/S-004 v1 approved, implementación y pruebas D pendientes, sin PR separado de planificación. Validación del avance: docs-check, regresiones de herramientas/documentación, diff-check y clasificación DOCS_ONLY; sin nuevo FULL ni recursos de ensayo levantados. Si cambia la precondición, conservar este checkpoint y reconciliar antes de mutar.
+[T-003 · checkpoint antes del FULL](tasks/T-003-initializer-beta.md#checkpoint-antes-del-full-local-final--2026-10-18). Código/documentos locales de D, PR#4 draft, último HEAD publicado92ea282d32a7cb55decb9393f3cb79e0966b2d38 y base193f5a763af9ae61726daf20d30ae4ce8d5ce59d. Dirigidos propios/copia compilable verdes; FULL final con fuentes congeladas, log/huellas y cleanup en ese checkpoint. No editar fuentes/Bash mientras esté ejecutándose. Publicar código únicamente al pasar el gate; luego cierre documental/CI y revisión independiente. C conserva su cierre/evidencia, sin repetir su FULL ni otorgar crédito global a HANDOFF.

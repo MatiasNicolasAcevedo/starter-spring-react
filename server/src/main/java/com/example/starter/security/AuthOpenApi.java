@@ -52,7 +52,7 @@ public class AuthOpenApi {
             var logout = new Operation()
                     .addTagsItem(TAG)
                     .operationId("logout")
-                    .summary("Cierra la sesión de Starter")
+                    .summary("Cierra la sesión")
                     .description("Invalida la sesión y borra las cookies de sesión y CSRF. Sin sesión pero con CSRF"
                             + " válido también responde 204. No cierra la sesión de Google.")
                     .addSecurityItem(new SecurityRequirement().addList(CSRF_HEADER))
