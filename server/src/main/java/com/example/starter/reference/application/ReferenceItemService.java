@@ -5,8 +5,8 @@ import com.example.starter.reference.persistence.ReferenceItemRepository;
 import java.time.Clock;
 import java.util.Objects;
 import java.util.UUID;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,8 +26,11 @@ public class ReferenceItemService {
     public ReferenceItemPage list(UUID owner, int page, int size) {
         Objects.requireNonNull(owner);
         if (page < 0 || size < 1 || size > 100) throw new IllegalArgumentException("Paginación inválida.");
-        var result = repository.findAllByOwnerId(
-                owner, PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt", "id")));
+        var pageable = PageRequest.of(page, size);
+        var result = new PageImpl<>(
+                repository.findPageByOwnerId(owner, pageable.getOffset(), size),
+                pageable,
+                repository.countByOwnerId(owner));
         return new ReferenceItemPage(
                 result.map(ReferenceItemView::from).getContent(),
                 page,

@@ -61,7 +61,8 @@ describe.each(['logout', 'expiry', 'switch'] as const)(
           }
         })
         const { user, queryClient } = renderWithProviders(<AppRoutes />, { route: '/reference' })
-        await screen.findByRole('heading', { name: 'Privado de A' })
+        // Filter before accessible-name/style computation: the unrelated h1 must not delay the list response.
+        expect(await screen.findByRole('heading', { name: 'Privado de A', level: 2 })).toBeVisible()
         await user.click(screen.getByRole('button', { name: 'Crear elemento' }))
         await user.type(screen.getByRole('textbox', { name: /Título/ }), 'Mutación A')
         await user.click(screen.getByRole('button', { name: 'Guardar' }))

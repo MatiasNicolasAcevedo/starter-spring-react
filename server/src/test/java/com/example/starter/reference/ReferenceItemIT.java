@@ -11,6 +11,8 @@ import java.util.UUID;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -231,5 +233,39 @@ class ReferenceItemIT {
                         JSON.writeValueAsString(Map.of("title", "x".repeat(120), "description", "x".repeat(2000)))),
                 201);
         assertThat(checked(a.get(PATH), 200).get("totalElements").asInt()).isEqualTo(4);
+    }
+
+    @ParameterizedTest
+    @CsvSource({"100,20", "107374182,20", "107374183,20", "2147483647,1", "2147483647,100"})
+    void validPagesAcrossJpaOffsetLimitReturnEmptyWithRealOwnerCounts(int page, int size) throws Exception {
+        var a = login();
+        var b = login();
+        var empty = login();
+        checked(mutate(a, PATH, "POST", "{\"title\":\"A propio\",\"description\":\"\"}"), 201);
+        for (int index = 0; index < 2; index++)
+            checked(mutate(b, PATH, "POST", "{\"title\":\"B privado\",\"description\":\"\"}"), 201);
+        var browsers = java.util.List.of(a, b, empty);
+        for (int index = 0; index < browsers.size(); index++) {
+            var browser = browsers.get(index);
+            int count = new int[] {1, 2, 0}[index];
+            var result = checked(browser.get(PATH + "?page=" + page + "&size=" + size), 200);
+            assertThat(result.get("content").size()).isZero();
+            assertThat(result.get("page").asInt()).isEqualTo(page);
+            assertThat(result.get("size").asInt()).isEqualTo(size);
+            assertThat(result.get("totalElements").asInt()).isEqualTo(count);
+            assertThat(result.get("totalPages").asInt()).isEqualTo((count + size - 1) / size);
+            var first = checked(browser.get(PATH), 200);
+            assertThat(first.get("content").size()).isEqualTo(count);
+            assertThat(first.get("totalElements").asInt()).isEqualTo(count);
+            var owner = UUID.fromString(browser.me().get("id").asString());
+            assertThat(jdbc.queryForObject(
+                            "SELECT count(*) FROM reference_item WHERE owner_id=?", Integer.class, owner))
+                    .isEqualTo(count);
+        }
+        assertThat(jdbc.queryForObject(
+                        "SELECT count(*) FROM reference_item WHERE owner_id IN (SELECT id FROM app_user WHERE issuer=?)",
+                        Integer.class,
+                        PROVIDER.issuer()))
+                .isEqualTo(3);
     }
 }

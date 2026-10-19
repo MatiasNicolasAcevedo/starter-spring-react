@@ -12,8 +12,6 @@ import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase;
 import org.springframework.context.annotation.Import;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 @DataJpaTest
@@ -48,19 +46,20 @@ class ReferenceItemRepositoryIT {
         var second = repository.saveAndFlush(new ReferenceItem(a, "Duplicado", "", NOW));
         repository.saveAndFlush(new ReferenceItem(b, "Ajeno", "", NOW.plusSeconds(60)));
         assertThat(first.getId().version()).isEqualTo(7);
-        var order = Sort.by(Sort.Direction.DESC, "createdAt", "id");
         var expected = jdbc.queryForList(
                 "SELECT id FROM reference_item WHERE owner_id=? ORDER BY created_at DESC,id DESC", UUID.class, a);
-        var page = repository.findAllByOwnerId(a, PageRequest.of(0, 1, order));
-        assertThat(page.getTotalElements()).isEqualTo(2);
-        assertThat(page.getTotalPages()).isEqualTo(2);
-        assertThat(page.getContent()).extracting(ReferenceItem::getId).containsExactly(expected.getFirst());
-        assertThat(repository.findAllByOwnerId(a, PageRequest.of(1, 1, order)).getContent())
+        var page = repository.findPageByOwnerId(a, 0L, 1);
+        assertThat(repository.countByOwnerId(a)).isEqualTo(2);
+        assertThat(repository.countByOwnerId(b)).isEqualTo(1);
+        assertThat(repository.countByOwnerId(UUID.randomUUID())).isZero();
+        assertThat(page).extracting(ReferenceItem::getId).containsExactly(expected.getFirst());
+        assertThat(repository.findPageByOwnerId(a, 1L, 1))
                 .extracting(ReferenceItem::getId)
                 .containsExactly(expected.getLast());
-        var outside = repository.findAllByOwnerId(a, PageRequest.of(10, 1, order));
-        assertThat(outside.getContent()).isEmpty();
-        assertThat(outside.getTotalElements()).isEqualTo(2);
+        for (long offset : new long[] {10L, Integer.MAX_VALUE, (long) Integer.MAX_VALUE + 1, 214748364700L}) {
+            assertThat(repository.findPageByOwnerId(a, offset, 1)).isEmpty();
+            assertThat(repository.countByOwnerId(a)).isEqualTo(2);
+        }
         assertThat(repository.findByIdAndOwnerId(first.getId(), b)).isEmpty();
         assertThat(repository.findByIdAndOwnerId(UUID.randomUUID(), b)).isEmpty();
         assertThat(repository.findByIdAndOwnerId(first.getId(), a)).isPresent();

@@ -3,7 +3,6 @@ package com.example.starter.reference.application;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 import com.example.starter.reference.persistence.ReferenceItem;
@@ -16,8 +15,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.test.util.ReflectionTestUtils;
 
 class ReferenceItemServiceTest {
@@ -74,18 +71,16 @@ class ReferenceItemServiceTest {
     }
 
     @Test
-    void pagingUsesOwnerAndStableDescendingTieBreakAndRejectsInvalidBounds() {
-        when(repository.findAllByOwnerId(eq(OWNER), any())).thenAnswer(call -> {
-            Pageable pageable = call.getArgument(1);
-            assertThat(pageable.getPageNumber()).isEqualTo(1);
-            assertThat(pageable.getPageSize()).isEqualTo(20);
-            assertThat(pageable.getSort().toString()).isEqualTo("createdAt: DESC,id: DESC");
-            return new PageImpl<ReferenceItem>(List.of(), pageable, 2);
-        });
+    void pagingUsesOwnerForContentAndCountsAndRejectsInvalidBounds() {
+        when(repository.findPageByOwnerId(OWNER, 20L, 20)).thenReturn(List.of());
+        when(repository.countByOwnerId(OWNER)).thenReturn(2L);
         var page = service.list(OWNER, 1, 20);
         assertThat(page.content()).isEmpty();
         assertThat(page.totalElements()).isEqualTo(2);
         assertThat(page.totalPages()).isEqualTo(1);
+        verify(repository).findPageByOwnerId(OWNER, 20L, 20);
+        verify(repository).countByOwnerId(OWNER);
+        verify(repository, never()).count();
         for (int[] invalid : new int[][] {{-1, 20}, {0, 0}, {0, 101}}) {
             assertThatThrownBy(() -> service.list(OWNER, invalid[0], invalid[1]))
                     .isInstanceOf(IllegalArgumentException.class);
@@ -94,6 +89,25 @@ class ReferenceItemServiceTest {
         assertThatThrownBy(() -> service.get(null, ID)).isInstanceOf(NullPointerException.class);
         assertThatThrownBy(() -> service.create(null, new ReferenceItemInput("x", "")))
                 .isInstanceOf(NullPointerException.class);
+    }
+
+    @Test
+    void largeOffsetIsNotNarrowedOrAssumedEmptyWhenOwnerHasMoreData() {
+        int page = 107374183;
+        int size = 20;
+        long offset = (long) page * size;
+        var item = new ReferenceItem(OWNER, "Más allá de int", "", NOW);
+        when(repository.findPageByOwnerId(OWNER, offset, size)).thenReturn(List.of(item));
+        when(repository.countByOwnerId(OWNER)).thenReturn(offset + 1);
+        var result = service.list(OWNER, page, size);
+        assertThat(offset).isGreaterThan(Integer.MAX_VALUE);
+        assertThat(result.content()).containsExactly(ReferenceItemView.from(item));
+        assertThat(result.page()).isEqualTo(page);
+        assertThat(result.size()).isEqualTo(size);
+        assertThat(result.totalElements()).isEqualTo(offset + 1);
+        assertThat(result.totalPages()).isEqualTo(page + 1);
+        verify(repository).findPageByOwnerId(OWNER, offset, size);
+        verify(repository).countByOwnerId(OWNER);
     }
 
     @Test

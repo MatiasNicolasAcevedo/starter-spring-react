@@ -12,7 +12,8 @@ const temporary = mkdtempSync(join(tmpdir(), 'starter-docs-check-'));
 const excluded = new Set(['.git', 'plantilla', 'node_modules', 'target', 'dist', 'coverage', 'artifacts', '__pycache__']);
 cpSync(root, temporary, { recursive: true, filter: (source) => !excluded.has(basename(source)) });
 const originals = new Map(['docs/HANDOFF.md', 'docs/STATUS.md', 'docs/BACKLOG.md',
-  'docs/tasks/T-000-starter-extraction.md'].map(path => [path, readFileSync(join(temporary, path), 'utf8')]));
+  'docs/tasks/T-000-starter-extraction.md', '.github/workflows/ci.yml', '.github/workflows/full.yml',
+  'scripts/verify.sh'].map(path => [path, readFileSync(join(temporary, path), 'utf8')]));
 const change = (path, transform) => writeFileSync(join(temporary, path), transform(originals.get(path)));
 const run = () => spawnSync(process.execPath, ['scripts/docs-check.mjs'], { cwd: temporary, encoding: 'utf8' });
 const rejects = (pattern) => {
@@ -26,6 +27,22 @@ after(() => rmSync(temporary, { recursive: true, force: true }));
 test('current generic contract passes without Git or the local kit', () => {
   const result = run();
   assert.equal(result.status, 0, result.stderr);
+});
+test('remote FULL cannot become automatic', () => {
+  change('.github/workflows/full.yml', text => text.replace('  workflow_dispatch:', '  pull_request:'));
+  rejects(/FULL remoto debe ser exclusivamente manual/);
+});
+test('local FULL cannot lose E2E while remote CI becomes lighter', () => {
+  change('scripts/verify.sh', text => text.replace('FULL) echo "docs server client e2e"', 'FULL) echo "docs server client"'));
+  rejects(/FULL no ejecuta la suite e2e/);
+});
+test('manual aggregate rejects a missing E2E dependency', () => {
+  change('.github/workflows/full.yml', text => text.replace('needs: [classify, docs, server, client, e2e]', 'needs: [classify, docs, server, client]'));
+  rejects(/full-result no depende de e2e/);
+});
+test('automatic CI retains the required check name', () => {
+  change('.github/workflows/ci.yml', text => text.replace('  verify-required:', '  renamed:'));
+  rejects(/falta check requerido verify-required/);
 });
 test('a missing criterion rejects the handoff', () => {
   change('docs/HANDOFF.md', text => text.replace(/^\| O-01 .*\n/m, ''));

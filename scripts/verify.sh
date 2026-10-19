@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Gate local de Starter (docs/TESTING.md). Ejecutar con Bash (Git Bash/WSL) desde cualquier carpeta del repo.
-# Despacha contenedores con Docker Compose; devuelve exit code distinto de cero si falla cualquier suite.
+# Despacha contenedores con Docker Compose; al primer fallo no inicia suites posteriores.
 #   bash scripts/verify.sh            todas las suites de la fase actual (FULL: único gate de entrega)
 #   bash scripts/verify.sh --docs     solo docs-check (gate de entrega solo si --policy informa DOCS_ONLY)
 #   bash scripts/verify.sh --server   solo backend (runner server-tests o alternativa host)
@@ -107,6 +107,10 @@ overall=0
 for suite in "${suites[@]}"; do
   if [[ "$SIGNAL_CODE" != 0 ]]; then
     result[$suite]="NO EJECUTADA (interrumpido)"
+    continue
+  fi
+  if [[ "$overall" != 0 ]]; then
+    result[$suite]="NO EJECUTADA (fallo previo)"
     continue
   fi
   echo "==> suite $suite"
