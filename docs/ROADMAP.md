@@ -8,14 +8,14 @@
 
 ## Secuencia contratada
 
-El objetivo vigente es completar este mismo starter de A a E. A/B/C están terminadas con revisión/merge/CI comprobados y evidencia propia en sus tareas. C conserva FULL local y dirigidos R2 según TESTING; su CI final es liviana. D/T-003 está in_progress/S-004 v1 approved, PR#4 draft; E draft. Cada parte requiere revisión, squash merge confirmado y CI vigente antes de activar la siguiente.
+El objetivo vigente es completar este mismo starter de A a E. A/B/C están terminadas con revisión/merge/CI comprobados y evidencia propia en sus tareas. C conserva FULL local y dirigidos R2 según TESTING; su CI final es liviana. D/T-003 está in_review/S-004 v1 approved, PR#4; E draft. Cada parte requiere revisión, squash merge confirmado y CI vigente antes de activar la siguiente.
 
 | Parte | Estado real | Resultado en palabras simples |
 |---|---|---|
 | A | done; PR #1 MERGED y CI verificada | Extraer y neutralizar la base, conservar versiones y contratos |
 | B | done; PR #2 MERGED y CI FULL PR/main verificadas | Levantar, comprobar, detener y retomar la aplicación conectada a su DB |
 | C | done; PR #3 MERGED, R2/CI liviana exactos, squash comprobado | Incorporar un ejemplo removible completo con permisos y pruebas |
-| D | in_progress; T-003 / S-004 v1, PR#4 draft; D4 validación pendiente | Personalizar la base con un inicializador y habilitarla como template beta |
+| D | in_review; T-003 / S-004 v1, PR#4; FULL propio verde, revisión/merge pendientes | Personalizar la base con un inicializador y habilitarla como template beta |
 | E | draft; espera D MERGED | Comprobar desde otra copia limpia que sirve para empezar otra aplicación |
 
 La aceptación detallada está abajo y en la tarea/spec de cada parte. Refinar solo la próxima parte al habilitarse; una tarea ready pasa a implementación, sin otra ronda de planificación salvo cambio material. Aplicar documentación mínima útil de AGENTS durante el trabajo: comandos de uso en README/SETUP, decisiones en ADR, evidencia en tarea/PR y estado breve con enlaces en el tablero. Materializar aprendizajes en esa base, sin mantener otro manual vivo en el kit transitorio.

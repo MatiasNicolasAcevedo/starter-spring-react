@@ -2,7 +2,7 @@
 
 Base genérica Java 21 / Spring Boot 4.1.1, React/TypeScript/Vite y PostgreSQL 18.6. MIT · Matias Nicolas Acevedo.
 
-**Estado: A/B/C terminadas y mergeadas; D en implementación y validación; E draft.** Beta/template y adopción siguen pendientes. Qué falta y orden de cierre: [ROADMAP](docs/ROADMAP.md#cierre-mínimo-para-mvp--revisión-del-dueño-2026-10-18); acción concreta en [STATUS](docs/STATUS.md); evidencia y cierre de C en [T-002](docs/tasks/T-002-reference-security.md). Origen y límites de continuidad: [PROVENANCE](docs/PROVENANCE.md).
+**Estado: A/B/C terminadas y mergeadas; D implementada, en revisión independiente; E draft.** Beta/template y adopción siguen pendientes. Qué falta y orden de cierre: [ROADMAP](docs/ROADMAP.md#cierre-mínimo-para-mvp--revisión-del-dueño-2026-10-18); acción concreta en [STATUS](docs/STATUS.md); evidencia propia de D en [T-003](docs/tasks/T-003-initializer-beta.md). Origen y límites de continuidad: [PROVENANCE](docs/PROVENANCE.md).
 
 **Destino:** crear aplicaciones con «Use this template → Create a new repository», personalizar y verificar la base, y empezar el primer flujo. Formulario y recorrido abajo; E comprobará la adopción sin kit personal. Objetivo aceptado y condiciones de retiro de `plantilla/`: [PROJECT_CONTEXT](PROJECT_CONTEXT.md#adopción-futura).
 

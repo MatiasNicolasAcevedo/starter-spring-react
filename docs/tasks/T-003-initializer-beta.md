@@ -1,6 +1,6 @@
 ---
 id: T-003
-status: in_progress
+status: in_review
 priority: P1
 size: M
 executor: frontier
@@ -24,7 +24,7 @@ Inicializador Node con lista explícita de escrituras, dry-run por defecto, appl
 Sin otros repos, Google real, datos/volúmenes ajenos, hosts globales, origen, cambios de protecciones, releases ni E. Sin automatizaciones semanales/dispatcher, nuevas dependencias o infraestructura adicional. No copiar/borrar el kit ni convertir sus preguntas en alcance obligatorio.
 
 ## Impacto
-Planner: solo documentos, conciliación T-002 done y corte de C. Implementación prevista: identidad de la copia, CLI y documentos propios; sin API/rutas/auth/permisos/propiedad nuevos, migraciones ni operaciones sobre DB. UI conserva comportamiento y personaliza solo identidad pertinente. Mantener dependencias/versiones/wrappers/locks y todas las suites/umbrales; no acreditar pruebas de D/HANDOFF con evidencia C.
+Implementación: identidad de la copia, CLI offline y documentos propios; sin API/rutas/auth/permisos/propiedad nuevos, migraciones ni operaciones sobre DB. UI conserva comportamiento y obtiene nombre/título de identidad pública JSON; backend expone ese nombre configurable en system/info. Dependencias/versiones/wrappers/locks y suites/umbrales conservados. Concurrencia client acotada a cuatro workers tras diagnóstico documentado, sin cambiar assertions/deadlines/retries. Sin crédito D/HANDOFF por evidencia C.
 
 ## Leer antes
 - S-004 v1 y PROJECT_CONTEXT · Adopción futura/decisión del 2026-10-18.
@@ -48,7 +48,7 @@ Antes de operaciones largas: checkpoint con comandos, SHA/base, proyectos nuevos
 Inventario relevante comprobado por planner: `scripts/docs-check.mjs` fija hoy la ruta Java de Testcontainers y el rótulo de conteo de STATUS; `scripts/ci/docs-check.test.mjs` fija el nombre de T-000 del starter. D1/D2 deben adaptar esas conexiones para que la copia personalizada conserve los mismos controles/negativos después de renombrar/reiniciar, sin omitirlos ni aceptar una validación vacía. Es parte del ensayo compilable/docs-check, sin ampliar el producto.
 
 ## Aceptación y pruebas
-Matriz D-AC-01…07 canónica en S-004, toda **pendiente de implementación**. Iterar con dirigidos de CLI/docs/copia; un FULL local sin opciones al cerrar fuentes técnicas, huella antes/después, base/HEAD, resultados/cleanup propios. Client verify incluye typecheck/lint/formato/tests/cobertura/build y backend clean verify incluye PostgreSQL IT/JaCoCo. Publicar código al pasar gate, cerrar documentación agrupada, CI automática liviana y revisión independiente sobre SHA/base exactos. Repetir FULL solo bajo las condiciones de TESTING; no exigir CI automática de main ni remoto FULL manual por rutina.
+Matriz D-AC-01…07 canónica en S-004; resultados propios del implementer al final de esta tarea. D-AC-01…06 implementados y comprobados; D-AC-07 conserva revisión/merge y habilitación beta pendientes. FULL local sin opciones al cerrar fuentes técnicas, huella antes/después, base/HEAD y cleanup propios. Client verify incluye typecheck/lint/formato/tests/cobertura/build y backend clean verify incluye PostgreSQL IT/JaCoCo. Código publicado después del gate; cierre documental agrupado y CI liviana final sobre HEAD/base exactos. Repetir FULL solo bajo TESTING; no exigir CI automática de main ni remoto FULL manual por rutina.
 
 No done mientras PR abierto; no autorrevisión ni merge de implementación propia. Beta/template solo después del merge D comprobado; E/adopción validadas no se heredan de D. Marcar template es la autorización específica de ROADMAP, sin modificar protecciones.
 
@@ -58,7 +58,7 @@ Rol planner, Codex desktop/API y PowerShell; familia expuesta GPT-6, runtime exa
 Validación de esta planificación: `node scripts/docs-check.mjs` exit0 (44 Markdown/5 tareas/HANDOFF0/22), `node --test "scripts/ci/*.test.mjs"` **64/64 exit0**, sin fallos/cancelados/omitidos; incluye13 regresiones documentales. Primer intento de matrices restringido por permisos del sandbox al crear Git temporal/objetos MSYS; misma orden fuera del sandbox verde, sin modificar tests. `git diff --check` exit0; solo ocho Markdown documentales A/M, sin fuentes técnicas/locks/workflows modificados; clasificador DOCS_ONLY del commit publicado comprobable contra la base. Kit ignorado y ausente de Git/índice. Sin FULL nuevo, CI automática de main/rama sin PR ni recursos Docker levantados por planner. Commit/push en esta misma rama; confirmar HEAD local/tracking/remoto y árbol limpio al entregar, sin PR documental separado.
 
 ## Resultado
-Planificación ready de D; implementación, pruebas propias, PR/revisión/merge y template beta pendientes. No volver a planificar sin cambio material. Reconciliación C y corte de ciclo incluidos en este avance, sin crédito adicional de HANDOFF.
+Implementación D1→D4 publicada en PR #4, en revisión independiente. Inicializador seguro, contexto/T-000 propios, formulario/guía y ensayo compilable sin kit integrados y comprobados con FULL propio. Revisión, merge y habilitación beta/template pendientes; D no done mientras el PR esté abierto. T-004 draft y HANDOFF0/22 NO_LISTO. Continuidad posterior exclusivamente PROVENANCE.
 
 ## Inicio implementer · 2026-10-18
 Codex desktop/API, terminal PowerShell/Git Bash; familia expuesta GPT-6, identificador runtime exacto y esfuerzo efectivo no expuestos. Sol/high solicitado; sin simular selección, delegación ni otras sesiones/modelos. Impacto: CLI/identidad y documentos propios de la copia, sin cambios de API/auth/permisos/propiedad/schema/UI de negocio.
@@ -117,3 +117,29 @@ COMPOSE_ENV_FILES=.env.example COMPOSE_PROJECT_NAME=starter-verify-d-20261018-23
 Control local ignorado `.orchestrator/t-003/run-full.sh`; salida `.orchestrator/t-003/full.log`. Preflight rechaza cualquier container/network/volume de esos dos namespaces antes de build. Fixtures ficticias explícitas, sin Google real. El wrapper limpia solo IDs con sus labels exactas, conserva exit no cero y rechaza si no puede listar/limpiar. Los ensayos internos conservan sus namespaces/traps/negativos y cleanup propios. No editar fuentes ni Bash durante FULL. Al retorno: comprobar exit/resumen, cero labels propios y huellas iguales; ante fallo diagnosticar antes de repetir.
 
 Pendiente: FULL propio y publicación del código si pasa; después cierre documental agrupado, CI liviana del HEAD/base publicados y reviewer nuevo. D sigue in_progress, beta/template solo después de revisión/merge D; T-004 draft y HANDOFF0/22 NO_LISTO. Continuidad final exclusivamente PROVENANCE.
+
+## Cierre implementer · 2026-10-19
+El checkpoint anterior quedó superado por el FULL terminado. Mismo rol/herramienta/familia y esfuerzo expuestos al inicio; sin delegar, abrir sesiones/modelos, autorrevisar ni mergear. Única tarea/PR activos. Commit técnico publicado después del gate: `361a91651c3a749d41f48617c51b2ca00f81b422`; base `193f5a763af9ae61726daf20d30ae4ce8d5ce59d` sin cambios. El gate se ejecutó sobre esas fuentes todavía locales, con HEAD de inicio `92ea282d32a7cb55decb9393f3cb79e0966b2d38`; no se atribuye el FULL a un commit que aún no existía. Después solo cierre Markdown de tablero/evidencia; comprobar huella técnica y base al revisar. El SHA final documental y la CI liviana exacta se consultan en PR#4/Git, sin SHA futuro autorreferencial.
+
+| Criterio | Evidencia propia del implementer | Estado de entrega |
+|---|---|---|
+| D-AC-01 | Ayuda/inputs y dry-run; snapshots completos de bytes/rutas en matriz CLI | Comprobado |
+| D-AC-02 | Apply con Agenda Demo/org.demo.agenda/Equipo Demo, main/test trasladados; segunda aplicación cero operaciones/bytes idénticos | Comprobado |
+| D-AC-03 | Rechazos antes de escritura: entradas/paquetes, raíz/ancestros, junction/symlink/hardlink, colisiones/inventario, ignorados modificados e identidades parciales; centinelas intactos | Comprobado en Windows; rama symlink de archivo también ejecutable en CI Linux |
+| D-AC-04 | Contexto/T-000 draft/tableros/AUTONOMY propios; los22 criterios se reinician incluso desde fixture previamente verificada; historia archivada y enlaces íntegros | Comprobado en copia sin kit/Git |
+| D-AC-05 | Formulario breve con ejemplo ficticio; guía canónica README hasta primer flujo y enlaces SETUP/ARCHITECTURE/ADR/REFERENCE | Recorrido e integridad documental comprobados; adopción literal E aún pendiente |
+| D-AC-06 | Copia personalizada compila: docs-check y16 pruebas documentales/adopción, backend91+75, client133;182 fuentes inmutables idénticas y comparación de inventario POM | Comprobado dentro del FULL, sin FULL anidado |
+| D-AC-07 | FULL propio exit0 y publicación; CI automática liviana del HEAD/base final consultable en PR | Revisión independiente/merge y luego isTemplate=true pendientes |
+
+FULL sin opciones con el comando del checkpoint anterior: inicio `2026-10-18T23:11:40-03:00`, fin `2026-10-18T23:52:38-03:00` (40m58s). Log local ignorado `.orchestrator/t-003/full.log`; resumen final docs/server/client/e2e **OK**, `result=0 cleanupFailure=0`. Incluye:
+
+- Backend raíz:91 unitarios/slices +75 IT PostgreSQL/OIDC, cero fallos/errores/omitidos, JaCoCo y Spotless. Client raíz:16 archivos/133 tests, typecheck/lint/formato/cobertura/build verdes.
+- Matriz CLI30/30, prefijos/proxies14/14 y copia personalizada con16 pruebas documentales/adopción,91+75 backend y133 client,182 archivos inmutables/POM idénticos. Cleanup de la copia0/0/0.
+- Regresiones B: CLI negativos/guardias/rollback/señales, ambos proxies, login/reload/caída DB/recuperación/HMR/persistencia/retoma y copia literal sin Git/kit. Playwright desktop/móvil15/15, API/DB/OIDC locales reales; Swagger y título de navegador contra dato API. Canary negativo del saneador conserva su fallo esperado; no es fallo del producto.
+- Wrapper y ensayos internos con cleanup por labels exactos. Reconsulta posterior de los proyectos `starter-verify-d-20261018-231126` y `starter-e2e-d-20261018-231126`: containers/networks/volumes **0/0/0**. Sin Google real, volúmenes/datos ajenos ni acceso al origen.
+
+Huellas ignoradas `fingerprint-before.json`/`fingerprint-after.json` en el mismo directorio:281 archivos de fuentes,235 técnicos, mapas SHA por ruta idénticos antes/después. SHA256 agregado completo `c60cbf99ed766f9f73ce3db4970c570ebc50dddb06c48d12c58f346dfa87ded5`; técnico `449513a4cf8d1e3a444d9cdc877951695f88371761f2a8c9b005ac0904164def`. Algoritmo reproducible: listado `git ls-files --cached --others --exclude-standard -z`, SHA256 de bytes por ruta ordenada, `json.dumps(mapa, sort_keys=True)` y SHA256 del JSON; mapa técnico excluye Markdown y LICENSE. Kit/Git/ignorados ausentes. Fuentes del commit técnico y cierre documental conservan ese mapa técnico.
+
+Dirigidos offline finales antes del gate: `node --test "scripts/ci/*.test.mjs"`94/94, cero fallos/cancelados/omitidos, log `tools-final-source.log`. Cierre documental: docs-check45 Markdown/5 tareas/HANDOFF0/22; primer dirigido93/94 porque al guardar Markdown desde PowerShell se introdujo CRLF y el negativo de eliminar una fila no la eliminaba. Restablecer LF según .gitattributes corrigió la fixture, sin modificar el test;13/13 documentales verdes. Matriz final94/94, cero fallos/cancelados/omitidos en `tools-closure-final.log`; run CI del HEAD/base finales registrado en descripción del PR, junto a `git diff --check` y huella técnica idéntica. No repetir FULL por esos Markdown. Capturas saneadas propias desktop/móvil inspeccionadas: `e2e/artifacts/starter-dev-b1-nginx-1792376544-855/safe-home-1280.png` y `safe-home-375.png` (ignoradas), también estados de caída y proxy Vite en starter-dev-b1-vite-1792376853-2715. Solo UI/identidad ficticias, sin publicar artefactos crudos.
+
+Próximo rol reviewer en sesión nueva, según único prompt de STATUS: revisar diff publicado/evidencia y dirigidos/negativos de riesgos, no exigir otro FULL salvo condición concreta de TESTING. No se emite APROBADO ni se habilita template desde implementación; GitHub sigue público y `isTemplate=false`. Habilitar/comprobar beta del mismo repo solo después de D cerrada/MERGED. T-004 draft, HANDOFF0/22 NO_LISTO; no validar D/E por herencia.

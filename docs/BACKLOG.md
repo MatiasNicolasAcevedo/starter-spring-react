@@ -1,17 +1,17 @@
 # Tablero vivo
 
-Próxima acción: T-003 (D) in_progress/S-004 v1 approved; D1→D4 en la rama publicada. C done, cierre comprobado en T-002; mapa de cierre en ROADMAP y único prompt ejecutable en STATUS.
+Próxima acción: revisión independiente de T-003 (D) in_review/S-004 v1 approved, único PR#4. C done, cierre comprobado en T-002; mapa de cierre en ROADMAP y único prompt ejecutable en STATUS.
 
 ## En vuelo
 | Tarea | Estado | Salida |
 |---|---|---|
-| [T-003](tasks/T-003-initializer-beta.md) | in_progress | S-004 v1: inicializador/formulario/guía y copia compilable verdes; D4 FULL/publicación pendientes |
+| [T-003](tasks/T-003-initializer-beta.md) | in_review | Inicializador/formulario/guía, copia compilable y FULL propios verdes, código publicado; CI liviana final/revisión independiente antes del merge y beta |
 
 ## Listas
 Ninguna otra tarea ready.
 
 ## Bloqueadas
-E/T-004 permanece draft hasta D MERGED y conciliada; ver ROADMAP. Ningún bloqueo para empezar D contratada.
+E/T-004 permanece draft hasta D MERGED y conciliada; ver ROADMAP. D espera revisión independiente y merge; beta/template solo después.
 
 ## Por refinar
 - Automatizaciones semanales, dispatcher, atestaciones de pruebas y optimizaciones de caché no medidas: fuera del cierre mínimo para MVP. Reconsiderar solo ante necesidad concreta; política de validación local ya decidida en TESTING.
