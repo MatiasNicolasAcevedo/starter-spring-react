@@ -1,10 +1,10 @@
 ---
 id: T-002
-status: in_review
+status: mergeable
 priority: P1
 size: M
 executor: frontier
-role: implementer
+role: reviewer
 milestone: M0
 counts_for_cycle: false
 product_cycle: null
@@ -16,8 +16,32 @@ depends_on: [T-001]
 ---
 # T-002 · C · Referencia removible y seguridad por dueño
 
+## Revisión independiente R2 · 2026-10-18
+Resultado favorable, **mergeable**, sin bloqueantes restantes; R1-01 resuelto. Sesión nueva e independiente de implementación/R1, Codex desktop/API y PowerShell/Git Bash; familia expuesta GPT-6, identificador runtime exacto/esfuerzo efectivo no expuestos. Sol/high solicitado, sin simular selección, delegar ni abrir sesiones/modelos. Impacto efectivo: revisión de comportamiento/API/propiedad/datos/UI y transición documental; ningún cambio al código publicado, permisos, datos persistentes o UI.
+
+Precondición comprobada: T-002 in_review/S-003 v1 approved, árbol limpio, único PR #3 OPEN/ready propio, sin reviews formales ni conversaciones de revisión pendientes. HEAD local/tracking/remoto/PR `7a204979516cfca359523bdeb983d9137c1447f1`; main/base local/tracking/remoto `881b365ab2cd2e3ec87031b44ec58b1ec324a3ef`. [CI liviana 39182589603](https://github.com/MatiasNicolasAcevedo/starter-spring-react/actions/runs/39182589603) completed/success, verify-required y log con HEAD/base exactos. Ruleset activo/strict, check requerido y squash sin bypass reconsultados sin cambios.
+
+Revisado el diff publicado completo contra base y C-AC-01…10: V2 aditiva/V1 intacta, UUID/Clock/DTO/validación/errores/no-store, cinco aperturas exactas, propiedad en persistencia y CSRF, UI/RHF/Zod/foco/paginación/texto plano, aislamiento de queries/mutaciones y retiro seguro. Auth/OIDC, perfiles, proxies, lifecycle B, Swagger, versiones/wrappers/locks y umbrales conservados. Simplificación de gate/CI respaldada por la decisión del dueño y TESTING, sin confundir check liviano con FULL.
+
+FULL local final del implementer **corroborado, no repetido por rutina**: XML originales 91 unit/slices +75 IT, fallos/errores/omitidos0; resumen de gate exit0/cleanup0; client133/133 y checks completos, Playwright15/15 del export auditado. JaCoCo reference/application47/47 líneas y20/20 ramas; mínimos80/70 conservados. Capturas1280/375 inspeccionadas, legibles/sin overflow. Huellas antes/después/publicación y R2 idénticas: **229 fuentes**, SHA256 `acd09cfc50fa53f7f35c42e2bea51460b60f548687552b299a812ea821c62b77`; cotejo de las229 contra blobs Git publicados sin discrepancias. Base estable y cierre posterior solo documental: no concurre una condición de TESTING que exija otro FULL. Auditoría propia actual de los nueve namespaces FULL0/0/0 y143 IDs observados ausentes; auditoría extra histórica de15 Testcontainers conservada.
+
+| Dirigidos/negativos propios R2 | Resultado |
+|---|---|
+| Backend container, copia ignorada idéntica de fuentes publicadas, `.env.example`, proyecto nuevo `starter-verify-c-r2-directed-20261018-01` | `clean verify -Dtest=ReferenceItemServiceTest,ReferenceItemControllerTest,SecurityConfigTest -Dit.test=ReferenceItemIT,ReferenceItemRepositoryIT,ReferenceItemMigrationIT,OpenApiContractIT` **exit0:18 unit/slices +17 IT**, fallos/errores/omitidos0; Spotless/JaCoCo verdes |
+| R1-01 y propiedad | Cinco combinaciones page/size a ambos lados de int y máximo admitido, tres identidades con conteos1/2/0, contenido vacío/conteo real y DB conservada; servicio prueba contenido virtual más allá de int, repositorio desempate/offsets y aislamiento |
+| Cuatro mutantes solo en copia ignorada, dirigidos HTTP/OIDC/PostgreSQL reales | Offset truncado:2 fallos/5 casos,200 esperado/403 real; conteo global:5/5,1 esperado/3 real; listado sin dueño:1/1,0 esperado/1 real; recurso sin dueño:1/1,404 esperado/200 real. Todos exit1 por assertions, errores/omitidos0 |
+| Client container, proyecto nuevo `starter-verify-c-r2-client-20261018-01` | Referencia completa +HTTP **42/42 exit0**, incluidos nueve casos logout/expiración/cambio a B × éxito/401/403 tardíos; guardias de cache, mensajes, queries B y CSRF intactas |
+| Mutante de cache tardía desde archivo ignorado montado solo en el contenedor | Nueve casos ejecutados, **3 fallos/6 verdes**, exit1: cada éxito tardío repuebla cache A y rompe la assertion de cache vacía en las tres transiciones |
+| Herramientas y contrato | **64/64 exit0**, fallos/cancelados/omitidos0; conserva negativos de fail-fast, FULL local/E2E y remoto exclusivamente manual |
+
+Diagnóstico de ReferenceSession contrastado con diff/logs del experimento causal rojo/verde: el selector original calcula estilos/nombre del h1 ajeno durante la preparación y puede bloquear la respuesta del listado; rojo con logout=0, verde al filtrar nivel2. El arreglo publicado solo precisa ese nivel y agrega visibilidad, conservando rol/nombre, nueve escenarios y todas las assertions/deadlines/retries/concurrencia. No se reconstruye retrospectivamente la carga exacta histórica ni se atribuye un fallo productivo de logout. Los dirigidos propios y el mutante de cache confirman que se conserva la detección del riesgo contratado.
+
+Evidencia propia local ignorada `.orchestrator/t-002-r2/`: `checkpoint.txt`, `published-blobs.json`, `source-before.json`/`source-after.json`, `evidence-audit.json`, `backend-positive.log` y XML positivos preservados, cuatro `*-negative.log`, `backend-result.json`, `client-positive.log`, `cache-negative.log`, `client-result.json`, `matrices.log`, `cleanup-final.json`. Copia server restaurada byte a byte; árbol publicado intacto. Cleanup propio exit0, ambos proyectos0/0/0 y13 IDs Testcontainers ausentes tras la ventana normal de Ryuk. Los brutos permanecen locales, solo resumen saneado publicable.
+
+Esta transición modifica exclusivamente tarea/STATUS/BACKLOG/HANDOFF. Validación propia del cierre: docs-check exit0 (43 Markdown/5 tareas/HANDOFF0/22), diff-check exit0 y regresiones documentales **13/13 exit0**, sin fallos/cancelados/omitidos (`docs-closing-tests.log`); huella229 de cierre idéntica. El SHA documental final y su CI liviana exacta se registran en el PR después del push; **solo entonces** publicar APROBADO R2 con HEAD/base y continuar merger en esta sesión según AUTONOMY, ligado al SHA revisado, sin commits posteriores al veredicto. No done antes de MERGED. Conciliación/corte de C en sesión nueva; D/E draft, HANDOFF0/22 NO_LISTO y continuidad posterior exclusivamente en PROVENANCE. R2 cierra las dos rondas, sin R3 automático.
+
 ## Entrega implementer para R2 · 2026-10-18
-Estado actual **in_review**, único [PR #3](https://github.com/MatiasNicolasAcevedo/starter-spring-react/pull/3) OPEN/ready. Código publicado en `eff92c131e83a8e35ec560fb63279cd3e2c12b24`, base `881b365ab2cd2e3ec87031b44ec58b1ec324a3ef`; HEAD local/tracking/remoto/PR conciliados tras push. Cierre posterior solo documental; SHA final/CI liviana exactos en el checkpoint del PR. Esta sesión implementer no revisa ni mergea su implementación. Rol/modelo/herramienta/esfuerzo expuestos e impacto en el diagnóstico siguiente; sin delegación ni otra sesión/modelo.
+Estado al entregar **in_review**, único [PR #3](https://github.com/MatiasNicolasAcevedo/starter-spring-react/pull/3) OPEN/ready. Código publicado en `eff92c131e83a8e35ec560fb63279cd3e2c12b24`, base `881b365ab2cd2e3ec87031b44ec58b1ec324a3ef`; HEAD local/tracking/remoto/PR conciliados tras push. Cierre posterior solo documental; SHA final/CI liviana exactos en el checkpoint del PR. Esta sesión implementer no revisa ni mergea su implementación. Rol/modelo/herramienta/esfuerzo expuestos e impacto en el diagnóstico siguiente; sin delegación ni otra sesión/modelo.
 
 Todos los cambios locales previos preservados e incorporados: cinco Java R1-01, documentación y tooling/CI, incluidos archivos nuevos. Arreglo adicional mínimo: búsqueda inicial de ReferenceSession exige además nivel2/visibilidad tras el experimento causal documentado abajo. Producción client/auth y assertions/deadlines/concurrencia/umbrales conservados. Gate fail-fast, CI automática liviana y FULL remoto manual según TESTING, protecciones intactas.
 
