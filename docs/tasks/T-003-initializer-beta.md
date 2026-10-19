@@ -1,10 +1,10 @@
 ---
 id: T-003
-status: ready
+status: in_progress
 priority: P1
 size: M
 executor: frontier
-role: planner
+role: implementer
 milestone: M0
 counts_for_cycle: false
 product_cycle: null
@@ -59,3 +59,10 @@ Validación de esta planificación: `node scripts/docs-check.mjs` exit0 (44 Mark
 
 ## Resultado
 Planificación ready de D; implementación, pruebas propias, PR/revisión/merge y template beta pendientes. No volver a planificar sin cambio material. Reconciliación C y corte de ciclo incluidos en este avance, sin crédito adicional de HANDOFF.
+
+## Inicio implementer · 2026-10-18
+Codex desktop/API, terminal PowerShell/Git Bash; familia expuesta GPT-6, identificador runtime exacto y esfuerzo efectivo no expuestos. Sol/high solicitado; sin simular selección, delegación ni otras sesiones/modelos. Impacto: CLI/identidad y documentos propios de la copia, sin cambios de API/auth/permisos/propiedad/schema/UI de negocio.
+
+Precondición comprobada: HEAD/tracking/remoto `fff878acb69699b9823f0ac9d9d36284ba5252ff`, primer y único commit documental D obtenido con git log; main local/tracking/remoto `193f5a763af9ae61726daf20d30ae4ce8d5ce59d`; árbol limpio, PR abiertos `[]`, PR#3 MERGED en ese squash. T-002 done, T-003 ready/S-004 v1 approved y T-004 draft. CI de C consultada, sin repetir FULL ni exigir CI de ramas sin PR.
+
+D1→D4 secuenciales según tabla existente. Inicio de tablero; próximo avance concreta lista de escrituras y negativos antes de sustituciones. Ningún recurso Docker ni copia de ensayo creado todavía. HANDOFF 0/22 NO_LISTO; beta/template pendientes de revisión/merge D.
