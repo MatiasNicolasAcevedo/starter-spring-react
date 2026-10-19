@@ -71,6 +71,6 @@ Una sesión nueva reduce el arrastre de contexto, pero no es una revisión human
 | Merge | `AUTOMATICO_ELEGIBLE` | Bootstrap completo; requiere veredicto de sesión distinta y checks verdes del HEAD/base vigentes. Ningún merge propio ejecutado |
 
 ## Alcance de esta autorización
-Solo creación/configuración inicial de este repo y partes A…E secuenciales; esta sesión implementa A. No crear/borrar otros repos. No operar Google real, datos persistentes ajenos ni el origen. No marcar template antes de D ni adopción validada antes de E. La constancia final tiene el único límite definido en PROVENANCE.
+Autorización inicial para creación/configuración de este repo y partes A…E secuenciales; fase actual y preparación previa a E autorizada por el dueño en T-004/STATUS. La referencia inicial a implementar solo A quedó consumida con su cierre y no activa por sí sola otras partes. No crear/borrar otros repos ni operar Google real, datos persistentes ajenos u origen. Beta habilitada tras D MERGED; adopción solo tras E. Constancia final limitada exclusivamente por PROVENANCE.
 
 Respuesta efectiva de GitHub al crear ruleset: required_review_thread_resolution=true (pedido), required_reviewers=[] y require_extra_approval_for_unattributed_changes=true (defaults añadidos por GitHub); allowed_merge_methods=[squash], 0 aprobaciones, sin bypass. Registrar y observar en el primer merge; no modificarlos para destrabar. Visibilidad/merge/secret scanning/push protection reconsultados activos; auto-merge deshabilitado.

@@ -2,15 +2,20 @@
 
 | Campo | Valor |
 |---|---|
-| Tarea y contrato | [T-004](tasks/T-004-clean-adoption.md) |
-| Estado | in_progress |
-| Acción actual | Implementar y verificar preparación previa a E autorizada por el dueño |
-| Rama / PR | chore/t-004-clean-adoption; único PR por publicar tras gate |
+| Tarea y contrato | [T-004](tasks/T-004-clean-adoption.md), preparación previa a E |
+| Estado | in_review |
+| Acción actual | Revisión independiente de la preparación publicada |
+| Rama / PR | chore/t-004-clean-adoption · [PR#5](https://github.com/MatiasNicolasAcevedo/starter-spring-react/pull/5) |
 | Base | main 6c5d4cd5395bdf871bc9bbbb5a536dcb53a44551 |
 
-Checkpoint y evidencia en T-004. D MERGED/template beta; E y Junie pendientes. [HANDOFF](HANDOFF.md): 0/22 NO_LISTO.
+Checkpoint, FULL41m43s y correspondencia de fuentes en T-004. Preparación implementada/verificada; revisión pendiente. D MERGED/template beta. Junie y E sin ejecutar; [HANDOFF](HANDOFF.md) conserva 0/22 NO_LISTO.
 
 ### Prompt de la siguiente sesión
 ```text
-Retomar T-004, preparación previa a E, en chore/t-004-clean-adoption. Precondición: preparación todavía in_progress y no iniciada la revisión. Leer AGENTS, tarea y su checkpoint; reconciliar Git/PR/CI y preservar cambios. Completar verificaciones y publicación pendientes antes de revisión independiente. No ejecutar E ni atribuir ejecución Junie. Si la precondición diverge, devolver el checkpoint vigente sin cambios.
+Revisar la preparación previa a E de T-004/PR#5 en una sesión distinta de implementación, misma rama chore/t-004-clean-adoption.
+Precondición: PR#5 OPEN/ready, T-004 in_review, árbol limpio y HEAD local/tracking/remoto iguales; base main 6c5d4cd5395bdf871bc9bbbb5a536dcb53a44551. Si diverge, checkpoint sin cambios.
+Leer AGENTS, contrato de preparación y checkpoint de T-004, protocolo reviewer; inspeccionar diff completo y CI del HEAD/base publicados.
+Comprobar evidencia propia FULL, huella técnica y copia inicializada; ejecutar dirigidos/negativos pertinentes. No repetir FULL por rutina.
+Aplicar el cierre específico de fase de T-004: si favorable, registrar PREPARACIÓN REVISADA, devolver tarea a in_progress/implementer y sustituir este prompt por el de E para una sesión posterior del dueño, mismo contrato/rama/PR.
+No ejecutar E, atribuir ejecución Junie, emitir APROBADO global, marcar mergeable ni mergear antes de completar E. Si hay bloqueantes, changes_requested con evidencia.
 ```
