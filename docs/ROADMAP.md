@@ -8,14 +8,14 @@
 
 ## Secuencia contratada
 
-El objetivo vigente es completar este mismo starter de A a E. A y B están terminadas con merge/CI comprobados. C publicó R1-01, preparación mínima del test client y simplificación de validación con FULL local verde; espera R2 independiente y merge, con evidencia propia en T-002. Cada parte requiere revisión, squash merge confirmado y CI vigente antes de activar la siguiente.
+El objetivo vigente es completar este mismo starter de A a E. A/B/C están terminadas con revisión/merge/CI comprobados y evidencia propia en sus tareas. C conserva FULL local y dirigidos R2 según TESTING; su CI final es liviana. D/T-003 está ready/S-004 v1 approved para implementación en sesión nueva; E draft. Cada parte requiere revisión, squash merge confirmado y CI vigente antes de activar la siguiente.
 
 | Parte | Estado real | Resultado en palabras simples |
 |---|---|---|
 | A | done; PR #1 MERGED y CI verificada | Extraer y neutralizar la base, conservar versiones y contratos |
 | B | done; PR #2 MERGED y CI FULL PR/main verificadas | Levantar, comprobar, detener y retomar la aplicación conectada a su DB |
-| C | in_review; T-002 / S-003 v1, correcciones publicadas y FULL local final verde; R2/merge pendientes | Incorporar un ejemplo removible completo con permisos y pruebas |
-| D | draft; espera C MERGED | Personalizar la base con un inicializador y habilitarla como template beta |
+| C | done; PR #3 MERGED, R2/CI liviana exactos, squash comprobado | Incorporar un ejemplo removible completo con permisos y pruebas |
+| D | ready; T-003 / S-004 v1, C MERGED y conciliada; implementación pendiente | Personalizar la base con un inicializador y habilitarla como template beta |
 | E | draft; espera D MERGED | Comprobar desde otra copia limpia que sirve para empezar otra aplicación |
 
 La aceptación detallada está abajo y en la tarea/spec de cada parte. Refinar solo la próxima parte al habilitarse; una tarea ready pasa a implementación, sin otra ronda de planificación salvo cambio material. Aplicar documentación mínima útil de AGENTS durante el trabajo: comandos de uso en README/SETUP, decisiones en ADR, evidencia en tarea/PR y estado breve con enlaces en el tablero. Materializar aprendizajes en esa base, sin mantener otro manual vivo en el kit transitorio.
@@ -33,22 +33,22 @@ La aplicación es un monolito Spring + SPA React + PostgreSQL. Lo que creció de
 
 | Orden | Trabajo pendiente | Salida concreta para pasar al siguiente |
 |---|---|---|
-| 1 · Terminar C (T-002, en revisión) | Correcciones, client y único FULL local final publicados/verdes según T-002. Completar R2 independiente con evidencia/dirigidos, CI liviana exacta y merge elegible | CRUD privado y regresiones comprobados; evidencia local y check liviano del HEAD/base; PR#3 MERGED |
-| 2 · Preparar uso (D/T-003, todavía draft) | Un inicializador seguro para nombre/paquete/titular, formulario de contexto corto y guía README → primer flujo. Probar personalización en copia temporal | Personalización funciona sin kit; FULL local de cierre, revisión y merge. Solo entonces template beta |
+| 1 · C cerrada (T-002 done) | R2 independiente APROBADO, CI liviana final exacta y PR#3 MERGED comprobados; evidencia canónica en T-002 | CRUD privado y regresiones comprobados; cierre conciliado con el primer avance D |
+| 2 · Preparar uso (D/T-003 ready, S-004 v1) | Un inicializador seguro para nombre/paquete/titular, formulario de contexto corto y guía README → primer flujo. Probar personalización en copia temporal | Personalización funciona sin kit; FULL local de cierre, revisión y merge. Solo entonces template beta |
 | 3 · Ensayar y cerrar (E/T-004, todavía draft) | Seguir la guía desde copia limpia con contexto ficticio distinto; levantar/login/CRUD/persistencia/retoma y FULL local, corregir solo defectos comprobados | Recorrido reproducible sin kit, checklist final con evidencia, revisión y merge; starter listo para adopción |
 
-Faltan tres cierres, de los cuales C ya está implementada. No faltan tres aplicaciones ni nuevas funcionalidades de negocio. Presupuesto orientativo: una sesión de trabajo y una revisión por cada tramo (C usa R2), ajustado por hallazgos concretos; no prometer una duración de código antes de diagnosticar el fallo actual. Las ejecuciones FULL históricas de C duraron aproximadamente34 minutos; no es una tarea de validación instantánea ni una medición del gate optimizado.
+Faltan D y E; C ya está cerrada. No son nuevas aplicaciones ni funcionalidades de negocio. Presupuesto orientativo: una sesión de trabajo y una revisión por cada tramo restante, ajustado por hallazgos concretos. Las ejecuciones FULL históricas de C duraron aproximadamente34 minutos; su FULL final35m38s no es una validación instantánea ni acredita ahorro medido del gate optimizado.
 
 **Proceso desde ahora:** pruebas locales dirigidas durante desarrollo, un FULL local al cerrar las fuentes técnicas; no repetir por documentación idéntica técnicamente ni por rutina de revisión. CI automática de un solo job liviano, FULL remoto solo manual; condiciones y límites en TESTING. Fallo temprano detiene el gate y deja las siguientes suites sin ejecutar. Publicar por avances útiles y conservar revisión independiente; sin cambios de rulesets, servicios nuevos ni runners permanentes.
 
 **Fuera del cierre mínimo:** dispatcher/orquestador, formato de atestación, automatizaciones semanales, nuevas capas de arquitectura, autenticación propia, más features de ejemplo, optimizaciones de caché sin medición y ampliación de D/E. Las reglas de seguridad/datos/cleanup y las versiones del stack se conservan. No borrar el kit ni rehacer el producto para reducir el número de archivos. Para MVP futuros, comenzar por un flujo útil dentro de esta misma arquitectura.
 
-HANDOFF0/22 es una checklist de aceptación final todavía no reconciliada; no expresa0% de implementación. A y B tienen evidencia propia en sus tareas; C tiene evidencia y una corrección pendiente de entrega. Al cerrar E se reconcilian los criterios con sus fuentes, sin repetir todas las fases solo para actualizar ese contador.
+HANDOFF0/22 es una checklist de aceptación final todavía no reconciliada; no expresa0% de implementación. A/B/C tienen evidencia y cierres propios en sus tareas. Al cerrar E se reconcilian los criterios con sus fuentes, sin repetir todas las fases solo para actualizar ese contador.
 
 ## Límites de cierre
 En B, Docker Desktop + Git Bash deben bastar para up/check/down sin Maven, PostgreSQL ni Node instalados en el host; usar runners containerizados para los probes reproducibles y declarar cualquier navegador host opcional. Debe haber cero fallback del perfil real y ningún cambio global de hosts. El check valida estado y contenido, no un 200 que sea index.html. El arranque fallido limpia lo recién creado sin borrar volúmenes preexistentes.
 Decisión del dueño 2026-10-18: D se limita a inicializador, formulario y guía breve. Las pruebas locales comprueban lista de escrituras, build/docs-check e inventario, sin crear otro repo. Dependabot/calendario de adopción se posponen; no son condición para terminar el starter. Actualizaciones futuras prueban lo afectado y majors/fundacionales exigen FULL local. La autorización para marcar este mismo repo como template en D es específica; no permite modificar las protecciones iniciales.
-Decisión del dueño 2026-10-17: [destino autosuficiente](../PROJECT_CONTEXT.md#adopción-futura). D integra/pule el formulario de contexto dentro del repo y consolida la guía de crear desde template, adoptar y hacer crecer la arquitectura; E prueba el recorrido sin `plantilla/`, incluido el contexto nuevo. El kit queda transitorio hasta esa validación; su eliminación local posterior corresponde al dueño y no al inicializador. D/E siguen draft y secuenciales: aquí solo se registra su salida aceptada, sin implementarlas ni agregar una etapa al cierre.
+Decisión del dueño 2026-10-17: [destino autosuficiente](../PROJECT_CONTEXT.md#adopción-futura). D integra/pule el formulario de contexto dentro del repo y consolida la guía de crear desde template, adoptar y hacer crecer la arquitectura; E prueba el recorrido sin `plantilla/`, incluido el contexto nuevo. El kit queda transitorio hasta esa validación; su eliminación local posterior corresponde al dueño y no al inicializador. D ready y E draft siguen secuenciales: refinamiento D en S-004, sin implementarlas aquí ni agregar una etapa al cierre.
 En E se usan defaults ficticios primero y contexto de otra app después; registrar comandos, SHA, fecha, exit codes, evidencias saneadas y labels sin huérfanos. El proyecto limpio debe poder detenerse y retomarse con datos persistentes propios antes de limpiar sus recursos de prueba.
 
 Beta solo tras D; adopción validada solo tras E. Las comprobaciones de A no acreditan B…E.
@@ -84,6 +84,21 @@ Precondiciones y evidencia por SHA en [cierre de T-001](tasks/T-001-local-stack.
 | Guía de retiro de referencia puede destruir datos o confundirse con inicializador/adopción | C documenta conexiones y diferencia DB vacía/existente sin tocar migraciones aplicadas; D integra formulario/guía y E prueba adopción sin kit, ambos draft |
 
 Cola revisada sin ampliar objetivo, arquitectura/auth/ADR, dependencias, aceptación de B, suites/umbrales/retries/deadlines ni protecciones. Endurecimiento de callback sigue pendiente fuera de T-002. No hay decisión nueva del dueño necesaria para implementar C contratada. Próximo corte al cierre de C, cambio relevante o cadencia de cinco tareas de producto. HANDOFF permanece 0/22 NO_LISTO; beta/template solo tras D y adopción validada solo tras E, con el único límite posterior de PROVENANCE.
+
+## Revisión de ciclo · cierre de C · 2026-10-18
+Disparador: cierre de parte C y decisión relevante del dueño sobre validación/MVP, sin esperar cinco tareas de producto. T-002 y T-003 son M0, `counts_for_cycle: false`, `product_cycle: null`; no incrementan ciclo de producto. Planner nuevo: Codex desktop/API y PowerShell, familia expuesta GPT-6; runtime exacto/esfuerzo efectivo no expuestos. Sol/high solicitado, sin simular selección ni delegar/abrir sesiones/modelos.
+
+Precondición comprobada antes de editar y fuente canónica: [reconciliación de T-002](tasks/T-002-reference-security.md#reconciliación-posterior-al-merge--2026-10-18), con APROBADO R2, HEAD/base/CI final exactos, PR#3 MERGED y squash idéntico al árbol revisado. Main local/tracking/remoto coincidentes, árbol limpio inicial, PR abiertos `[]`, T-002 documentalmente mergeable y D/E draft. Primer avance de `chore/t-003-initializer-beta` desde main concilia C done/tarea/STATUS/BACKLOG/HANDOFF y refina solo D. Evidencia pesada de C conservada, sin otro FULL ni CI automática de main exigidos por rutina.
+
+| Hallazgo del corte | Decisión dentro del contrato |
+|---|---|
+| C cerró el borde de offsets grandes y demostró propiedad/conteos/cache con negativos | C done; conservar regresiones y guía REFERENCE, sin reabrir R2/R3 ni atribuir esas pruebas a D/HANDOFF |
+| La repetición de FULL y documentación agregaba costo sin incertidumbre nueva | Decisión del dueño ya materializada en TESTING/gate/CI: dirigidos locales, un FULL al cierre técnico, liviano en PR, remoto solo manual y fallo temprano. Sin atestaciones/dispatcher/calendario ni ahorro porcentual prometido |
+| Falta personalización segura y contexto/guía propios para empezar un MVP | [S-004 v1](specs/S-004-initializer-beta.md) y T-003 ready: D1 escrituras/guardias → D2 inicializador → D3 formulario/guía/reinicio → D4 integración/cierre. Una tarea/PR; implementación en sesión nueva, sin otra planificación salvo cambio material |
+| Personalizar puede escribir fuera de destino o heredar estados/permisos del starter | Lista explícita, dry-run/apply/idempotencia, negativos y copia compilable; T-000/contexto/HANDOFF/AUTONOMY propios, sin kit/Git/secretos/datos. D no elimina referencia ni altera migraciones |
+| Beta y ensayo de adopción son resultados distintos aún pendientes | Template del mismo repo solo tras D validada/revisada/MERGED; E draft y secuencial, sin otro repo ni kit. HANDOFF0/22 NO_LISTO, continuidad posterior solo PROVENANCE |
+
+Cola revisada sin ampliar objetivo, arquitectura/auth/ADR, versiones, suites/umbrales/retries/deadlines ni protecciones. Endurecimiento del callback y optimizaciones no medidas siguen en BACKLOG, fuera de D mínima. No se necesita nueva decisión del dueño para implementar el contrato refinado. Próximo corte al cierre de D, cambio relevante o cadencia de cinco tareas de producto.
 
 ## Adopción de otro producto
 Reiniciar PROJECT/ROADMAP/STATUS/BACKLOG desde el contexto nuevo, sin estados del starter. La primera tarea es T-000 de adopción; vuelve a validar HANDOFF, configuración GitHub propia y ensayo limpio. Las reglas/protocolos/ADR/spec de auth permanecen heredadas, sin convertirlas en pruebas ejecutadas.

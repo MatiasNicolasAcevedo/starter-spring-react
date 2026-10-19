@@ -1,27 +1,28 @@
 # Tablero vivo
 
-Próxima acción: T-002 (C), R2 favorable sin bloqueantes; completar CI liviana/veredicto final y merge elegible en esta sesión. Tras MERGED, conciliación/corte de C en sesión nueva. Mapa de cierre en ROADMAP; único prompt ejecutable en STATUS.
+Próxima acción: T-003 (D) ready/S-004 v1 approved; implementar D1 en sesión nueva sobre la rama publicada, sin replanificar. C done, cierre comprobado en T-002; mapa de cierre en ROADMAP y único prompt ejecutable en STATUS.
 
 ## En vuelo
-| Tarea | Estado | Salida |
-|---|---|---|
-| [T-002](tasks/T-002-reference-security.md) | mergeable | R2 favorable, R1-01 resuelto; FULL local corroborado, dirigidos18+17/42 y negativos efectivos; CI/veredicto/merge finales en PR #3 |
+Ninguna implementación ni PR abiertos; la rama D contiene su primer avance de planificación.
 
 ## Listas
-Ninguna.
+| Tarea | Estado | Salida |
+|---|---|---|
+| [T-003](tasks/T-003-initializer-beta.md) | ready | S-004 v1: inicializador seguro, formulario y guía breve, copia compilable; D1→D4 secuenciales. Implementación/pruebas/beta pendientes |
 
 ## Bloqueadas
-D/E permanecen draft, dependientes del merge y conciliación de su predecesora; ver ROADMAP. C mergeable tras R2; D espera su merge.
+E/T-004 permanece draft hasta D MERGED y conciliada; ver ROADMAP. Ningún bloqueo para empezar D contratada.
 
 ## Por refinar
 - Automatizaciones semanales, dispatcher, atestaciones de pruebas y optimizaciones de caché no medidas: fuera del cierre mínimo para MVP. Reconsiderar solo ante necesidad concreta; política de validación local ya decidida en TESTING.
-- En D, integrar/pulir el formulario de contexto y consolidar adopción desde GitHub template/guía de crecimiento; en E, probar todo el recorrido sin kit. Objetivo aceptado en PROJECT_CONTEXT y salidas registradas en T-003/T-004; permanecen draft, sin ampliar B.
+- E: ensayo literal de adopción sin kit, con otro contexto ficticio y retoma persistente, pendiente de D MERGED. Salida aceptada en T-004/PROJECT_CONTEXT; no refinar ni implementar aquí.
 - En una tarea futura, evaluar endurecimiento del callback fallido con sesión previa: cerrar replay invalida la sesión y permite logout forzado cross-site. No reabrir auth dentro de A o B.
 
 ## Hechas recientes
 | Tarea | Estado | Salida |
 |---|---|---|
+| [T-002](tasks/T-002-reference-security.md) | done | C: PR #3 MERGED, APROBADO R2/CI liviana final exactos y squash idéntico al árbol revisado; evidencia canónica en tarea |
 | [T-001](tasks/T-001-local-stack.md) | done | B: PR #2 MERGED, squash/CI FULL final PR y main comprobados; evidencia canónica en tarea |
 | [T-000](tasks/T-000-starter-extraction.md) | done | A: PR #1 MERGED, squash 47184f725f8a89528acac0aa3e7383f2334258de; FULL PR 39044690435 y main 39045270616 verificadas success, seis jobs verdes |
 
-Objetivo y estado de A…E: ROADMAP. Única tarea activa T-002 mergeable; revisión R2 y evidencia propia en T-002, confirmación final en PR #3. Cobertura y logout en vuelo de S-003 C-AC-07/09 comprobados en C, sin acreditar aceptación global. HANDOFF 0/22 NO_LISTO; evidencia de A/B en T-000/T-001.
+Objetivo y estado de A…E: ROADMAP. Única siguiente tarea T-003 ready; no hay implementación activa. Cobertura y logout en vuelo de S-003 C-AC-07/09 comprobados en C, sin acreditar aceptación global ni D/E. HANDOFF 0/22 NO_LISTO; evidencia propia de A/B/C en sus tareas.
