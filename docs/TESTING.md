@@ -53,6 +53,10 @@ Los ejemplos con nombres son patrones para planner, no comandos pendientes de in
 La revisión de carga local del 2026-10-19 conserva un FULL de cierre técnico: el inicializador y scripts operativos afectan ambas capas y aislamiento. El costo histórico C35m38s/D40m58s puede variar; no prometer reducción sin medir. Se elimina la repetición por rutina y la actualización de cuatro documentos por cambio pequeño. No se introduce otro dispatcher ni un gate parcial equivalente a FULL. E y la adopción T-000 mantienen aceptación FULL propia.
 
 ## Validación local y CI liviana · decisión del dueño 2026-10-18
+La coherencia arquitectónica se revisa sobre el diff: respetar límites de feature, contratos/API, propiedad de datos, migraciones, sesión/CSRF y estados UI según ARCHITECTURE/AGENTS y la spec. El planner ya tomó decisiones; el implementer comprueba consumidores/referencias al cambiar un contrato y el revisor independiente evalúa bordes y desviaciones. No existe un check automático que garantice arquitectura ni ausencia total de bugs, y no se añade un framework de análisis por cada tarea.
+
+Antes de cada commit: diff/index, ausencia de secretos/kit y pruebas dirigidas pertinentes si cambió código; una corrección documental usa docs-check, sin un FULL por commit. Para poner un PR técnico ready: FULL local válido de las fuentes finales/base, docs-check y CI liviana verde, después revisión independiente. Un draft admite avances parciales con pendientes explícitos. Tras cambios solo Markdown, conservar el FULL si fuentes técnicas/base coinciden y ejecutar docs-check/dirigidos afectados; no anunciar DOCS_ONLY si el clasificador no lo permite. La clasificación conservadora del diff no sustituye la comprobación de correspondencia de fuentes/evidencia del revisor.
+
 La validación pesada se hace en local. El dueño pidió optimizar para MVP pequeños, reducir esperas y ejecuciones de Actions. Esta decisión sustituye la repetición obligatoria de FULL en CI/implementer/reviewer; conserva la aceptación funcional, las suites, negativos, assertions, cobertura y revisión independiente. No modifica el ruleset ni sus permisos.
 
 | Momento | Verificación exigida |

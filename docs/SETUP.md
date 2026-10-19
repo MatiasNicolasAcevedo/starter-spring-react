@@ -10,6 +10,8 @@ En PowerShell usar `& "C:\Program Files\Git\bin\bash.exe" scripts/verify.sh`. No
 Comandos persistentes mínimos en [README](../README.md#modo-local-explícito-sin-credenciales). Cada acción exige --mode local, --proxy nginx|vite y --project starter-dev- seguido de un sufijo propio. El namespace starter-dev-auth- está reservado al harness efímero. Docker Desktop/Compose V2/Git Bash bastan para up/check/down; Node >=24 host sigue siendo requisito separado del controlador FULL/E2E.
 
 ## Instrucciones de Junie en IntelliJ IDEA y AIR
+Inventario y límites de MCP/skills: [.junie/TOOLS.md](../.junie/TOOLS.md). Es la única fuente de disponibilidad registrada; no asumirla desde una herramienta distinta o desde el catálogo del starter. La comprobación efectiva se hace en la sesión Junie del dueño, sin inspeccionar configuración privada ni secretos.
+
 
 Configuración declarada por el dueño: Junie Lite con Qwen 3.6 27B; no es evidencia de ejecución ni de capacidad en este repo. El dueño selecciona el modelo; ningún script abre sesiones, cambia modelos o instala agentes. El microensayo preparado vive en [la plantilla de ensayo](templates/junie-trial.md), sin ejecutarlo por frontera.
 

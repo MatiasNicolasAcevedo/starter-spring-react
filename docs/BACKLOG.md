@@ -2,8 +2,11 @@
 
 Acción actual y único prompt en [STATUS](STATUS.md); estados y evidencia canónicos en cada tarea. Cambiar este índice solo al cambiar orden/dependencias.
 
-## Cola
+## En curso
 - [T-004](tasks/T-004-clean-adoption.md): preparación previa autorizada → revisión independiente → ensayo E en otra sesión, mismo contrato/rama/único PR. Depende de D MERGED. Sin otra tarea/PR activa.
+
+## Siguientes
+Dentro de T-004: primero revisión independiente de preparación; después E con su contrato existente, contexto ficticio propio y FULL de adopción. No hay otra tarea ready de producto en este starter. El microensayo Junie tiene contrato preparado, sin ejecución ni PR paralelos; solo se ejecuta cuando la fase lo habilite. Tras E MERGED/validada se puede retirar kit y rige exclusivamente PROVENANCE.
 
 ## Por refinar
 - Callback fallido con sesión previa: evaluar logout forzado cross-site en una tarea futura; no reabrir auth durante esta preparación.

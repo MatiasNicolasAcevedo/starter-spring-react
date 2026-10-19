@@ -6,6 +6,8 @@
 | Revisión de ciclo | Cada cinco tareas de producto mergeadas, cierre de parte/hito o cambio relevante |
 | WIP | Una tarea y un PR activos; revisión en sesión distinta |
 
+En las aplicaciones futuras, frontera prepara versiones/iteraciones con objetivo observable, specs por capacidad/épica y una secuencia de varias tareas pequeñas Junie. Junie comprueba avance cada cinco tareas sin replanificación de frontera obligatoria; esta vuelve al objetivo acordado o ante decisiones fuera de contrato. Contrato de continuidad en ORCHESTRATION; no cambia la secuencia A…E de construcción del starter.
+
 ## Secuencia contratada
 
 El objetivo vigente es completar este mismo starter de A a E. A/B/C/D están terminadas con revisión/merge/CI comprobados y evidencia propia en sus tareas. D/T-003 cierra S-004 v1 con PR#4 MERGED y template beta comprobado; [T-004](tasks/T-004-clean-adoption.md) contiene la preparación previa in_progress autorizada el 2026-10-19 y el contrato propio E, todavía sin ejecución. Cada parte requiere revisión, squash merge confirmado y CI vigente antes de activar la siguiente.

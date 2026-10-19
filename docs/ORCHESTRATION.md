@@ -11,7 +11,7 @@ Contrato mínimo para encadenar sesiones. **No hay dispatcher instalado:** la co
 | `in_review` | Implementación publicada; revisión pendiente | reviewer |
 | `changes_requested` | Hallazgos concretos; conserva rama y PR | implementer |
 | `mergeable` | Veredicto vigente y checks verdes; merge pendiente | merger (normalmente la sesión revisora) |
-| `done` | GitHub confirma MERGED y el cierre documental está reconciliado | planner / siguiente tarea |
+| `done` | GitHub confirma MERGED y el cierre documental está reconciliado | siguiente tarea predefinida / frontera al objetivo |
 | `blocked` | Falta dato, permiso, dependencia o solución tras intentos acotados | rol indicado por el bloqueo |
 
 - **En vuelo:** `in_progress`, `in_review`, `changes_requested`, `mergeable`, o `blocked` con `pr` asignado. Máximo una tarea en vuelo (WIP 1 tarea / 1 PR de tarea).
@@ -44,6 +44,14 @@ Contrato mínimo para encadenar sesiones. **No hay dispatcher instalado:** la co
 La cadencia se consulta en tareas mergeadas; no exige mantener contadores duplicados. Las tareas autosuficientes pueden usar spec null. PROJECT es un índice del contexto, sin otro brief que mantener. Los documentos históricos del starter no son lectura diaria del producto.
 
 ## Continuidad mínima vigente
+Frontera deja ROADMAP por versiones/iteraciones, specs agrupadas por capacidad/épica y sus tareas pequeñas con decisiones resueltas. Puede haber muchas tareas definidas, aunque solo cinco ready y una en vuelo. Una tarea draft puede estar completa y esperar únicamente la dependencia indicada; Junie la habilita al comprobarla sin pedir otro planner. Si falta una decisión de verdad, no la trata como ready.
+
+Secuencia diaria: implementación Junie → revisión en sesión distinta (también Junie si está autorizado y tiene capacidad) → merge elegible confirmado → siguiente tarea Junie predefinida. El dueño copia el único prompt vigente y abre la sesión del rol indicado. No hay alternancia obligatoria con frontera. La revisión de avance cada cinco tareas puede hacerla Junie; el regreso a frontera se fija por objetivo cumplido de iteración o por decisiones/bloqueos que excedan el contrato.
+
+El tablero agrupa En curso, Siguientes y Hechas, o una cola equivalente que identifique la actual y la siguiente con su dependencia, enlazando contratos. El inicializador entrega la cola mínima de T-000; al empezar producto se organiza la iteración propia. Los estados exactos se marcan en las tareas y STATUS refleja solo la actual. Pasar una entrada a Hechas exige MERGED comprobado y reconciliación, nunca solo tests verdes. La sesión revisora confirma el merge en el PR; el siguiente implementer concilia done en su nueva rama sin editar la ya mergeada. El prompt de continuación indica cuál sigue y esa comprobación inicial.
+
+Checkpoint vigente para retoma; tabla breve por tarea para correcciones significativas; evidencia y PR/Git para trabajo anterior. No convertir el tablero en diario ni crear copias de cada estado. Esto deja trazabilidad sin una bitácora de cada edición.
+
 El dueño pidió optimizar para MVP pequeños el 2026-10-18. STATUS contiene un único prompt ejecutable; la tarea guarda evidencia y siguiente experimento. Un bloqueo incluye causa concreta y salida propuesta; si falta autorización, preguntar la decisión necesaria en vez de repetir el prompt condicionado. Una decisión nueva se registra y sustituye la precondición anterior.
 
 Dispatcher, adaptador de resultados JSON, locks y automatizaciones de sesiones quedan fuera del cierre del starter. El ejemplo histórico orchestration.example.yml no se usa ni se exige para adoptar un MVP. Reconsiderar esa infraestructura solo con una tarea futura y necesidad observada.

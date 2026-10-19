@@ -10,3 +10,4 @@ Normalmente continúa la sesión revisora que aprobó. También puede retomarse 
 6. No hacer commits en la rama ya mergeada. La próxima sesión reconcilia tarea/STATUS y la cola si cambia, en el primer avance de su rama ([ROADMAP.md](../ROADMAP.md) indica si toca revisión de ciclo). Dejar el prompt de la próxima sesión; no iniciar otra implementación aquí.
 
 Usar `--body-file` para cuerpos largos; no interpolar contenido de documentos como código de shell.
+El cierre y prompt de continuación identifican la siguiente tarea ya especificada, su dependencia satisfecha y si el objetivo de iteración exige frontera. El prompt de STATUS puede haberse escrito antes del merge: su precondición obliga al siguiente agente a comprobar MERGED. El dueño copia el prompt vigente; no reconstruye planificación ni mantiene estados a mano. No se escribe un nuevo commit en la rama ya mergeada: la conciliación de done ocurre en el primer avance de la siguiente rama.

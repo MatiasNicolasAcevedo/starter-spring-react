@@ -2,13 +2,16 @@
 
 ## Contrato
 Contexto y alcance: PROJECT_CONTEXT.md. Entrada diaria: docs/STATUS.md → tarea actual y sus referencias concretas. Leer además server/AGENTS.md o client/AGENTS.md al tocar esa capa; Junie debe leerlos explícitamente. Protocolos por rol en docs/agents/; no recorrer todo docs/ por rutina.
+Herramientas externas de Junie: [.junie/TOOLS.md](.junie/TOOLS.md), única fuente del inventario/estado comprobado. Consultar lo pertinente; declarado no equivale a activo. No inferir herramientas Junie desde las de otro agente ni instalar/autenticar/delegar por ese inventario.
 Java 21, Spring Boot 4.1.1, paquete `com.example.starter`, PostgreSQL 18 obligatorio; React/TypeScript estricto/Vite/MUI. Conservar versiones de docs/DEPENDENCIES.md, wrappers y lockfiles; usar su gestor para cambiarlos. Cada CLAUDE.md contiene solo `@AGENTS.md`.
 
 ## Trabajo diario
 1. Leer STATUS, tarea y protocolo del rol; comprobar git status/último commit y, con Git propio autorizado, PR/CI y HEAD/base/remotos. Preservar cambios existentes y retomar la tarea activa.
 2. Una tarea y un PR activos. Frontera resuelve alcance/arquitectura y deja tareas pequeñas listas; Junie ejecuta el contrato. Cada tarea nueva y revisión usa sesión nueva. Registrar una vez rol/modelo/herramienta/esfuerzo realmente expuestos e impacto en comportamiento/API/permisos/datos/UI.
+Frontera prepara una iteración agrupada en specs por capacidad/épica, con objetivo de salida y varias tareas Junie ordenadas. Junie encadena tareas predefinidas sin alternar con planificación de frontera; esta vuelve al objetivo acordado o ante decisión/bloqueo fuera de contrato. La revisión cada cinco tareas es un control de avance por Junie, no retorno obligatorio a frontera. Detalle de continuidad en docs/ORCHESTRATION.md.
 3. Resolver correcciones ordinarias dentro del contrato. Ante una decisión de alcance, arquitectura o permisos no especificada, guardar causa, evidencia, intentos y dato necesario en la tarea y devolver a frontera/dueño; no rediseñar ni repetir intentos equivalentes. Máximo dos rondas de revisión y tres correcciones distintas por bloqueo, después checkpoint/dueño.
 4. Progreso, comandos/resultados y pendientes viven en la tarea. Actualizar STATUS al cambiar acción, rol o bloqueo; BACKLOG solo al cambiar cola/dependencias; HANDOFF solo en adopción/traspaso o si cambia evidencia de un criterio. No copiar el mismo checkpoint en varios documentos. Revisión de ciclo cada cinco tareas de producto, hito o cambio relevante; hallazgos fuera de alcance a BACKLOG.
+Conservar en la tarea una bitácora breve de correcciones significativas (problema/causa, arreglo y prueba/SHA); el checkpoint es solo la retoma vigente. Tras revisión/MERGED, el siguiente prompt toma la siguiente tarea predefinida con dependencias satisfechas y reconcilia la anterior; no inventar aceptación ni iniciar trabajo de otra tarea en la sesión que cierra esta.
 
 ## Pruebas y entrega
 Pruebas dirigidas durante iteración; selección por riesgo y comandos exactos en la tarea según docs/TESTING.md. Bugfix primero rojo; reglas críticas con negativos. Conservar regresiones, assertions, cobertura, retries y deadlines; no fabricar éxito ni mockear API propia en E2E.

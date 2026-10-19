@@ -3,6 +3,7 @@
 Usar antes de crear el repo o completar `PROJECT_CONTEXT.md` raíz después. Si la idea ya está pulida, frontera reutiliza sus respuestas: no repetir el cuestionario. Responder en pocas líneas y preguntar solo por decisiones faltantes que afecten MVP, datos, reglas, permisos o aceptación. Ningún casillero obliga a agregar funcionalidad. No incluir secretos ni datos personales.
 
 Cabecera del contexto final: nombre, objetivo en dos frases, dueño por rol/alias y estado (borrador o aceptado con evidencia del acuerdo). Separar confirmado, propuesto y pendiente. La identidad pública/licencia y autorización GitHub se resuelven para el repo propio en AUTONOMY; no asumirlos del starter.
+Conservar en PROJECT_CONTEXT completado la referencia a [.junie/TOOLS.md](../../.junie/TOOLS.md) como inventario de herramientas externas; su disponibilidad debe comprobarse en esa instalación. El formulario genérico permanece aquí versionado y vacío para reutilizarlo; las respuestas de la idea reemplazan el borrador de PROJECT_CONTEXT raíz después de la personalización, nunca este formulario.
 
 1. **Problema y usuarios:** ¿qué tarea cuesta hoy, a quién y cómo la resuelve?
 2. **Flujo central:** un usuario hace qué, con qué entrada y qué resultado observable obtiene. Dar un ejemplo ficticio.
