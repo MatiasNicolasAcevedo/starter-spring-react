@@ -32,6 +32,9 @@ import org.springframework.web.context.WebApplicationContext;
 class SecurityConfigTest {
 
     @MockitoBean
+    private com.example.starter.reference.application.ReferenceItemService referenceItems;
+
+    @MockitoBean
     private IdentityService identityService;
 
     @Autowired
@@ -46,6 +49,29 @@ class SecurityConfigTest {
     @BeforeEach
     void usePublicOrigin() {
         mockMvc = AuthOriginMockMvc.create(context, origin);
+    }
+
+    @Test
+    void referenceNeighboursAndUncontractedMethodsRemainDeniedWithSessionAndRealCsrf() throws Exception {
+        var token = mockMvc.perform(get("/api/v1/auth/csrf"))
+                .andReturn()
+                .getResponse()
+                .getCookie("XSRF-TOKEN");
+        for (String path : new String[] {
+            "/api/v1/reference/private", "/api/v1/reference-items/extra/child", "/api/v1/reference-items/"
+        }) {
+            mockMvc.perform(get(path).with(oidcLogin().oidcUser(AuthFixtures.localUser("Demo", null, false))))
+                    .andExpect(status().isForbidden());
+        }
+        for (String method : new String[] {"HEAD", "OPTIONS", "PATCH", "PUT", "DELETE"}) {
+            mockMvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request(
+                                    org.springframework.http.HttpMethod.valueOf(method), "/api/v1/reference-items")
+                            .with(oidcLogin().oidcUser(AuthFixtures.localUser("Demo", null, false)))
+                            .cookie(token)
+                            .header("X-XSRF-TOKEN", token.getValue()))
+                    .andExpect(status().isForbidden());
+        }
+        verifyNoInteractions(referenceItems);
     }
 
     @Test

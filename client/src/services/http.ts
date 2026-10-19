@@ -76,6 +76,8 @@ export interface RequestOptions {
   body?: unknown
   /** Cancela la petición (TanStack Query lo provee en `queryFn`). El aborto se propaga tal cual, sin envolverlo. */
   signal?: AbortSignal
+  /** Scoped private requests can identify a superseded session; rejection still reaches their caller. */
+  sessionIsCurrent?: () => boolean
 }
 
 export interface HttpClientOptions {
@@ -106,7 +108,7 @@ export function createHttpClient(options: HttpClientOptions = {}): HttpClient {
 
   async function send(
     path: string,
-    { method = 'GET', body, signal }: RequestOptions,
+    { method = 'GET', body, signal, sessionIsCurrent }: RequestOptions,
   ): Promise<Response> {
     const headers = new Headers({ Accept: ACCEPT })
     let payload: string | undefined
@@ -134,7 +136,9 @@ export function createHttpClient(options: HttpClientOptions = {}): HttpClient {
       throw new NetworkError(error)
     }
     if (!response.ok) {
-      if (response.status === 401) options.onUnauthorized?.({ path, method })
+      if (response.status === 401 && (sessionIsCurrent === undefined || sessionIsCurrent())) {
+        options.onUnauthorized?.({ path, method })
+      }
       throw new ApiError(response.status, await readProblem(response, signal))
     }
     return response

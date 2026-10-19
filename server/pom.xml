@@ -36,6 +36,8 @@
 		<!-- Umbrales heredados sin cambios; la feature de referencia los evalúa en su tarea. -->
 		<jacoco.line.minimum>0.00</jacoco.line.minimum>
 		<jacoco.branch.minimum>0.00</jacoco.branch.minimum>
+		<jacoco.reference.line.minimum>0.80</jacoco.reference.line.minimum>
+		<jacoco.reference.branch.minimum>0.70</jacoco.reference.branch.minimum>
 		<!-- Valor inicial; JaCoCo lo amplía con su agente antes de cada suite. -->
 		<argLine/>
 	</properties>
@@ -267,6 +269,14 @@
 											<value>COVEREDRATIO</value>
 											<minimum>${jacoco.branch.minimum}</minimum>
 										</limit>
+									</limits>
+								</rule>
+								<rule>
+									<element>PACKAGE</element>
+									<includes><include>*reference*application</include></includes>
+									<limits>
+										<limit><counter>LINE</counter><value>COVEREDRATIO</value><minimum>${jacoco.reference.line.minimum}</minimum></limit>
+										<limit><counter>BRANCH</counter><value>COVEREDRATIO</value><minimum>${jacoco.reference.branch.minimum}</minimum></limit>
 									</limits>
 								</rule>
 							</rules>

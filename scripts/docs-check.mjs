@@ -220,16 +220,25 @@ const phaseCi = existsSync(join(ROOT, '.github/workflows/ci.yml')) && read('.git
 const phaseSh = existsSync(join(ROOT, 'scripts/verify.sh')) && read('scripts/verify.sh').match(/^GATE_PHASE="(\w+)"/m)?.[1];
 if (!phaseCi || phaseCi !== phaseSh) fail('scripts/verify.sh', `GATE_PHASE distinto de ci.yml (${phaseSh} vs ${phaseCi})`);
 if (phaseSh && !read('docs/TESTING.md').includes(`**Fase actual: \`${phaseSh}\`**`)) fail('docs/TESTING.md', `no declara la fase ${phaseSh}`);
-// FULL: verify.sh ejecuta e2e y la CI tiene job e2e evaluado por el agregado verify-required (base heredada).
+// FULL local intacto; CI automática liviana y FULL remoto exclusivamente manual.
 if (phaseSh === 'FULL' && phaseCi === 'FULL') {
   const ci = read('.github/workflows/ci.yml');
-  if (!/^ {2}e2e:\n/m.test(ci)) fail('.github/workflows/ci.yml', 'fase FULL sin job e2e');
-  const needs = ci.match(/^ {2}verify-required:\n[\s\S]*?^ {4}needs: \[([^\]]*)\]/m)?.[1].split(',').map((s) => s.trim()) ?? [];
-  for (const job of ['classify', 'docs', 'server', 'client', 'e2e']) {
-    if (!needs.includes(job)) fail('.github/workflows/ci.yml', `verify-required no depende de ${job}`);
+  if (!/^ {2}verify-required:\n/m.test(ci)) fail('.github/workflows/ci.yml', 'falta check requerido verify-required');
+  if (ci.includes('scripts/verify.sh') || /^ {2}(server|client|e2e):\n/m.test(ci)) {
+    fail('.github/workflows/ci.yml', 'la CI automática debe ser liviana');
   }
-  if (!ci.includes('E2E: ${{ needs.e2e.result }}') || !ci.includes('run: node scripts/ci/verify-required.mjs')) {
-    fail('.github/workflows/ci.yml', 'verify-required no evalúa e2e con scripts/ci/verify-required.mjs');
+  const manualPath = '.github/workflows/full.yml';
+  const manual = existsSync(join(ROOT, manualPath)) ? read(manualPath) : '';
+  if (!manual.includes('  workflow_dispatch:') || /^ {2}(push|pull_request|schedule):/m.test(manual)) {
+    fail(manualPath, 'FULL remoto debe ser exclusivamente manual');
+  }
+  if (!/^ {2}e2e:\n/m.test(manual)) fail(manualPath, 'fase FULL sin job e2e');
+  const needs = manual.match(/^ {2}full-result:\n[\s\S]*?^ {4}needs: \[([^\]]*)\]/m)?.[1].split(',').map((s) => s.trim()) ?? [];
+  for (const job of ['classify', 'docs', 'server', 'client', 'e2e']) {
+    if (!needs.includes(job)) fail(manualPath, `full-result no depende de ${job}`);
+  }
+  if (!manual.includes('E2E: ${{ needs.e2e.result }}') || !manual.includes('run: node scripts/ci/verify-required.mjs')) {
+    fail(manualPath, 'full-result no evalúa e2e con scripts/ci/verify-required.mjs');
   }
   if (!read('scripts/verify.sh').includes('FULL) echo "docs server client e2e"')) fail('scripts/verify.sh', 'FULL no ejecuta la suite e2e');
 }

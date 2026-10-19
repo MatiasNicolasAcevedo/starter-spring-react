@@ -1,0 +1,183 @@
+# CI de Starter. Política y reglas de eficiencia en docs/TESTING.md.
+# Ejecución remota completa solo manual; no es el check requerido por main.
+# Su decisión vive en scripts/ci/verify-required.mjs; clasificador y agregado se prueban en classify antes de usarse.
+name: full-manual
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: full-manual-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  # Fase del gate: debe coincidir con scripts/verify.sh (lo valida docs-check).
+  GATE_PHASE: FULL
+  NODE_VERSION: 24.21.0
+  # Formato de versión de Temurin en actions/setup-java (equivale a la imagen eclipse-temurin:21.0.12_8).
+  JAVA_VERSION: 21.0.12+8.0.LTS
+
+jobs:
+  classify:
+    name: classify
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      policy: ${{ steps.policy.outputs.policy }}
+      draft: ${{ steps.policy.outputs.draft }}
+      base: ${{ steps.policy.outputs.base }}
+      head: ${{ steps.policy.outputs.head }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      # Repos git temporales y matriz del agregado: si fallan, classify falla y full-result rechaza.
+      - name: Pruebas del clasificador y del agregado
+        run: node --test "scripts/ci/*.test.mjs"
+      - id: policy
+        name: Clasificar el diff manual
+        run: |
+          base="$(git rev-parse origin/main)"
+          node scripts/ci/classify-diff.mjs --base "$base" --head "$GITHUB_SHA" --phase "$GATE_PHASE" | tee -a "$GITHUB_OUTPUT"
+          { echo "draft=false"; echo "base=$base"; echo "head=$GITHUB_SHA"; } >> "$GITHUB_OUTPUT"
+
+  docs:
+    name: docs-check
+    needs: classify
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - run: node scripts/docs-check.mjs
+
+  server:
+    name: server
+    needs: classify
+    if: needs.classify.outputs.policy != 'DOCS_ONLY'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
+        with:
+          distribution: temurin
+          java-version: ${{ env.JAVA_VERSION }}
+          cache: maven
+          cache-dependency-path: server/pom.xml
+      - name: Backend rápido (draft)
+        if: needs.classify.outputs.draft == 'true'
+        run: ./mvnw -B -ntp spotless:check test
+      - name: Backend completo (clean verify con Testcontainers)
+        if: needs.classify.outputs.draft != 'true'
+        run: ./mvnw -B -ntp clean verify
+      - name: Reportes de pruebas (solo en fallos)
+        if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: server-test-reports
+          path: |
+            server/target/surefire-reports/
+            server/target/failsafe-reports/
+          retention-days: 7
+
+  client:
+    name: client
+    needs: classify
+    if: needs.classify.outputs.policy != 'DOCS_ONLY'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: client
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: client/package-lock.json
+      - run: npm ci --no-audit --no-fund
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run format:check
+      - run: npm run test:ci
+      - run: npm run build
+
+  # E2E real en paralelo bajo petición manual: build SPA/nginx, API, PostgreSQL y OIDC
+  # local en un proyecto Compose único sin puertos host. El navegador nunca recibe el socket Docker.
+  e2e:
+    name: e2e
+    needs: classify
+    if: needs.classify.outputs.policy != 'DOCS_ONLY'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      STARTER_E2E_PROJECT: starter-e2e-ci-${{ github.run_id }}-${{ github.run_attempt }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # Node del host: control cerrado de lifecycle/DB del proyecto propio (scripts/run-e2e.mjs).
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Integración local persistente y Playwright (1280 / 375)
+        timeout-minutes: 40
+        run: bash scripts/verify.sh --e2e
+      # Solo el export saneado: sanitized/ existe únicamente si su auditoría pasó. Brutos, control y logs nunca se suben.
+      - name: Export saneado (solo en fallos)
+        if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: e2e-sanitized-report
+          path: e2e/artifacts/${{ env.STARTER_E2E_PROJECT }}/sanitized/
+          if-no-files-found: ignore
+          retention-days: 7
+
+  full-result:
+    name: full-result
+    needs: [classify, docs, server, client, e2e]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Evaluar política y suites exigidas
+        env:
+          POLICY: ${{ needs.classify.outputs.policy }}
+          DRAFT: ${{ needs.classify.outputs.draft }}
+          BASE: ${{ needs.classify.outputs.base }}
+          HEAD: ${{ needs.classify.outputs.head }}
+          CLASSIFY: ${{ needs.classify.result }}
+          DOCS: ${{ needs.docs.result }}
+          SERVER: ${{ needs.server.result }}
+          CLIENT: ${{ needs.client.result }}
+          E2E: ${{ needs.e2e.result }}
+        run: node scripts/ci/verify-required.mjs

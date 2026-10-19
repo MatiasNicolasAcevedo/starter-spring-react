@@ -17,7 +17,7 @@ import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.json.JsonMapper;
 
 /** Cookie transport over real HTTP; never installs a principal or substitutes Spring authentication. */
-final class OidcHttpBrowser {
+public final class OidcHttpBrowser {
     static final String PUBLIC_ORIGIN = "http://127.0.0.1:5173";
     static final String CALLBACK = PUBLIC_ORIGIN + "/login/oauth2/code/google";
     private final int port;
@@ -27,11 +27,11 @@ final class OidcHttpBrowser {
             .followRedirects(HttpClient.Redirect.NEVER)
             .build();
 
-    OidcHttpBrowser(int port) {
+    public OidcHttpBrowser(int port) {
         this.port = port;
     }
 
-    String cookie(String name) {
+    public String cookie(String name) {
         return cookies.get(name);
     }
 
@@ -39,7 +39,7 @@ final class OidcHttpBrowser {
         cookies.put(name, value);
     }
 
-    HttpResponse<String> get(String path) throws Exception {
+    public HttpResponse<String> get(String path) throws Exception {
         return app(path, "GET", Map.of());
     }
 
@@ -47,7 +47,7 @@ final class OidcHttpBrowser {
         return app(path, "POST", headers);
     }
 
-    URI start() throws Exception {
+    public URI start() throws Exception {
         var response = get("/oauth2/authorization/google?returnTo=https://attacker.example");
         assertThat(response.statusCode()).isEqualTo(302);
         assertNoStore(response);
@@ -62,7 +62,7 @@ final class OidcHttpBrowser {
         return authorization;
     }
 
-    URI authorize(URI authorization) throws Exception {
+    public URI authorize(URI authorization) throws Exception {
         var response = external(authorization);
         assertThat(response.statusCode()).isEqualTo(302);
         URI callback = URI.create(response.headers().firstValue("Location").orElseThrow());
@@ -72,7 +72,7 @@ final class OidcHttpBrowser {
         return callback;
     }
 
-    HttpResponse<String> callback(URI callback) throws Exception {
+    public HttpResponse<String> callback(URI callback) throws Exception {
         return get(callback.getRawPath() + "?" + callback.getRawQuery());
     }
 
@@ -82,7 +82,7 @@ final class OidcHttpBrowser {
                 HttpResponse.BodyHandlers.ofString());
     }
 
-    JsonNode me() throws Exception {
+    public JsonNode me() throws Exception {
         var response = get("/api/v1/auth/me");
         assertThat(response.statusCode()).isEqualTo(200);
         assertNoStore(response);
@@ -149,12 +149,17 @@ final class OidcHttpBrowser {
     }
 
     private HttpResponse<String> app(String path, String method, Map<String, String> headers) throws Exception {
+        return request(path, method, headers, "");
+    }
+
+    public HttpResponse<String> request(String path, String method, Map<String, String> headers, String body)
+            throws Exception {
         var request = HttpRequest.newBuilder(URI.create("http://127.0.0.1:" + port + path))
                 .timeout(Duration.ofSeconds(5))
                 .header("X-Forwarded-Host", "127.0.0.1:5173")
                 .header("X-Forwarded-Proto", "http")
                 .header("X-Forwarded-Port", "5173")
-                .method(method, HttpRequest.BodyPublishers.noBody());
+                .method(method, HttpRequest.BodyPublishers.ofString(body));
         if (!cookies.isEmpty()) {
             request.header(
                     "Cookie",

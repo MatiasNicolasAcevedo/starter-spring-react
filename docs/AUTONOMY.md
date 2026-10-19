@@ -51,7 +51,7 @@ Decisiones reversibles dentro de la tarea no requieren confirmación. Para decis
 1. PR del repositorio y rama base autorizados; tarea y spec vigentes; alcance respetado.
 2. HEAD publicado coincide con el SHA revisado y probado; sin cambios propios pendientes.
 3. Revisión de una sesión distinta de la implementación: veredicto `APROBADO` con SHA de HEAD y SHA de base registrados en el PR.
-4. Todos los checks exigidos por la política del diff existen, terminaron y están verdes. `verify-required` informa esa política; ninguno omitido, cancelado, pendiente o ausente cuenta como verde.
+4. `verify-required` liviano existe y está verde sobre el HEAD publicado. Además, evidencia FULL local válida para las fuentes/base y comprobada por el revisor conforme a TESTING. El check automático no acredita FULL ni sustituye esa evidencia; checks exigidos fallidos/cancelados/ausentes no cuentan como verde. Decisión del dueño 2026-10-18: FULL remoto solo manual, sin modificar el ruleset.
 5. Sin conversaciones bloqueantes ni cambios pedidos pendientes.
 6. Base actualizada según el ruleset y pruebas de la combinación actual. Si cambia base o HEAD, se revalida lo afectado y se publica un veredicto nuevo.
 7. El tablero indica `mergeable` (no `done`) y no hay otro PR de tarea activo.

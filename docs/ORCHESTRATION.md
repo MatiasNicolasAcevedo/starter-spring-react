@@ -30,24 +30,7 @@ Contrato mínimo para encadenar sesiones. **No hay dispatcher instalado:** la co
 | `counts_for_cycle` | booleano; `false` en M0, infraestructura y tareas solo documentales |
 | `pr` | `null` o número de PR real |
 
-## Resultado estructurado de una sesión (para un futuro adaptador)
-```json
-{
-  "schema_version": 1,
-  "session_id": "id-real-de-la-sesion",
-  "role": "reviewer",
-  "task_id": "T-NNN",
-  "outcome": "approved",
-  "head_sha": "sha-completo-del-head",
-  "base_sha": "sha-completo-de-la-base",
-  "pr_number": 1,
-  "published": true,
-  "evidence_urls": [],
-  "next_action": "merge",
-  "blocker": null
-}
-```
-Si la sesión revisora también mergeó: `role: merger`, `outcome: merged`, `completed_roles: [reviewer, merger]`, `next_action: reconcile` y `merge_commit_sha` real. Un controlador valida SHAs, campos y outcomes de un conjunto cerrado y los contrasta con GitHub; nunca confía en `published` o `approved` declarados. Un JSON inválido no provoca un merge.
+## Continuidad mínima vigente
+El dueño pidió optimizar para MVP pequeños el 2026-10-18. STATUS contiene un único prompt ejecutable; la tarea guarda evidencia y siguiente experimento. Un bloqueo incluye causa concreta y salida propuesta; si falta autorización, preguntar la decisión necesaria en vez de repetir el prompt condicionado. Una decisión nueva se registra y sustituye la precondición anterior.
 
-## Dispatcher opcional
-Solo con una tarea expresa, herramientas disponibles y capacidades comprobadas (`CICLO_AUTOMATICO_VERIFICADO` en HANDOFF con evidencia). Bucle previsto: lock exclusivo por repositorio → consultar GitHub y reconciliar → si `executor: frontier` y el ejecutor disponible es Junie, guardar traspaso y parar → elegir solo la primera acción aplicable (cambios pedidos, revisión con merge elegible, retoma de merge, retoma de implementación, revisión de ciclo, primera ready, planner, cierre) → validar resultado y checkpoint → repetir con límites de sesiones/tiempo. Valores iniciales en [orchestration.example.yml](orchestration.example.yml). Logs de runtime en `.orchestrator/` (ignorado).
+Dispatcher, adaptador de resultados JSON, locks y automatizaciones de sesiones quedan fuera del cierre del starter. El ejemplo histórico orchestration.example.yml no se usa ni se exige para adoptar un MVP. Reconsiderar esa infraestructura solo con una tarea futura y necesidad observada.
