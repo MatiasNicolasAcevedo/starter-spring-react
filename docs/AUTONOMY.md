@@ -13,6 +13,8 @@ Autorización del dueño registrada una vez; las sesiones la heredan. Autoriza o
 El traspaso a Junie Lite no revoca estos permisos Git. Si una tarea requiere redefinir arquitectura, modelo de autenticación o alcance, Junie Lite prepara evidencia y propuesta para el dueño, que decide y puede abrir una sesión de frontera. Cambios pequeños ya especificados no se bloquean por tocar server o client.
 
 ## Operaciones ordinarias autorizadas
+Configuración declarada por el dueño el 2026-10-19: Junie Lite con Qwen 3.6 27B; ejecución todavía no observada. Frontera prepara contexto/decisiones y tareas, Junie implementa contratos pequeños. No abrir sesiones/modelos por cuenta propia. Preparación previa a E autorizada dentro de T-004; mismo PR, revisión independiente de preparación antes del ensayo en otra sesión. No habilita E en esta sesión ni un merge anticipado de T-004.
+
 - Leer código y documentación del proyecto; crear specs y tareas dentro del brief ([PROJECT.md](PROJECT.md)).
 - Implementar y mantener Java/Spring Boot/React, tests y documentación de una tarea refinada.
 - Crear ramas, commits de rutas explícitas, push, PR draft/ready y comentarios técnicos en esos PRs.

@@ -1,10 +1,10 @@
 ---
 id: T-004
-status: ready
+status: in_progress
 priority: P1
 size: M
 executor: frontier
-role: planner
+role: implementer
 milestone: M0
 counts_for_cycle: false
 product_cycle: null
@@ -16,7 +16,18 @@ depends_on: [T-003]
 # T-004 · E · Ensayo de adopción
 
 ## Objetivo
+Cambio material autorizado por el dueño el 2026-10-19: preparar primero el starter para MVP pequeños con frontera como planner y Junie Lite como ejecutor de tareas acotadas. Esta preparación se implementa en la misma rama y único PR de T-004; no ejecuta E ni acredita adopción. La matriz E-AC y el FULL de aceptación de E permanecen exigidos. Después de revisión independiente de la preparación, E se ejecutará en su sesión correspondiente sobre la versión simplificada, dentro de este mismo PR que no se mergea antes de completar E. No abrir un PR documental paralelo.
+
 Cumplir E de [ROADMAP](../ROADMAP.md): demostrar que una idea se adopta desde otra copia limpia con la base y documentación propias, sin copiar el kit, conforme [PROJECT_CONTEXT](../../PROJECT_CONTEXT.md#adopción-futura). D está MERGED y conciliada como template beta; su evidencia no acredita este ensayo. Este documento es el contrato canónico de E, con reglas y matriz E-AC; spec null es intencional para no duplicar un contrato de validación sin API nueva.
+
+## Preparación previa autorizada
+Rol implementer con refinamiento explícito del contrato en esta sesión. Herramienta Codex desktop/API, PowerShell, Git Bash, git/gh; familia expuesta GPT-6, identificador runtime exacto y esfuerzo efectivo no expuestos. Sol/high es preferencia solicitada, sin selección simulada ni delegaciones. Junie Lite con Qwen 3.6 27B es configuración declarada por el dueño; ninguna ejecución Junie observada. Impacto: documentos, contratos de tarea y reset mecánico del inicializador; sin cambios al comportamiento de la aplicación, API, permisos/propiedad, datos, migraciones o UI.
+
+Estado inicial reconciliado: árbol limpio, HEAD local/tracking/remoto b9bb24f04bf86598eddbbfa7db58f10019783bf1; main local/tracking/remoto 6c5d4cd5395bdf871bc9bbbb5a536dcb53a44551. PR#4 MERGED, isTemplate=true, PR abiertos ninguno; últimas ejecuciones de ci success. Consulta git/gh real, sin acceso al origen.
+
+División previa a edición: P1 consolidar README/AGENTS/protocolos/contexto/tarea y estado mínimo; P2 trasladar el contrato a documentos inicializados y validadores, con regresiones de copia sin Git/kit; P3 dirigidos y FULL sobre fuentes finales, con checkpoint/cleanup; P4 publicar y dejar revisión independiente. No cambiar stack, suites, umbrales, retries, deadlines ni protecciones.
+
+Aceptación de preparación: tarea pequeña con decisiones y comandos resueltos; progreso canónico en tarea, STATUS como entrada, BACKLOG como cola y HANDOFF solo aceptación; copia inicializada sin carga A…E ni permisos/evidencias heredados; instrucciones Junie contrastadas con fuentes oficiales y microensayo único preparado, sin ejecutarlo como frontera; docs-check, matrices y FULL propios. Cada E-AC sigue pendiente hasta el ensayo E.
 
 ## Alcance
 Una copia temporal limpia propia del SHA publicado de esta rama, exportada sin Git/kit/ignorados/artefactos/configuración privada. Seguir README literalmente con defaults ficticios primero y una identidad/contexto distintos después; registrar cualquier paso faltante como defecto, sin ocultarlo mediante preparación manual. La ruta GitHub template se comprueba documentalmente y con isTemplate=true del mismo repo; no crear otro repositorio ni afirmar que se ensayó su creación.
@@ -65,5 +76,22 @@ Rol planner; Codex desktop/API y terminal PowerShell/git/gh, familia expuesta GP
 
 Validación propia de este avance: `node scripts/docs-check.mjs` exit0 (45 Markdown/5 tareas/HANDOFF0/22); `node --test "scripts/ci/*.test.mjs"`94/94 exit0, cero fallos/cancelados/omitidos,46,37s; incluye13 controles documentales y30 casos CLI con copias temporales propias retiradas por sus tests. `git diff --check` exit0. Solo siete Markdown modificados, fuentes técnicas/base intactas; sin FULL nuevo, recursos Docker/copia de adopción creados ni pruebas E ejecutadas. Kit ignorado y ausente de Git/índice. Publicación en esta rama sin PR separado; comprobar clasificación DOCS_ONLY del commit y HEAD local/tracking/remoto/árbol limpio al entregar. SHA final consultable en Git, sin autorreferencia a un commit futuro. Próximo rol implementer en sesión nueva, mismo HEAD publicado/base y contrato, según STATUS; no otra planificación sin cambio material.
 
+## Checkpoint de preparación vigente
+FULL propio terminado el 2026-10-19, 19:09:41→19:51:24 America/Buenos_Aires, duración41m43s, exit0. `.orchestrator/t-004-prep/full.log` y result.txt: docs/server/client/e2e OK; backend91 unitarios/slices+75 IT, client133, Playwright15/15; matriz inicializador31/31, copia sin Git/kit/ignorados docs-check y20 controles, backend91+75/client133 e inventario183 fuentes inmutables idénticas. Integración local nginx/Vite, DB caída/recuperación desktop/móvil, retoma, guardias, fallos/señales y proxies pasaron; cleanup de scripts y wrapper sin error, namespaces verify/e2e container-a/network/volume0/0/0. No es ensayo E ni ejecución Junie.
+
+Huellas before.json/after.json idénticas:282 fuentes,235 técnicas, SHA256 completo `dfd56c92b22d642fc97356c43bc13377765146763f560fec99529e894334d8bf`; técnico `c04e258bdf53f581d08805195fd5572591a6cec195035cfd3491875a30a1323b`. Algoritmo en wrapper ignorado: rutas ordenadas de git ls-files cached/others/exclude-standard, SHA256 por bytes y SHA256 de JSON.stringify(mapa); mapa técnico excluye Markdown/LICENSE. HEAD al correr b9bb24f04bf86598eddbbfa7db58f10019783bf1 con fuentes locales, base6c5d4cd5395bdf871bc9bbbb5a536dcb53a44551; no se atribuye a un commit futuro. Publicación de código pendiente inmediata; cierre solo Markdown conservará huella/base y ejecutará docs-check/dirigidos afectados.
+
+P1/P2 implementadas; P3 en curso. Matriz final de herramientas 99/99 exit0, sin omitidos/cancelados, 40,94 s (.orchestrator/t-004-prep-tools.log). Primer intento restringido: junction EPERM de sandbox y fixture de conteo ajustada al nuevo STATUS sin conteo duplicado; misma matriz con acceso a temporales/junctions propios pasa, sin omitir negativos. Se conservan rechazo de conteo falso, estados explícitos obsoletos, WIP y evidencia heredada, y se agregan cola mínima, progreso sin HANDOFF, ready sin contadores, prompt único y guardia de bloque de instrucciones.
+
+Rojo propio de la guardia nueva: invertir delimitadores era aceptado (exit de CLI0 cuando debía1); `.orchestrator/t-004-boundary-red.log`. Arreglo: exigir un único par ordenado. Verde dirigido 1/1 exit0, 7,01 s, prueba cuatro variantes y cero escrituras (`t-004-boundary-green.log`). Sin bajar assertions; no es el microensayo Junie.
+
+Antes de FULL: HEAD base de trabajo b9bb24f04bf86598eddbbfa7db58f10019783bf1 y main 6c5d4cd5395bdf871bc9bbbb5a536dcb53a44551; fuentes locales finales todavía sin commit. Comando (Git Bash): `COMPOSE_ENV_FILES=.env.example COMPOSE_PROJECT_NAME=starter-verify-t004-prep-20261019a STARTER_E2E_PROJECT=starter-e2e-t004-prep-20261019a STARTER_SERVER_TESTS=container bash scripts/verify.sh`. Preflight exige labels ausentes; wrapper ignorado `.orchestrator/t-004-prep/run-full.ps1`, log full.log y huellas before/after.json en ese directorio. La copia compilable sin Git/kit/ignorados forma parte de ese gate, no es E. Cleanup solo de proyecto verify recién creado y labels container-a/network/volume cero; scripts hijos conservan su limpieza propia. No editar fuentes durante la corrida. Después: publicar avance y revisión independiente de preparación, sin E ni merge anticipado.
+
+Kit pertinente inventariado en lectura: README, guía del dueño, formulario y secciones 17/18.10 de guía frontera; no se leen archive ni secretos. Lo útil que faltaba se consolida en formulario (reutilizar respuestas y separar confirmado/propuesto/pendiente), protocolos (decisiones resueltas, impacto y bloqueo breve), README/SETUP (recorrido e instrucciones Junie) y TESTING (capa por riesgo). El resto ya estaba integrado o son ceremonias históricas; kit intacto y fuera de Git/copias.
+
+CI inspeccionada: pull_request a main en opened/synchronize/reopened/ready_for_review; un job verify-required, cancelación por PR y timeout 5 min. Runs 39324133003 y 39325515279: job completo success en12 y15 s (herramientas6 y5 s); otro run cancelado al actualizar el mismo SHA. No cambiar workflow sin fricción adicional demostrada; ready_for_review puede repetir el check y conserva señal de entrega. FULL remoto sigue manual. FULL local histórico C35m38s/D40m58s; se reducen lecturas/actualizaciones y repeticiones, sin afirmar ahorro medido.
+
+Microensayo Junie preparado una sola vez en docs/templates/junie-trial.md; no es una tarea/PR paralela ni ejecución de frontera. Lectura documental oficial y configuración efectiva se distinguen en SETUP. Ejecución real Junie y E pendientes.
+
 ## Resultado
-Contrato completo y dependencias cumplidas: ready para sesión implementadora nueva. E no ejecutada; aceptación y evidencias pendientes. Sin PR documental separado; planificación se publica en la misma rama que usará el único PR E. D done/template beta; adopción todavía no validada, HANDOFF0/22 NO_LISTO y kit conservado.
+Preparación previa in_progress. E no ejecutada; matriz E-AC pendiente. D done/template beta; adopción sin validar, HANDOFF0/22 NO_LISTO y kit conservado. Tras publicar: reviewer independiente revisa esta fase y deja `PREPARACIÓN REVISADA` si es favorable, sin `mergeable`, APROBADO global ni merge. Devuelve a in_progress/implementer con único prompt E y misma rama/PR para que el dueño lo ejecute en otra sesión; si hay bloqueantes, changes_requested con evidencia. Veredicto final/merge de T-004 requieren E completa, nunca solo esta puesta a punto. Esta regla específica evita que el protocolo reviewer→merger adelante el cierre de E.

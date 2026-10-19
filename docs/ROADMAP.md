@@ -8,7 +8,7 @@
 
 ## Secuencia contratada
 
-El objetivo vigente es completar este mismo starter de A a E. A/B/C/D están terminadas con revisión/merge/CI comprobados y evidencia propia en sus tareas. D/T-003 cierra S-004 v1 con PR#4 MERGED y template beta comprobado; [T-004](tasks/T-004-clean-adoption.md) contiene el contrato propio E ready, todavía sin ejecución. Cada parte requiere revisión, squash merge confirmado y CI vigente antes de activar la siguiente.
+El objetivo vigente es completar este mismo starter de A a E. A/B/C/D están terminadas con revisión/merge/CI comprobados y evidencia propia en sus tareas. D/T-003 cierra S-004 v1 con PR#4 MERGED y template beta comprobado; [T-004](tasks/T-004-clean-adoption.md) contiene la preparación previa in_progress autorizada el 2026-10-19 y el contrato propio E, todavía sin ejecución. Cada parte requiere revisión, squash merge confirmado y CI vigente antes de activar la siguiente.
 
 | Parte | Estado real | Resultado en palabras simples |
 |---|---|---|
@@ -16,7 +16,7 @@ El objetivo vigente es completar este mismo starter de A a E. A/B/C/D están ter
 | B | done; PR #2 MERGED y CI FULL PR/main verificadas | Levantar, comprobar, detener y retomar la aplicación conectada a su DB |
 | C | done; PR #3 MERGED, R2/CI liviana exactos, squash comprobado | Incorporar un ejemplo removible completo con permisos y pruebas |
 | D | done; PR#4 MERGED, APROBADO R1/CI liviana exactos, squash idéntico e isTemplate=true | Personalizar la base con un inicializador y habilitarla como template beta |
-| E | ready; contrato E-AC/E1→E4 en T-004, ejecución en sesión nueva | Comprobar desde otra copia limpia que sirve para empezar otra aplicación |
+| E | Preparación previa en T-004; ensayo E-AC/E1→E4 pendiente en otra sesión | Comprobar desde otra copia limpia que sirve para empezar otra aplicación |
 
 La aceptación detallada está abajo y en la tarea/spec de cada parte. Refinar solo la próxima parte al habilitarse; una tarea ready pasa a implementación, sin otra ronda de planificación salvo cambio material. Aplicar documentación mínima útil de AGENTS durante el trabajo: comandos de uso en README/SETUP, decisiones en ADR, evidencia en tarea/PR y estado breve con enlaces en el tablero. Materializar aprendizajes en esa base, sin mantener otro manual vivo en el kit transitorio.
 
@@ -35,7 +35,7 @@ La aplicación es un monolito Spring + SPA React + PostgreSQL. Lo que creció de
 |---|---|---|
 | 1 · C cerrada (T-002 done) | R2 independiente APROBADO, CI liviana final exacta y PR#3 MERGED comprobados; evidencia canónica en T-002 | CRUD privado y regresiones comprobados; cierre conciliado con el primer avance D |
 | 2 · Preparar uso (D/T-003 done, S-004 v1) | Inicializador, formulario y guía comprobados; evidencia propia y cierre en T-003/PR#4 | FULL local, APROBADO R1/CI y MERGED comprobados; template beta habilitado con límites visibles |
-| 3 · Ensayar y cerrar (E/T-004 ready) | Seguir la guía desde copia limpia con contexto ficticio distinto; levantar/login/CRUD/persistencia/retoma y FULL local, corregir solo defectos comprobados | Recorrido reproducible sin kit, checklist final con evidencia, revisión y merge; starter listo para adopción |
+| 3 · Preparar, revisar y ensayar (E/T-004) | Seguir la guía desde copia limpia con contexto ficticio distinto; levantar/login/CRUD/persistencia/retoma y FULL local, corregir solo defectos comprobados | Recorrido reproducible sin kit, checklist final con evidencia, revisión y merge; starter listo para adopción |
 
 Falta E; A/B/C/D están cerradas. No son nuevas aplicaciones ni funcionalidades de negocio. Presupuesto orientativo: una sesión de trabajo y una revisión para el ensayo restante, ajustado por hallazgos concretos. Las ejecuciones FULL históricas de C duraron aproximadamente34 minutos; su FULL final35m38s no es una validación instantánea ni acredita ahorro medido del gate optimizado.
 
@@ -117,3 +117,6 @@ Cola revisada: callback y automatizaciones/optimizaciones siguen fuera del cierr
 
 ## Adopción de otro producto
 Reiniciar PROJECT/ROADMAP/STATUS/BACKLOG desde el contexto nuevo, sin estados del starter. La primera tarea es T-000 de adopción; vuelve a validar HANDOFF, configuración GitHub propia y ensayo limpio. Las reglas/protocolos/ADR/spec de auth permanecen heredadas, sin convertirlas en pruebas ejecutadas.
+
+## Revisión de ciclo · preparación previa a E · 2026-10-19
+Cambio material explícito del dueño: priorizar MVP pequeños, frontera como planner y Junie Lite como ejecutor de contratos pequeños. Alcance y evidencia canónicos en T-004; no un informe adicional ni tarea/PR paralelo. Se simplifican lecturas, contrato de tareas, progreso y reset de la copia; se conserva FULL técnico/E, CI requerida y seguridad. Preparación se revisa independientemente antes de ejecutar E en otra sesión dentro del único PR T-004; no merge parcial ni adopción acreditada. Microensayo Junie preparado, ejecución pendiente. Roles, estado y pruebas propios no se heredan a nuevas aplicaciones.

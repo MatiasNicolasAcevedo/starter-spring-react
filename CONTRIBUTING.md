@@ -4,7 +4,7 @@ Proyecto personal con trabajo de agentes bajo [docs/AUTONOMY.md](docs/AUTONOMY.m
 
 ## Flujo de una tarea
 1. Cada cambio corresponde a una tarea `docs/tasks/T-NNN-slug.md` con alcance y aceptación. Una tarea y un PR en vuelo a la vez.
-2. Rama exacta del frontmatter desde `main` actualizada: `feat/`, `fix/`, `chore/`, `build/`, `ci/`, `test/`, `docs/` + `T-NNN-slug`.
+2. Rama exacta del frontmatter desde `main` actualizada; `codex/` por defecto para tareas nuevas, conservando nombres ya contratados.
 3. PR draft al primer push útil; ready cuando el gate local de la política pasó y la tarea está `in_review`.
 4. Revisión en una sesión distinta de la implementación, sobre el SHA publicado; veredicto `APROBADO`/`CAMBIOS REQUERIDOS` con SHA de HEAD y base en el PR ([docs/agents/reviewer.md](docs/agents/reviewer.md)).
 5. Merge solo por squash, sin bypass, cuando se cumplen las condiciones de AUTONOMY ([docs/agents/merger.md](docs/agents/merger.md)). El tablero se reconcilia en la siguiente sesión.

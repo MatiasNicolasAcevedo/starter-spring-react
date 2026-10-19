@@ -19,6 +19,8 @@ La guía breve de adopción y crecimiento enlazará README/SETUP, ARCHITECTURE, 
 En E se comprobará el recorrido literal desde una copia limpia sin kit. Tras E MERGED y validada, el dueño podrá eliminar su carpeta local `plantilla/`: ningún comando, enlace necesario, formulario ni protocolo dependerá de ella. Conservar hasta entonces su contenido útil; el inicializador nunca la copia ni la borra. No agrega una etapa después de E ni modifica el único límite posterior de PROVENANCE.
 
 ## Decisiones trazadas
+2026-10-19: cambio material previo a E autorizado por el dueño. Frontera recibe la idea pulida, resuelve contexto/alcance/arquitectura mínima y prepara tareas pequeñas; Junie Lite ejecuta en IntelliJ IDEA/AIR. Qwen 3.6 27B es configuración declarada, sin ejecución/capacidades verificadas en esta sesión. Estado/evidencia en tarea, STATUS como entrada, BACKLOG como cola, HANDOFF solo aceptación/traspaso; guías canónicas sin duplicación. Preparación y ensayo E permanecen en T-004 y un único PR, con revisión independiente de la preparación antes del ensayo en otra sesión; no habilita ejecutar E ahora.
+
 2026-10-17: mantener versiones y dependencias del snapshot; no actualizar latest. Modo local explícito sin credenciales y Google real sin fallback. Una tarea/PR activos, revisión distinta y squash protegido.
 2026-10-17: el dueño acepta el starter autosuficiente como única base de nuevas aplicaciones; integrar y pulir el formulario de contexto en D, probar adopción sin kit en E y retirar después el kit local. Priorizar adopción ágil y documentación canónica; el detalle se trabaja dentro de D/E, sin frenar ni ampliar la implementación B.
 

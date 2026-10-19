@@ -1,41 +1,54 @@
 # starter-spring-react
 
-Base genérica Java 21 / Spring Boot 4.1.1, React/TypeScript/Vite y PostgreSQL 18.6. MIT · Matias Nicolas Acevedo.
+Base pública MIT de Java 21 / Spring Boot 4.1.1, React/TypeScript/Vite/MUI y PostgreSQL 18.6. Incluye sesión backend OIDC/CSRF, permisos por propietario, CRUD removible de referencia, migraciones, Swagger opt-in, pruebas y desarrollo local persistente sin Google.
 
-**Estado: A/B/C/D terminadas y mergeadas; template beta habilitado; E lista para ejecutar su ensayo en una sesión nueva.** Beta limitada a validación local/OIDC ficticio; Google real pendiente del dueño y adopción E todavía no validada. Qué falta y orden de cierre: [ROADMAP](docs/ROADMAP.md#cierre-mínimo-para-mvp--revisión-del-dueño-2026-10-18); acción concreta en [STATUS](docs/STATUS.md); evidencia propia de D en [T-003](docs/tasks/T-003-initializer-beta.md). Origen y límites de continuidad: [PROVENANCE](docs/PROVENANCE.md).
-
-**Destino:** crear aplicaciones con «Use this template → Create a new repository», personalizar y verificar la base, y empezar el primer flujo. Formulario y recorrido abajo; E comprobará la adopción sin kit personal. Objetivo aceptado y condiciones de retiro de `plantilla/`: [PROJECT_CONTEXT](PROJECT_CONTEXT.md#adopción-futura).
+Template beta habilitado tras A/B/C/D MERGED; preparación para frontera → Junie en T-004, ensayo E pendiente. HANDOFF sigue 0/22 NO_LISTO; Google real pendiente del dueño. [Estado y única próxima acción](docs/STATUS.md), [alcance y pendientes](docs/ROADMAP.md), [procedencia](docs/PROVENANCE.md). No equivale a adopción validada.
 
 <!-- adoption-guide:start -->
 ## Crear una aplicación y su primer flujo
 
-1. Consultar el [formulario breve](docs/templates/project-context.md), incluso antes de crear el repo. Cuando este repo esté habilitado como template, usar «Use this template → Create a new repository» en GitHub y clonar **el repositorio propio**. Esta operación corresponde al dueño; el inicializador trabaja offline en la copia. Beta/template solo tras D MERGED; ensayo de adopción E pendiente. Google real queda pendiente del dueño, con OIDC ficticio local como camino probado por cada adopción.
-2. Con Node >=24, ejecutar desde la raíz de la copia nueva (ejemplo ficticio):
+1. Entregar la idea pulida al agente de frontera junto al [formulario breve](docs/templates/project-context.md). Reutilizar respuestas; preguntar solo decisiones faltantes de MVP/datos/reglas/permisos/aceptación. Frontera escribe PROJECT_CONTEXT propio y resuelve arquitectura mínima sobre esta base. No necesita el kit personal.
+2. Si aún no hay copia propia, el dueño usa «Use this template → Create a new repository» y clona su repo. Requisitos: Docker Desktop con contenedores Linux, Compose V2 y Git Bash para desarrollo; Node >=24 host para inicializador y FULL/E2E. JDK21 es opcional para IDE/Maven host. [Versiones y trampas](docs/SETUP.md#requisitos-del-host).
+3. Personalizar mecánicamente la copia nueva antes de editar contexto/código (ejemplo ficticio):
 
    ```bash
    node scripts/init-project.mjs --name "Agenda Demo" --slug agenda-demo --package org.demo.agenda --holder "Equipo Demo"
-   # Revisar el plan; repetir exactamente con --apply para escribir.
+   # Revisar el plan; repetir las mismas entradas con --apply.
    node scripts/init-project.mjs --name "Agenda Demo" --slug agenda-demo --package org.demo.agenda --holder "Equipo Demo" --apply
    ```
 
-   Dry-run no escribe. Entradas, lista de archivos, guardias e idempotencia: [SETUP](docs/SETUP.md#personalización-en-una-copia-propia). No ejecutar apply sobre el starter de mantenimiento. Los identificadores internos npm y STARTER_* permanecen estables para conservar locks y harness. Revisar el diff propio antes de continuar.
-3. Completar `PROJECT_CONTEXT.md` con el problema/flujo/MVP/permisos y aceptación propios. El inicializador deja una T-000 de adopción draft y archiva la historia del starter; contexto aceptado, autorización/configuración GitHub y pruebas deben ser propios. Consultar [STATUS](docs/STATUS.md), [HANDOFF](docs/HANDOFF.md) y [AUTONOMY](docs/AUTONOMY.md). Los registros archivados y PROVENANCE son procedencia, sin activar su continuidad final.
-4. Levantar y comprobar con [SETUP](docs/SETUP.md#primer-uso-local-sin-google), usando un proyecto nuevo, fixture ficticia y puertos libres. Probar login local, datos propios y retoma antes del cleanup. Para FULL se requiere además Node >=24 en host. [TESTING](docs/TESTING.md) explica dirigidos, FULL local de cierre y CI liviana: ningún resultado del starter vale como ejecución de esta copia.
-5. Validar T-000 con evidencia propia y derivar una spec/tarea del primer flujo desde el contexto. Usar la arquitectura existente: feature Java con controller/DTO/servicio/persistencia y feature React con API/hook/página/formulario. Decidir propiedad en el servicio, respaldar invariantes con constraints y añadir migraciones Flyway nuevas. Probar caso útil, validación, usuario ajeno, CSRF y UI con API/DB reales según los [AGENTS](AGENTS.md), [ARCHITECTURE](docs/ARCHITECTURE.md) y [ADR](docs/adr/0001-base-tecnica-y-alineacion-del-scaffold.md).
+   No aplicar sobre el starter de mantenimiento ni reinicializar después de editar. La CLI no genera negocio, no opera GitHub y conserva locks/auth/migraciones/referencia. [Entradas, guardias y escrituras](docs/SETUP.md#personalización-en-una-copia-propia).
+4. Guardar el contexto propio preparado por frontera en PROJECT_CONTEXT.md; resolver [AUTONOMY](docs/AUTONOMY.md) para este repo y validar T-000 de adopción con evidencia propia. [STATUS](docs/STATUS.md) da la siguiente acción. Historia archivada y permisos/pruebas del starter no acreditan el producto. Levantar, comprobar y retomar con los comandos de abajo; aceptación y FULL según [TESTING](docs/TESTING.md).
+5. Frontera deja una [tarea pequeña ready](docs/templates/task.md) del primer flujo: decisiones, archivos, pasos, aceptación y comandos resueltos. Java por feature y React por feature, usando la [arquitectura existente](docs/ARCHITECTURE.md); retirar/sustituir el ejemplo según [REFERENCE](docs/REFERENCE.md), sin modificar migraciones aplicadas.
 
-Para sustituir el ejemplo seguir [REFERENCE](docs/REFERENCE.md): el inicializador no lo retira ni altera migraciones. Separar web/application/persistence/domain cuando la complejidad lo justifique; no agregar servicios, colas o infraestructura antes de una necesidad observada. Conservar sesión OIDC backend/CSRF, cliente HTTP y cache por identidad. Revisar el crecimiento cada cinco tareas o cambio relevante con los [protocolos](docs/agents/planner.md).
+## Trabajo diario con Junie
+
+El dueño abre la raíz y configura [instrucciones Junie/AIR](docs/SETUP.md#instrucciones-de-junie-en-intellij-idea-y-air). Junie lee AGENTS raíz → STATUS → tarea y referencias mínimas, incluido AGENTS de la capa afectada. Ejecuta pasos y pruebas indicados; correcciones ordinarias continúan, decisiones nuevas de arquitectura/alcance vuelven a frontera/dueño con evidencia.
+
+El progreso y evidencia van en la tarea. STATUS cambia al cambiar acción/rol/bloqueo; BACKLOG solo si cambia la cola; HANDOFF solo en aceptación/traspaso o criterio afectado. Con código publicado y gate pertinente verde, revisión independiente y merge confirmado antes de la próxima tarea. [Protocolos por rol](docs/agents/implementer.md); no releer A…E ni todo docs/ en cada tarea.
+
+Junie Lite con Qwen 3.6 27B es configuración declarada por el dueño, no ejecución comprobada. Hay un [microensayo unitario preparado](docs/templates/junie-trial.md); su resultado debe venir de Junie. No añade una feature de demostración.
 
 ## Modo local explícito sin credenciales
 
-Comandos persistentes desde Git Bash (Docker Desktop/Compose V2; datos ficticios, sin Google):
+Desde Git Bash, con proyecto propio nuevo y datos ficticios:
 
 ```bash
 bash scripts/dev.sh up --mode local --proxy nginx --project starter-dev-mi-app
 bash scripts/dev.sh check --mode local --proxy nginx --project starter-dev-mi-app
 bash scripts/dev.sh down --mode local --proxy nginx --project starter-dev-mi-app
-# Retomar con el mismo proyecto, ruta, modo, proxy y parámetros: repetir up.
-COMPOSE_ENV_FILES=.env.example COMPOSE_PROJECT_NAME=starter-verify-mi-app STARTER_E2E_PROJECT=starter-e2e-mi-app STARTER_SERVER_TESTS=container bash scripts/verify.sh
+# Retomar: repetir up con la misma ruta, proyecto, proxy y parámetros.
 ```
 
-UI nginx http://127.0.0.1:5175; Vite usa --proxy vite y 5176. down conserva DB; usar --env-file con puertos distintos para coexistencia y los mismos parámetros en cada acción. Antes de FULL comprobar ausencia de recursos del namespace elegido; cleanup únicamente por labels propios según SETUP. Google real: [guía exclusiva del dueño](docs/SETUP.md#google-oidc-real). Versiones: [DEPENDENCIES](docs/DEPENDENCIES.md).
+UI nginx http://127.0.0.1:5175; Vite usa `--proxy vite` y 5176. down conserva DB. Para coexistencia usar `--env-file` con puertos libres distintos en cada acción; aislamiento, login local y retoma en [SETUP](docs/SETUP.md#primer-uso-local-sin-google). Google real: [camino exclusivo del dueño](docs/SETUP.md#google-oidc-real).
+
+Durante una tarea ejecutar los tests dirigidos elegidos por frontera. Cierre técnico con namespaces nuevos propios, tras comprobar labels ausentes según SETUP:
+
+```bash
+COMPOSE_ENV_FILES=.env.example COMPOSE_PROJECT_NAME=starter-verify-mi-app STARTER_E2E_PROJECT=starter-e2e-mi-app STARTER_SERVER_TESTS=container bash scripts/verify.sh
+# Solo recursos ficticios creados por esta ejecución:
+docker compose --env-file .env.example -p starter-verify-mi-app --profile verify down --volumes --remove-orphans
+```
+
+FULL conserva backend/IT PostgreSQL, client e integración/Playwright reales. CI automática `verify-required` comprueba herramientas/documentación y clasifica el diff; no ejecuta ni acredita FULL. No repetir FULL por cierre solo documental con base/fuentes idénticas. Política y elección de pruebas: [TESTING](docs/TESTING.md#elegir-pruebas-para-una-tarea-pequeña). Versiones: [DEPENDENCIES](docs/DEPENDENCIES.md).
 <!-- adoption-guide:end -->

@@ -1,11 +1,10 @@
-# Protocolo · planner
+# Protocolo · planner de frontera
 
-1. Reconciliar estado remoto (`gh pr list`, checks, merges) y respetar el trabajo en vuelo.
-2. Leer [PROJECT.md](../PROJECT.md), [HANDOFF.md](../HANDOFF.md) y el ciclo vigente de [ROADMAP.md](../ROADMAP.md). Volver a [PROJECT_CONTEXT.md](../../PROJECT_CONTEXT.md) solo ante un cambio o una ambigüedad; no repensar todo el producto.
-3. Crear o revisar la spec breve (plantilla [templates/spec.md](../templates/spec.md)): reglas, permisos con actor permitido y denegado, contratos y matriz criterio → test. Referenciar secciones e IDs del contexto (F-, RN-, CA-).
-4. Refino progresivo: máximo cinco tareas `ready`; el resto queda en «Por refinar» del BACKLOG.
-5. Dividir complejidad media en tareas S con dependencias claras; ordenar por valor y desbloqueos. Tamaño orientativo: un resultado, 3–5 archivos de código, ~250 líneas manuales (las cuatro tareas de M0 son mayores por diseño).
-6. Validar ausencia de ciclos, IDs únicos, riesgos, alcance y salida verificable; `product_cycle` y `counts_for_cycle` correctos.
-7. Publicar la planificación en una rama/PR de planificación o en el primer commit de la tarea autorizada; nunca dejarla solo local.
-8. Dejar un único prompt concreto en STATUS para la primera acción ejecutable. En M0 no declarar traspaso a Junie Lite hasta cumplir HANDOFF.
-9. Al cumplirse un disparador de revisión de ciclo (ROADMAP), revisar resultados y cola antes de abrir la siguiente implementación; registrar el corte en ROADMAP. Cambios de objetivo se proponen al dueño; ajustes ordinarios continúan bajo la autorización vigente.
+1. Leer STATUS, tarea activa y contexto aceptado; reconciliar Git/PR/CI según AGENTS. Reutilizar la idea pulida y respuestas disponibles. Preguntar solo por decisiones faltantes que cambien MVP, datos, reglas, permisos o aceptación; marcar confirmado/propuesto/pendiente sin convertir cada casillero en alcance.
+2. Completar PROJECT_CONTEXT desde el [formulario breve](../templates/project-context.md). Conservar arquitectura existente; resolver lo necesario para el primer resultado útil. La CLI personaliza identidad, no interpreta negocio. AUTONOMY contiene decisiones propias de operación/GitHub. No trasladar A…E a la aplicación.
+3. Entregar una [tarea pequeña](../templates/task.md): resultado observable, decisiones ya resueltas, máximo cinco referencias concretas, archivos previstos, pasos breves, aceptación, prueba pertinente con motivo y comandos exactos. Una spec separada solo si varias tareas comparten un contrato; una tarea autosuficiente usa spec null. No exigir otro documento para repetir su aceptación.
+4. Dividir cuando haya decisiones independientes, más de un resultado o demasiadas capas para revisar juntas. Orientación: 3–5 archivos de código, sin un límite artificial de líneas; evitar microtareas administrativas sin resultado. Junie no elige arquitectura ni vuelve a planificar el proyecto. Máximo cinco ready; normalmente preparar solo la actual y la siguiente con su dependencia.
+5. Marcar ready solo si decisiones bloqueantes y dependencias están resueltas. Elegir la capa de prueba más pequeña que demuestre la regla según [TESTING](../TESTING.md#elegir-pruebas-para-una-tarea-pequeña); distinguir tests nuevos de suites existentes exigidas al cierre. Dar entorno/directorio y comando ejecutable, sin dejar nombres ficticios como comando final.
+6. Publicar el contrato en el primer avance de la tarea autorizada, sin PR de planificación separado. STATUS conserva un único prompt breve con precondición observable; BACKLOG es la cola, no otra copia del estado. Revisar ROADMAP al dispararse ciclo/hito/cambio relevante, sin replanificar una tarea ready sin cambio material.
+
+El ejecutor registra el progreso en la tarea. Una decisión nueva vuelve a frontera/dueño con evidencia y propuesta; una corrección ordinaria continúa dentro del contrato. Configuración Junie e instrucciones: [SETUP](../SETUP.md#instrucciones-de-junie-en-intellij-idea-y-air).

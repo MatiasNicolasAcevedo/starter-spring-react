@@ -37,6 +37,21 @@ OpenAPI/Swagger ([ADR 0003](adr/0003-openapi-swagger-opt-in.md)): `ApiDocsAccess
 
 `e2e/tests/swagger.spec.ts` (solo proyecto desktop, `testIgnore` en móvil): por `http://localhost` abre `/api/docs/swagger-ui.html`, observa swagger-config y documento 200 con `servers` `http://localhost`, ejecuta desde la UI «Try it out» de system/info (respuesta de red 200 igual al dato real y resultado mostrado) y de me sin sesión (401 ProblemDetail), comprueba que POST `/logout` no ofrece «Try it out» y que ninguna petición sale del origen público. Sin `route`/MSW. Rojo dirigido: `STARTER_E2E_ASSERT_FAILURE=swagger bash scripts/e2e.sh` selecciona solo ese spec y cambia únicamente el dato esperado en la UI; el export saneado no incluye capturas de Swagger (solo pantallas SPA con manifest).
 
+## Elegir pruebas para una tarea pequeña
+
+Frontera indica en cada tarea la capa, el riesgo que demuestra y comandos exactos; Junie los ejecuta sin decidir otra estrategia. Elegir la menor capa que observe el comportamiento, reutilizando fixtures y regresiones existentes:
+
+| Cambio/riesgo | Prueba nueva pertinente | Iteración desde la raíz (Git Bash) |
+|---|---|---|
+| Regla o transformación sin infraestructura | Unitaria con caso útil y borde/error | `cd server && ./mvnw -Dtest=NombreTest test` o `npm --prefix client test -- --run src/ruta.test.ts` (sustituir ruta/nombre en la tarea) |
+| Interacción/estados de pantalla | Componente con providers reales, Testing Library y MSW | `npm --prefix client test -- --run src/ruta.test.tsx` y `npm --prefix client run typecheck` |
+| Persistencia, contrato HTTP, permisos o CSRF | IT PostgreSQL/HTTP real y negativo de actor/regla | `cd server && ./mvnw -Dit.test=NombreIT verify` con Docker, después gate backend de cierre |
+| Recorrido principal o riesgo entre capas | Playwright con API/DB/OIDC propios reales | La tarea fija la receta aislada; `bash scripts/verify.sh --e2e` conserva el conjunto y cleanup |
+
+Los ejemplos con nombres son patrones para planner, no comandos pendientes de interpretar por Junie. JDK21 y dependencias host para Maven; `npm ci --prefix client` antes de Vitest host. Alternativa containerizada y trampas: SETUP. No exigir E2E nueva por cada cambio, duplicar un mismo caso en todas las capas ni crear tests triviales que reflejen la implementación. Conservar las regresiones existentes de seguridad/persistencia y todos sus umbrales. Una prueba dirigida verde solo acredita ese alcance.
+
+La revisión de carga local del 2026-10-19 conserva un FULL de cierre técnico: el inicializador y scripts operativos afectan ambas capas y aislamiento. El costo histórico C35m38s/D40m58s puede variar; no prometer reducción sin medir. Se elimina la repetición por rutina y la actualización de cuatro documentos por cambio pequeño. No se introduce otro dispatcher ni un gate parcial equivalente a FULL. E y la adopción T-000 mantienen aceptación FULL propia.
+
 ## Validación local y CI liviana · decisión del dueño 2026-10-18
 La validación pesada se hace en local. El dueño pidió optimizar para MVP pequeños, reducir esperas y ejecuciones de Actions. Esta decisión sustituye la repetición obligatoria de FULL en CI/implementer/reviewer; conserva la aceptación funcional, las suites, negativos, assertions, cobertura y revisión independiente. No modifica el ruleset ni sus permisos.
 

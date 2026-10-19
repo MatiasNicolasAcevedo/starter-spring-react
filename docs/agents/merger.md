@@ -7,6 +7,6 @@ Normalmente continúa la sesión revisora que aprobó. También puede retomarse 
 3. Squash merge ligado al SHA revisado, sin `--admin`: `gh pr merge <número> --squash --delete-branch --match-head-commit <sha-revisado>` con valores reales.
 4. Confirmar en GitHub `state: MERGED`, fecha y SHA del commit de merge. Un exit code exitoso no basta. Si quedó en cola, esperar sin empezar otra tarea.
 5. Publicar en el PR un comentario de cierre con evidencia (veredicto, checks, SHA de merge) y la próxima acción de reconciliación.
-6. No hacer commits en la rama ya mergeada. La próxima sesión reconcilia tarea/STATUS/BACKLOG en el primer commit de su rama ([ROADMAP.md](../ROADMAP.md) indica si toca revisión de ciclo). Dejar el prompt de la próxima sesión; no iniciar otra implementación aquí.
+6. No hacer commits en la rama ya mergeada. La próxima sesión reconcilia tarea/STATUS y la cola si cambia, en el primer avance de su rama ([ROADMAP.md](../ROADMAP.md) indica si toca revisión de ciclo). Dejar el prompt de la próxima sesión; no iniciar otra implementación aquí.
 
 Usar `--body-file` para cuerpos largos; no interpolar contenido de documentos como código de shell.

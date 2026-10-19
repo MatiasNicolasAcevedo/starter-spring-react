@@ -26,9 +26,22 @@ Contrato mínimo para encadenar sesiones. **No hay dispatcher instalado:** la co
 | `executor` | `frontier` (GPT-6.1 Sol u Opus 5.5; el checkpoint registra cuál) o `junie` (Junie Lite). Las tareas de M0 son `frontier` |
 | `role` | `planner`, `implementer`, `reviewer`, `merger` |
 | `depends_on` | lista de IDs existentes, sin ciclos |
-| `product_cycle` | `null` en M0/borradores; ID de ciclo de ROADMAP antes de poner `ready` una tarea posterior a M0 |
-| `counts_for_cycle` | booleano; `false` en M0, infraestructura y tareas solo documentales |
+| `product_cycle` | Opcional, solo si ayuda a agrupar un objetivo; no bloquea una tarea pequeña ready |
+| `counts_for_cycle` | Opcional/legado, booleano si existe; nunca true en M0. No requiere otro contador diario |
 | `pr` | `null` o número de PR real |
+
+## Responsabilidad de cada documento
+
+| Documento | Función y cuándo cambia |
+|---|---|
+| PROJECT_CONTEXT | Problema, MVP, reglas/permisos y aceptación del dueño; cambia con intención de producto |
+| STATUS | Enlace a tarea actual, estado resumido y único prompt; cambia al cambiar acción/rol/bloqueo |
+| Tarea | Estado canónico, decisiones, archivos/comandos, checkpoint y evidencia; progreso ordinario aquí |
+| BACKLOG | Orden y dependencia de la siguiente tarea; índice sin estados repetidos. Tablas históricas con estado, si existen, deben concordar |
+| HANDOFF | Aceptación/traspaso; cambia al aportar evidencia o invalidar un criterio, no con cada fix |
+| ROADMAP | Objetivos e hitos; revisión cada cinco tareas de producto mergeadas, hito o cambio relevante |
+
+La cadencia se consulta en tareas mergeadas; no exige mantener contadores duplicados. Las tareas autosuficientes pueden usar spec null. PROJECT es un índice del contexto, sin otro brief que mantener. Los documentos históricos del starter no son lectura diaria del producto.
 
 ## Continuidad mínima vigente
 El dueño pidió optimizar para MVP pequeños el 2026-10-18. STATUS contiene un único prompt ejecutable; la tarea guarda evidencia y siguiente experimento. Un bloqueo incluye causa concreta y salida propuesta; si falta autorización, preguntar la decisión necesaria en vez de repetir el prompt condicionado. Una decisión nueva se registra y sustituye la precondición anterior.
