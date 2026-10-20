@@ -3,15 +3,18 @@
 Acción actual y único prompt en [STATUS](STATUS.md); estados y evidencia canónicos en cada tarea. Cambiar este índice solo al cambiar orden/dependencias.
 
 ## En curso
-- [T-004](tasks/T-004-clean-adoption.md): preparación revisada → ensayo E en otra sesión, mismo contrato/rama/único PR. Depende de D MERGED. Sin otra tarea/PR activa.
+- [T-004](tasks/T-004-clean-adoption.md): preparación revisada y ensayo E ejecutado; in_review para revisión independiente de la tarea completa en el mismo PR#5. Depende de D MERGED. Sin otra tarea/PR activa.
 
 ## Siguientes
-Dentro de T-004: E con su contrato existente, contexto ficticio propio y FULL de adopción; después revisión independiente de T-004 completa. No hay otra tarea ready de producto en este starter. El microensayo Junie tiene contrato preparado, sin ejecución ni PR paralelos; solo se ejecuta cuando la fase lo habilite. Tras E MERGED/validada se puede retirar kit y rige exclusivamente PROVENANCE.
+Tras revisión favorable y MERGED de T-004: única continuidad PROVENANCE y retiro del kit por el dueño. No hay otra tarea ready de producto en este starter. El microensayo Junie tiene contrato preparado, sin ejecución ni PR paralelos.
 
 ## Por refinar
 - Callback fallido con sesión previa: evaluar logout forzado cross-site en una tarea futura; no reabrir auth durante esta preparación.
 - Automatizaciones, dispatcher, atestaciones y caché sin medición: fuera del cierre mínimo; reconsiderar solo ante necesidad concreta.
 - docs-check del tablero de listas: validar sección/estado (En curso/Hechas) también en ítems de lista, con negativo; hoy una tarea en vuelo listada en Hechas pasa. Observación O1 de la revisión de preparación de T-004; no amplía E.
+- Huella de ruta de dev.sh: una copia bajo `%TEMP%` tiene dos grafías en Git Bash (`/tmp` y `/c/Users/.../Temp`) y el check con la otra falla cerrado sin mutar. Evaluar normalización compatible con volúmenes existentes. Observación E-O1 de T-004.
+- Imágenes de proyectos efímeros: los ensayos retiran contenedores/redes/volúmenes por label pero dejan imágenes `<proyecto>-*` de nombre único que se acumulan. Evaluar limpieza acotada a imágenes propias. Observación E-O2 de T-004.
+- Conteo de HANDOFF en STATUS: docs-check valida solo la primera ocurrencia y su negativo asume STATUS sin conteo; con un conteo correcto presente, un segundo falso pasa y la regresión falla. Validar todas las ocurrencias con negativo. Observación E-O3 de T-004; STATUS evita hoy ese patrón opcional.
 
 ## Hechas recientes
 - [T-003](tasks/T-003-initializer-beta.md): D y template beta, PR#4 MERGED.

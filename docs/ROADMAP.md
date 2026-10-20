@@ -10,7 +10,7 @@ En las aplicaciones futuras, frontera prepara versiones/iteraciones con objetivo
 
 ## Secuencia contratada
 
-El objetivo vigente es completar este mismo starter de A a E. A/B/C/D están terminadas con revisión/merge/CI comprobados y evidencia propia en sus tareas. D/T-003 cierra S-004 v1 con PR#4 MERGED y template beta comprobado; [T-004](tasks/T-004-clean-adoption.md) contiene la preparación previa in_progress autorizada el 2026-10-19 y el contrato propio E, todavía sin ejecución. Cada parte requiere revisión, squash merge confirmado y CI vigente antes de activar la siguiente.
+El objetivo vigente es completar este mismo starter de A a E. A/B/C/D están terminadas con revisión/merge/CI comprobados y evidencia propia en sus tareas. D/T-003 cierra S-004 v1 con PR#4 MERGED y template beta comprobado; [T-004](tasks/T-004-clean-adoption.md) contiene la preparación revisada y el ensayo E ejecutado el 2026-10-19, en revisión independiente. Cada parte requiere revisión, squash merge confirmado y CI vigente antes de activar la siguiente.
 
 | Parte | Estado real | Resultado en palabras simples |
 |---|---|---|
@@ -18,7 +18,7 @@ El objetivo vigente es completar este mismo starter de A a E. A/B/C/D están ter
 | B | done; PR #2 MERGED y CI FULL PR/main verificadas | Levantar, comprobar, detener y retomar la aplicación conectada a su DB |
 | C | done; PR #3 MERGED, R2/CI liviana exactos, squash comprobado | Incorporar un ejemplo removible completo con permisos y pruebas |
 | D | done; PR#4 MERGED, APROBADO R1/CI liviana exactos, squash idéntico e isTemplate=true | Personalizar la base con un inicializador y habilitarla como template beta |
-| E | Preparación previa en T-004; ensayo E-AC/E1→E4 pendiente en otra sesión | Comprobar desde otra copia limpia que sirve para empezar otra aplicación |
+| E | T-004 in_review: preparación revisada y E1→E4 ejecutados con FULL propio de la copia; revisión independiente y merge pendientes | Comprobar desde otra copia limpia que sirve para empezar otra aplicación |
 
 La aceptación detallada está abajo y en la tarea/spec de cada parte. Refinar solo la próxima parte al habilitarse; una tarea ready pasa a implementación, sin otra ronda de planificación salvo cambio material. Aplicar documentación mínima útil de AGENTS durante el trabajo: comandos de uso en README/SETUP, decisiones en ADR, evidencia en tarea/PR y estado breve con enlaces en el tablero. Materializar aprendizajes en esa base, sin mantener otro manual vivo en el kit transitorio.
 
@@ -39,13 +39,13 @@ La aplicación es un monolito Spring + SPA React + PostgreSQL. Lo que creció de
 | 2 · Preparar uso (D/T-003 done, S-004 v1) | Inicializador, formulario y guía comprobados; evidencia propia y cierre en T-003/PR#4 | FULL local, APROBADO R1/CI y MERGED comprobados; template beta habilitado con límites visibles |
 | 3 · Preparar, revisar y ensayar (E/T-004) | Seguir la guía desde copia limpia con contexto ficticio distinto; levantar/login/CRUD/persistencia/retoma y FULL local, corregir solo defectos comprobados | Recorrido reproducible sin kit, checklist final con evidencia, revisión y merge; starter listo para adopción |
 
-Falta E; A/B/C/D están cerradas. No son nuevas aplicaciones ni funcionalidades de negocio. Presupuesto orientativo: una sesión de trabajo y una revisión para el ensayo restante, ajustado por hallazgos concretos. Las ejecuciones FULL históricas de C duraron aproximadamente34 minutos; su FULL final35m38s no es una validación instantánea ni acredita ahorro medido del gate optimizado.
+Falta cerrar E (revisión y merge de T-004); A/B/C/D están cerradas. No son nuevas aplicaciones ni funcionalidades de negocio. Presupuesto orientativo: una sesión de trabajo y una revisión para el ensayo restante, ajustado por hallazgos concretos. Las ejecuciones FULL históricas de C duraron aproximadamente34 minutos; su FULL final35m38s no es una validación instantánea ni acredita ahorro medido del gate optimizado.
 
 **Proceso desde ahora:** pruebas locales dirigidas durante desarrollo, un FULL local al cerrar las fuentes técnicas; no repetir por documentación idéntica técnicamente ni por rutina de revisión. CI automática de un solo job liviano, FULL remoto solo manual; condiciones y límites en TESTING. Fallo temprano detiene el gate y deja las siguientes suites sin ejecutar. Publicar por avances útiles y conservar revisión independiente; sin cambios de rulesets, servicios nuevos ni runners permanentes.
 
 **Fuera del cierre mínimo:** dispatcher/orquestador, formato de atestación, automatizaciones semanales, nuevas capas de arquitectura, autenticación propia, más features de ejemplo, optimizaciones de caché sin medición y ampliación de D/E. Las reglas de seguridad/datos/cleanup y las versiones del stack se conservan. No borrar el kit ni rehacer el producto para reducir el número de archivos. Para MVP futuros, comenzar por un flujo útil dentro de esta misma arquitectura.
 
-HANDOFF0/22 es una checklist de aceptación final todavía no reconciliada; no expresa0% de implementación. A/B/C/D tienen evidencia y cierres propios en sus tareas. Al cerrar E se reconcilian los criterios con sus fuentes, sin repetir todas las fases solo para actualizar ese contador.
+HANDOFF es la checklist de aceptación final. E la concilió el 2026-10-19 con fuentes propias de A–E, sin repetir fases solo para actualizar el contador: 20/22, con V-03/G-03 pendientes de CI, revisión y merge de T-004.
 
 ## Límites de cierre
 En B, Docker Desktop + Git Bash deben bastar para up/check/down sin Maven, PostgreSQL ni Node instalados en el host; usar runners containerizados para los probes reproducibles y declarar cualquier navegador host opcional. Debe haber cero fallback del perfil real y ningún cambio global de hosts. El check valida estado y contenido, no un 200 que sea index.html. El arranque fallido limpia lo recién creado sin borrar volúmenes preexistentes.

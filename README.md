@@ -2,7 +2,7 @@
 
 Base pública MIT de Java 21 / Spring Boot 4.1.1, React/TypeScript/Vite/MUI y PostgreSQL 18.6. Incluye sesión backend OIDC/CSRF, permisos por propietario, CRUD removible de referencia, migraciones, Swagger opt-in, pruebas y desarrollo local persistente sin Google.
 
-Template beta habilitado tras A/B/C/D MERGED; preparación para frontera → Junie en T-004, ensayo E pendiente. HANDOFF sigue 0/22 NO_LISTO; Google real pendiente del dueño. [Estado y única próxima acción](docs/STATUS.md), [alcance y pendientes](docs/ROADMAP.md), [procedencia](docs/PROVENANCE.md). No equivale a adopción validada.
+Template beta habilitado tras A/B/C/D MERGED; preparación para frontera → Junie y ensayo de adopción E ejecutados en T-004, en revisión independiente. HANDOFF 20/22 NO_LISTO hasta CI, revisión y merge de ese PR; Google real pendiente del dueño. [Estado y única próxima acción](docs/STATUS.md), [alcance y pendientes](docs/ROADMAP.md), [procedencia](docs/PROVENANCE.md). No equivale a adopción validada.
 
 <!-- adoption-guide:start -->
 ## Qué incluye esta base
