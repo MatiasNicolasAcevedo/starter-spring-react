@@ -1,6 +1,6 @@
 ---
 id: T-005
-status: in_progress
+status: in_review
 priority: P1
 size: M
 milestone: M0
@@ -11,7 +11,7 @@ spec_version: null
 depends_on: []
 branch: codex/t-005-generic-baseline
 risk: standard
-role: implementer
+role: reviewer
 executor: frontier
 pr: 6
 ---
@@ -57,6 +57,6 @@ Tiempos secuenciales de pared, no perfil de CPU/I/O ni promesa para otra máquin
 - La matriz exhaustiva se ejecutaba en toda tarea: se separan aplicación y tooling; clasificador conservador exige STARTER para scripts/Compose/dependencias/configuración compartida/desconocidos. Pruebas de rutas, secuencia, no duplicación y fail-fast verdes. Se corrigió la reutilización de un archivo de llamadas entre fixtures de selección.
 
 ## Entrega y pendientes
-Publicar esta ampliación en el mismo PR; después cerrar documentación a in_review/reviewer y exigir CI propia del HEAD final. Esta sesión implementó: no aprueba ni mergea su trabajo. Limpieza del árbol actual, historia Git conservada sin reescribir; adopciones sin historia ni permisos/evidencia heredados. Kit no copiado/borrado.
+Implementación ampliada publicada en 8bbccad931e3aac20a29de267c0065ff468344fa. Cierre solo documental a in_review/reviewer; exigir CI propia del HEAD final antes del veredicto independiente. Regresiones documentales posteriores 20/20 y docs-check exit 0. Esta sesión implementó: no aprueba ni mergea su trabajo. Limpieza del árbol actual, historia Git conservada sin reescribir; adopciones sin historia ni permisos/evidencia heredados. Kit no copiado/borrado.
 
 Decisión del dueño: portfolio personal, 4–5 proyectos alternables, VPS 4 vCPU/8 GB, frontend/backend juntos y PG compartido por bases/roles. Presupuesto máximo US$10–15/mes. Primero desarrollar apps; proveedor/región/dominio y precio/stock/latencia desde Argentina se revalidan al contratar. DEPLOYMENT registra camino y candidatos, sin infraestructura configurada, pagos, deploy, datos reales ni Google real. La base sigue en ajuste para el uso del dueño.
