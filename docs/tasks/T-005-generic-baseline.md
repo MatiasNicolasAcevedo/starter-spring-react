@@ -1,6 +1,6 @@
 ---
 id: T-005
-status: in_review
+status: mergeable
 priority: P1
 size: M
 milestone: M0
@@ -11,7 +11,7 @@ spec_version: null
 depends_on: []
 branch: codex/t-005-generic-baseline
 risk: standard
-role: reviewer
+role: merger
 executor: frontier
 pr: 6
 ---
@@ -93,3 +93,16 @@ Resultado de revalidación afectada: bash scripts/test-init-copy.sh exit 0 en 35
 Conservación acotada: r1r2-evidence-scope.json compara las 237 huellas técnicas de profiles-* con estas fuentes. Solo cambian scripts/lib/init-project-documents.mjs, scripts/lib/init-project-manifest.mjs y scripts/test-init-project.mjs frente a tooling; aplicación/infraestructura/lifecycle/proxies/señales idénticos, con base intacta y cleanup previo válido. Frente a aplicación se reproduce además la única diferencia ya revisada de full.yml (timeout 55→45). Se conserva evidencia previa únicamente para esos ámbitos intactos; no se repiten por rutina ni se declara un nuevo FULL o tooling exhaustivo. No cambia ninguna suite/assertion/cobertura/retry/deadline/señal/cleanup existente.
 
 Publicación de las correcciones: db379b993e7578bfa98706435a76e71a0e44dfb7, mismo PR OPEN/ready. Copia actual: 91 unitarios/slices +75 IT PostgreSQL, JaCoCo, frontend 133 con cobertura/typecheck/lint/formato/build y 23 regresiones de adopción/documentos; cero fallos/errores/omitidos. Namespace propio starter-verify-init-1792538076-94811: comprobación adicional r1r2-cleanup.json container/network/volume 0/0/0. Cierre posterior exclusivamente Markdown a in_review/reviewer; conserva las huellas técnicas probadas, exige docs-check y CI propia del HEAD final. HEAD/CI finales en el comentario de publicación más reciente del PR. Pendiente únicamente revisión de sesión distinta; esta sesión no aprueba/mergea ni acredita adopción/aceptación.
+
+## Checkpoint de revisión R1/R2 · 2026-10-20
+Sesión nueva e independiente de implementación; reviewer de frontera, con continuación merger del mismo PR autorizada por el dueño y AUTONOMY. Codex desktop/API, familia GPT-6 expuesta; identificador runtime exacto y esfuerzo efectivo no expuestos. Terminal PowerShell/Node/Python/Git y conector GitHub; sin delegación ni operación Junie. Impacto propio exclusivamente documental, sin cambios de código, comportamiento/API, permisos, datos ni UI.
+
+HEAD recibido y reconsultado 41d599b19652aacc1436f31c5b953ceeca36a4c8, base main cbaf5b0aaca3212f9c08d870a085a6ba85c8d0b3, coincidentes con publicación final y refs remotas; PR #6 OPEN/ready, único PR abierto, árbol inicialmente limpio. CI propia 39514600133 y job verify-required success; sin reviews formales ni conversaciones pendientes. Los 52 parches remotos reconstruyen los blobs del HEAD local desde esa base (review-r1r2-audit.json). Perfil del diff completo FULL/STARTER. Ruleset main-protection activo: squash, cero aprobaciones formales, resolución de conversaciones, verify-required de integración 15368, strict y ningún bypass.
+
+R1/R2 resueltos sin nuevos bloqueantes: DEPLOYMENT excluye de la copia el bloque obligatorio con decisión fechada/portfolio/presupuesto/candidatos, mantiene una propuesta pendiente de decisiones propias y conserva en el starter el VPS aceptado. El plan completo valida antes de escribir; DEPLOYMENT pertenece al inventario y a las huellas de reinicialización. S-003/SETUP/ARCHITECTURE usan contratos vigentes; comparación de IDs confirma que no se pierde ningún ID técnico. Rojo previo 2/2 por las causas reportadas corroborado en r1r2-red.log; verde actual y guardias 3/3 corroborados. Dirigido propio node --test scripts/test-init-project.mjs: 34/34, exit 0, 49.660 s, incluidos marcadores ausentes/repetidos/invertidos, archivo ausente, dry-run/idempotencia, bytes intactos tras rechazo y edición propia posterior. Log review-r1r2-init-host.log; el intento restringido sin resultado fue interrumpido y no se acredita como ejecución de tests.
+
+Auditoría propia de evidencia (review-r1r2-audit.py/json): r1r2-validation-before/after idénticos y fuentes técnicas actuales coincidentes; 237 huellas técnicas en cada gate profiles-* con before/after idénticos. Frente a tooling cambian exactamente los tres scripts de R1/R2, acreditados por CI actual 114/114 y copia actual exit 0/353.261 s, nunca por tooling viejo. Log r1r2-copy.log confirma 184 archivos inmutables/POM, 91 unitarios/slices +75 IT PostgreSQL/JaCoCo, frontend 133 completo, adopción/docs 23/23 y cleanup 0/0/0; r1r2-cleanup.json lo corrobora para su namespace exacto. Frente a aplicación se reproduce además únicamente la restauración ya revisada del timeout full.yml 55→45, igual al timeout de base. Se conserva evidencia local de aplicación exit 0/711.331 s (15 Playwright reales sin omitidos) y lifecycle/proxies/fallos/preservación/señales intactos del tooling exit 0/1837.722 s con cleanup válido; no se repiten suites largas sin riesgo nuevo. CI liviana no acredita FULL remoto.
+
+Resultado técnico favorable; transición mergeable/merger, todavía sin declarar done. Cierre documental de esta sesión requiere docs-check, regresiones documentales, diff-check, commit/push de tarea/STATUS/BACKLOG y CI propia del nuevo HEAD. El veredicto APROBADO con HEAD/base exactos se publica solo después; no habrá commits posteriores a ese veredicto. Reconsultar esos hechos antes de squash ligado al SHA aprobado, confirmar MERGED y publicar cierre. Si cambia HEAD/base o falla un requisito, conservar checkpoint y devolver a revisión, sin bypass. Próxima sesión tras MERGED: frontera reconcilia T-005 y revisa el objetivo de mantenimiento con el dueño; no existe otra tarea predefinida ready en la cola, por lo que no se inventa ni inicia implementación. Sin aceptación/adopción heredada, compra/deploy, Google/datos reales, otros repos ni kit.
+
+Transición documental comprobada: node --test scripts/ci/docs-check.test.mjs 20/20 exit 0 (review-r1r2-docs-transition.log), node scripts/docs-check.mjs y git diff --check exit 0. Solo tarea/STATUS/BACKLOG cambian; HANDOFF conserva 0/22 sin aceptación heredada. HEAD documental final, CI propia y resultado del merge se registran en los comentarios canónicos del PR, sin commit posterior a la aprobación.

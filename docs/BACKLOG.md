@@ -1,11 +1,11 @@
 # Cola del starter
 
-Próxima acción: revisión independiente de las correcciones R1/R2 de T-005. Estado y prompt en [STATUS](STATUS.md).
+Próxima acción: cierre del mismo PR de T-005 con veredicto/CI propios y merge elegible. Tras MERGED vuelve a frontera/dueño; no hay otra tarea predefinida ready. Estado y prompt en [STATUS](STATUS.md).
 
 ## En vuelo
 | Tarea | Estado | Resultado |
 |---|---|---|
-| [T-005](tasks/T-005-generic-baseline.md) | in_review | R1/R2 publicados; pendiente veredicto de otra sesión |
+| [T-005](tasks/T-005-generic-baseline.md) | mergeable | R1/R2 revisados favorablemente; pendiente cierre con HEAD/base/CI exactos y MERGED confirmado |
 
 ## Por refinar
 - Implementar despliegue compartido después de elegir proveedor/región y aprobar el contrato de [DEPLOYMENT](DEPLOYMENT.md).
