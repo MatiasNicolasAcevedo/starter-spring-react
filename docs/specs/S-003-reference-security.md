@@ -9,7 +9,7 @@ tasks: []
 
 ## Problema y usuario
 El mantenedor necesita un ejemplo completo que pueda reemplazar al crear otra aplicación: persistencia, API, formulario y permisos comprobados con dos identidades. La base actual demuestra auth y disponibilidad; todavía no tiene CRUD de usuario. La referencia será una lista privada de elementos con título y descripción, sin significado comercial ni permisos derivados del proveedor.
-Referencias: [PROJECT_CONTEXT](../../PROJECT_CONTEXT.md), «Objetivo aceptado» y «Alcance y secuencia»; parte C de [ROADMAP](../ROADMAP.md). El contexto genérico no tiene IDs F-/RN-/CA-; los C-AC siguientes trazan este contrato sin inventar reglas de negocio. Auth continúa según [S-001](S-001-auth-google.md), ADR 0002/0003 y las regresiones de B según S-002.
+Referencias: contexto propio en [PROJECT_CONTEXT](../../PROJECT_CONTEXT.md) y recorrido de adopción en [ROADMAP](../ROADMAP.md). Los C-AC siguientes trazan el contrato técnico de la referencia sin inventar reglas de negocio para una aplicación nueva. Auth continúa según [S-001](S-001-auth-google.md), ADR 0002/0003 y las regresiones de disponibilidad y desarrollo local de [S-002](S-002-local-stack.md).
 
 ## Historias y reglas
 1. Una persona autenticada puede crear, listar, consultar, editar y borrar sus elementos. Un visitante no accede a la API privada; la UI ofrece entrar por el login existente. Ninguna identidad puede listar, leer, editar, borrar ni transferirse elementos ajenos.

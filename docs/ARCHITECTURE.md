@@ -46,7 +46,7 @@ Operación: el contenedor `client` (target `runtime`) sirve el build con nginx y
 [TESTING](TESTING.md) conserva FULL, negativos y políticas CI; [SETUP](SETUP.md) conserva comandos y trampas. README diferencia el harness local efímero de dev.sh persistente; comandos y parámetros tienen su fuente canónica en SETUP.
 ADR 0001: versiones/Java/PostgreSQL/build; ADR 0002: OIDC/sesión/CSRF/proxies; ADR 0003: Swagger opt-in loopback/GET/api/docs. Los cambios requieren tarea, decisión y pruebas propias.
 
-## Disponibilidad y desarrollo local (B)
+## Disponibilidad y desarrollo local
 GET /actuator/health/readiness agrega readinessState y db explícitamente; liveness conserva independencia de DB. Backend admite solo GET de health/root, readiness y liveness internos. Los proxies publican exclusivamente GET readiness y rechazan el resto de Actuator antes del fallback SPA, reconstruyendo metadata desde el origen validado. JSON público contiene solo status, sin componentes/detalles; la caída de DB devuelve 503. Adquisición Hikari 2 s, validación 1 s y connectTimeout/socketTimeout PostgreSQL 2 s acotan el probe y su recuperación; afectan también las conexiones ordinarias de esta base sin dominio. Los loggers del health/pool no publican causas de driver de la caída. Contexto de la decisión: [grupos health de Spring Boot](https://docs.spring.io/spring-boot/reference/actuator/endpoints.html).
 
 La UI combina system/info con readiness UP mediante HTTP/Zod/Query; revalida readiness cada 5 s, sin retries y con timeout de petición 5 s. Un error de refetch tiene prioridad sobre datos de cache anteriores. El reintento solicita ambos contratos; conserva el botón montado y lo deshabilita durante fetch. No cambia sesión/CSRF/cache privada.

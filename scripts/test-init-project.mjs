@@ -127,6 +127,60 @@ for (const [label, value, key] of [
 });
 for (const args of [[], [...entries, '--unknown'], [...entries, '--name', 'Duplicado'], entries.slice(0, -1)]) test(`unknown/duplicate/incomplete inputs reject: ${JSON.stringify(args)}`, () => rejectUnchanged(fixture(), args));
 
+test('R1: adoption keeps a generic deployment proposal without maintenance decisions', () => {
+  const path = fixture();
+  const maintenance = readFileSync(join(path, 'docs/DEPLOYMENT.md'), 'utf8');
+  assert.match(maintenance, /Decisión del dueño 2026-10-20: portfolio personal/);
+  assert.match(maintenance, /4 vCPU compartidas y 8 GB RAM/);
+  assert.match(maintenance, /US\$10–15\/mes/);
+  const result = run(path, entries, true);
+  assert.equal(result.status, 0, result.stderr);
+  const proposal = readFileSync(join(path, 'docs/DEPLOYMENT.md'), 'utf8');
+  assert.doesNotMatch(proposal, /Decisión del dueño|2026-10-20|portfolio personal|4–5 proyectos|US\$10–15|Punto de partida aceptado|techo acordado|starter-only/);
+  assert.match(proposal, /Pendiente de decisión del dueño/);
+  assert.match(proposal, /PostgreSQL 18 compartido/);
+  assert.match(proposal, /OIDC\/sesión\/CSRF/);
+  assert.match(proposal, /sin SUPERUSER\/CREATEDB\/CREATEROLE/);
+  assert.match(proposal, /backup\/restore/);
+  const first = snapshot(path);
+  assert.equal(run(path, entries, true).status, 0);
+  assert.deepEqual(snapshot(path), first);
+  writeFileSync(join(path, 'docs/DEPLOYMENT.md'), proposal + '\nDecisión propia posterior.\n');
+  rejectUnchanged(path, entries, /modificada o parcial/);
+});
+
+test('R2: source and adopted technical guides reference current contracts without retired phases', () => {
+  const path = fixture();
+  const obsolete = /parte C|regresiones de B|Entorno de A|\(B\)|Objetivo aceptado|Alcance y secuencia|B agrega/;
+  const guides = ['docs/specs/S-003-reference-security.md', 'docs/SETUP.md', 'docs/ARCHITECTURE.md'];
+  for (const guide of guides) assert.doesNotMatch(readFileSync(join(path, guide), 'utf8'), obsolete, guide);
+  const result = run(path, entries, true);
+  assert.equal(result.status, 0, result.stderr);
+  for (const guide of guides) assert.doesNotMatch(readFileSync(join(path, guide), 'utf8'), obsolete, guide);
+  const spec = readFileSync(join(path, guides[0]), 'utf8');
+  assert.match(spec, /\[S-001\]\(S-001-auth-google.md\)/);
+  assert.match(spec, /\[S-002\]\(S-002-local-stack.md\)/);
+  assert.match(spec, /C-AC-10/);
+  assert.match(spec, /ReferenceItemIT/);
+});
+
+test('deployment boundary is required and rejects missing, repeated or reversed markers before writes', () => {
+  for (const transform of [
+    text => text.replace('<!-- starter-only:start -->', ''),
+    text => text.replace('<!-- starter-only:end -->', ''),
+    text => text.replace('starter-only:start', 'starter-only:swap').replace('starter-only:end', 'starter-only:start').replace('starter-only:swap', 'starter-only:end'),
+    text => text + '\n<!-- starter-only:start -->\n',
+    text => text + '\n<!-- starter-only:end -->\n',
+  ]) {
+    const path = fixture(), file = join(path, 'docs/DEPLOYMENT.md');
+    writeFileSync(file, transform(readFileSync(file, 'utf8')));
+    rejectUnchanged(path, entries, /Frontera de despliegue del starter ausente/);
+  }
+  const path = fixture();
+  unlinkSync(join(path, 'docs/DEPLOYMENT.md'));
+  rejectUnchanged(path, entries, /requerido ausente/);
+});
+
 test('missing source and altered late marker reject before any writes', () => {
   const path = fixture();
   writeFileSync(join(path, 'server/Dockerfile'), 'incompatible');

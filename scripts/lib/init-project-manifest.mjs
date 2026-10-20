@@ -102,6 +102,7 @@ export const RESET_FILES = [
   "docs/BACKLOG.md",
   "docs/HANDOFF.md",
   "docs/AUTONOMY.md",
+  "docs/DEPLOYMENT.md",
   "docs/ORCHESTRATION.md",
   "docs/tasks/T-000-adoption.md"
 ];

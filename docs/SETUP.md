@@ -3,7 +3,7 @@
 Versiones congeladas y efectivas en [DEPENDENCIES](DEPENDENCIES.md). Comandos y versiones vigentes; evidencia por SHA en la tarea activa. Actualizaciones mediante tarea explícita.
 
 ## Requisitos del host
-Docker Desktop abierto (Linux/WSL2), Compose V2 y Git Bash. Node >=24 en host para control cerrado E2E; npm para scripts de navegador. JDK 21 solo para IDE/alternativa backend host; builds ordinarios en contenedor. Entorno de A: Docker 28.5.1, Compose v2.40.2-desktop.1, Git 2.51.1, gh 2.96.0, Node 24.21.0/npm 11.19.0, Corretto 21.0.9. Contenedores Temurin 21.0.12+8, Node 24.21.0, PostgreSQL 18.6.
+Docker Desktop abierto (Linux/WSL2), Compose V2 y Git Bash. Node >=24 en host para control cerrado E2E; npm para scripts de navegador. JDK 21 solo para IDE/alternativa backend host; builds ordinarios en contenedor. Versiones de referencia del host: Docker 28.5.1, Compose v2.40.2-desktop.1, Git 2.51.1, gh 2.96.0, Node 24.21.0/npm 11.19.0, Corretto 21.0.9. Contenedores Temurin 21.0.12+8, Node 24.21.0, PostgreSQL 18.6.
 En PowerShell usar `& "C:\Program Files\Git\bin\bash.exe" scripts/verify.sh`. No ejecutar scripts con otro shell ni modificar configuración global.
 
 ## Primer uso local sin Google
@@ -23,7 +23,7 @@ Abrir la raíz del monorepo. En el plugin Junie, Settings → Tools → Junie �
 
 Recorrido y ejemplo de CLI en [README](../README.md#crear-una-aplicación-y-su-primer-flujo); `node scripts/init-project.mjs --help` detalla entradas. Usar Node >=24 y copia limpia propia. Dry-run por defecto, `--apply` explícito. Nombre/titular admiten letras Unicode, números, espacios y `. , ( ) _ -` (1..100); slug de 2..50 caracteres minúsculos con letra inicial y guiones internos; paquete de al menos dos segmentos Java minúsculos sin palabras reservadas ni namespace java.*. No pasar secretos/contexto privado.
 
-Lista canónica de escrituras/renombres: [init-project-manifest.mjs](../scripts/lib/init-project-manifest.mjs). El script prevalida todos los archivos, marcadores, árbol Java y destinos, rechaza enlaces/junctions/hardlinks, escapes, colisiones y estado parcial antes de escribir. Personaliza identidad visible/API system/info, Java main/test, coordenadas propias Maven/Docker/Compose y MIT. Reinicia documentos operativos y una T-000 de adopción; retira tareas de mantenimiento sin copiarlas ni archivarlas. Las specs técnicas se conservan como contratos, sin acreditar pruebas propias; AUTONOMY vuelve a decisiones pendientes. No toca Git/kit/ignorados/.env real, auth, rutas, migraciones, dependencias/wrappers/locks ni referencia.
+Lista canónica de escrituras/renombres: [init-project-manifest.mjs](../scripts/lib/init-project-manifest.mjs). El script prevalida todos los archivos, marcadores, árbol Java y destinos, rechaza enlaces/junctions/hardlinks, escapes, colisiones y estado parcial antes de escribir. Personaliza identidad visible/API system/info, Java main/test, coordenadas propias Maven/Docker/Compose y MIT. Reinicia documentos operativos y una T-000 de adopción; retira tareas de mantenimiento sin copiarlas ni archivarlas. DEPLOYMENT conserva la propuesta técnica común y excluye la decisión, portfolio, presupuesto y candidatos del mantenimiento; la copia queda pendiente de decisión propia. Las specs técnicas se conservan como contratos, sin acreditar pruebas propias; AUTONOMY vuelve a decisiones pendientes. No toca Git/kit/ignorados/.env real, auth, rutas, migraciones, dependencias/wrappers/locks ni referencia.
 
 `project-identity.json` contiene identidad pública y hashes del resultado. Segundo apply idéntico y dry-run posterior no escriben; después de editar contexto/código no reinicializar: estado diferente se rechaza para preservar cambios. Un error de E/S puede dejar una copia parcial; no se promete transacción de filesystem. Conservar diagnóstico fijo y recrear únicamente una copia descartable propia. El inicializador no borra kit, no invoca Git/red/Docker/npm ni crea repositorios.
 
@@ -64,7 +64,7 @@ Fuentes de la guía: [Google servidor web](https://developers.google.com/identit
 ## OpenAPI y Swagger UI opt-in (ADR 0003)
 STARTER_API_DOCS_ENABLED=false por defecto. Activación solo HTTP loopback; un origen HTTPS/externo o valor distinto de true/false falla con mensaje fijo. Overlays E2E/dev-auth activan explícitamente.
 Mismo origen del client: GET /api/docs/swagger-ui.html → index/recursos, /api/docs/openapi JSON y /api/docs/openapi/swagger-config. GET exclusivamente, servers fijo, UI sin persistAuthorization ni CSRF de UI. Try it out system/info devuelve API real, me anónimo 401. Defaults /v3/api-docs y /swagger-ui no se abren: pueden caer en SPA por proxy, HTTP 200 sin contenido OpenAPI no es éxito.
-Perfil real apagado/restringido según ADR, CSRF intacto en mutaciones. Probar nginx y Vite; B agrega conexión health DB y rutas exactas, sin exposición amplia de Actuator.
+Perfil real apagado/restringido según ADR, CSRF intacto en mutaciones. Probar nginx y Vite; disponibilidad y desarrollo local según [S-002](specs/S-002-local-stack.md), con conexión health DB y rutas exactas, sin exposición amplia de Actuator.
 
 ## Trampas conocidas
 | ID | Síntoma / causa | Regla comprobada de la base, a revalidar |

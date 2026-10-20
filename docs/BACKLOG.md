@@ -5,7 +5,7 @@ Próxima acción: T-005, correcciones R1/R2 en sesión implementer nueva. Estado
 ## En vuelo
 | Tarea | Estado | Resultado |
 |---|---|---|
-| [T-005](tasks/T-005-generic-baseline.md) | changes_requested | Resolver los hallazgos de copia genérica y referencias retiradas |
+| [T-005](tasks/T-005-generic-baseline.md) | in_progress | Resolver los hallazgos de copia genérica y referencias retiradas |
 
 ## Por refinar
 - Implementar despliegue compartido después de elegir proveedor/región y aprobar el contrato de [DEPLOYMENT](DEPLOYMENT.md).

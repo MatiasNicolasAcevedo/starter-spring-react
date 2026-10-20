@@ -7,15 +7,19 @@ export function adoptionDocuments(identity, read) {
     .replace(/^(\| [A-Z]-\d{2} \|[^|]*\|)[^\n]*/gm, '$1 pendiente | Sin evidencia propia; revalidar en T-000 | Dueño y revisor del producto |');
   const guide = read('README.md').match(/<!-- adoption-guide:start -->([\s\S]*?)<!-- adoption-guide:end -->/)?.[1];
   if (!guide) throw new Error('Guía canónica de adopción ausente');
-  const rules = read('AGENTS.md');
-  const boundary = /^<!-- starter-only:start -->\n[\s\S]*?^<!-- starter-only:end -->\n?/m;
-  if ((rules.match(/<!-- starter-only:start -->/g) ?? []).length !== 1
-    || (rules.match(/<!-- starter-only:end -->/g) ?? []).length !== 1 || !boundary.test(rules)) {
-    throw new Error('Frontera de instrucciones del starter ausente');
-  }
-  const agents = rules.replace(boundary, '')
+  const withoutMaintenance = (path, label) => {
+    const source = read(path);
+    const boundary = /^<!-- starter-only:start -->\n[\s\S]*?^<!-- starter-only:end -->\n?/m;
+    if ((source.match(/<!-- starter-only:start -->/g) ?? []).length !== 1
+      || (source.match(/<!-- starter-only:end -->/g) ?? []).length !== 1 || !boundary.test(source)) {
+      throw new Error(`Frontera de ${label} del starter ausente`);
+    }
+    return source.replace(boundary, '');
+  };
+  const agents = withoutMaintenance('AGENTS.md', 'instrucciones')
     .replace('# AGENTS · Starter', `# AGENTS · ${name}`).replaceAll('com.example.starter', packageName);
   return {
+    'docs/DEPLOYMENT.md': withoutMaintenance('docs/DEPLOYMENT.md', 'despliegue'),
     'README.md': `# ${name}\n\n${slug} · MIT · ${holder}. Identidad Java: \`${packageName}\`.\n\nAdopción pendiente: [T-000](docs/${task}), [estado](docs/STATUS.md) y [contexto propio](PROJECT_CONTEXT.md). Ninguna prueba ni permiso GitHub se hereda. Google real pendiente del dueño; OIDC local usa datos ficticios.\n\n${guide.trim()}\n`,
     'PROJECT_CONTEXT.md': `# Contexto de ${name}\n\nEstado: borrador, pendiente de aceptación del dueño. Identidad: ${slug}; titular MIT: ${holder}.\n\nFrontera reutiliza la idea pulida y el [formulario breve](docs/templates/project-context.md); completar aquí con respuestas propias, sin repetir preguntas resueltas ni inventar negocio a partir del nombre.\n\n## Problema, usuario y resultado\nPendiente de la idea del dueño.\n\n## Flujo central y MVP\nPendientes flujo observable, alcance y exclusiones.\n\n## Datos, reglas y permisos\nPendientes recursos, validación y actor permitido/denegado.\n\n## Aceptación y decisiones\nPendientes ejemplos de éxito/error/denegación y decisiones bloqueantes. Separar confirmado/propuesto/pendiente. Contexto aceptado antes de refinar primer flujo; no incluir secretos ni datos personales.\n`,
     'docs/PROJECT.md': `# Proyecto ${name}\n\nContrato propio: [PROJECT_CONTEXT](../PROJECT_CONTEXT.md). Adopción y aceptación pendientes en [T-000](${task}); arquitectura técnica heredada en [ARCHITECTURE](ARCHITECTURE.md). Ninguna entrega del starter acredita este producto.\n`,

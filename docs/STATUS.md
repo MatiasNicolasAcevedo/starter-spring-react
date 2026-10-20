@@ -3,8 +3,8 @@
 | Campo | Valor |
 |---|---|
 | Tarea y contrato | [T-005](tasks/T-005-generic-baseline.md) |
-| Estado | changes_requested |
-| Acción actual | Nueva sesión implementer: resolver R1/R2 de la revisión independiente, misma tarea y PR |
+| Estado | in_progress |
+| Acción actual | Implementer corrige R1/R2 y revalida adopción en la misma tarea y PR |
 | Rama / PR | codex/t-005-generic-baseline · [PR #6](https://github.com/MatiasNicolasAcevedo/starter-spring-react/pull/6) |
 
 La base sigue en ajuste para el uso del dueño. Evidencia y comandos en la tarea; HEAD/CI propios del cierre en el comentario de publicación más reciente del PR. Proveedor/región/dominio pendientes para cuando exista una app; ningún despliegue ni ejecución Junie acreditados. Kit sin operar.
