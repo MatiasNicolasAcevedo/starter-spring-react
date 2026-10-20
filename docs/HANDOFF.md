@@ -2,7 +2,7 @@
 
 Checklist propia de 22 criterios. Las reglas y suites del snapshot son heredadas; su evidencia no verifica el starter ni una aplicación futura. Cada producto vuelve a evaluar todos los criterios desde su contexto.
 
-- **Veredicto:** `NO_LISTO` — 20/22 verificados.
+- **Veredicto:** `NO_LISTO` — 21/22 verificados.
 - **Continuidad:** `POR_SESION`.
 - **Merge:** `AUTOMATICO_ELEGIBLE` solo con AUTONOMY/checks/veredicto independiente vigentes; no autoriza merge propio.
 
@@ -23,7 +23,7 @@ Checklist propia de 22 criterios. Las reglas y suites del snapshot son heredadas
 | S-03 | Google real: smoke del dueño o pendiente externo explícito, responsable y acción sin secretos | verificado | Propia: 2026-10-19 pendiente externo explícito: el dueño ejecuta el smoke con su configuración privada según SETUP · Google OIDC real; agentes no lo operan; perfil real sin fallback probado en FULL (T-004 · E3) | Dueño; registrar fecha/resultado saneados al ejecutarlo |
 | V-01 | Unitarios/slices, PostgreSQL IT, componentes, typecheck/lint/formato/build reales | verificado | Propia: 2026-10-19 FULL de la copia: 91 unitarios/slices, 75 IT PostgreSQL, JaCoCo, client 133 con typecheck/lint/formato/cobertura/build (T-004 · E3) | Frontera/revisor; revalidar en starter y cada adopción |
 | V-02 | Playwright desktop/móvil con API/DB/OIDC reales, errores, saneamiento y cleanup labels cero | verificado | Propia: 2026-10-19 Playwright 15/15 desktop/móvil con API/DB/OIDC reales, export saneado y labels 0/0/0 en el FULL de la copia (T-004 · E3) | Frontera/revisor; revalidar en starter y cada adopción |
-| V-03 | FULL local y CI requerida del HEAD publicado verdes, sin omitidos interpretados como éxito | pendiente | FULL de la copia verde 2026-10-19 y FULL de preparación sobre la misma huella técnica (T-004); falta verify-required del HEAD final de PR#5 | Reviewer de T-004: comprobar CI del HEAD revisado |
+| V-03 | FULL local y CI requerida del HEAD publicado verdes, sin omitidos interpretados como éxito | verificado | Propia: FULL preparación/copia 2026-10-19 corroborados por reviewer independiente el 2026-10-20, mismas fuentes/base; verify-required success de 5150c17/base 6c5d4cd, run 39351806579. HEAD documental final, su CI exacta y veredicto se registran en [PR#5](https://github.com/MatiasNicolasAcevedo/starter-spring-react/pull/5) antes de aprobar/mergear (T-004 · revisión completa) | Reviewer/merger: exigir CI propia del HEAD final; invalidar si cambia base/fuentes o falla |
 | G-01 | Git propio, licencia, kit excluido, repo y ruleset efectivos propios; copia sin kit funciona | verificado | Propia: repo, MIT y ruleset propios desde 2026-10-17 (AUTONOMY, T-000); 2026-10-19 copia sin kit ni Git del starter funciona hasta FULL (T-004 · E1–E3) | Frontera/revisor; revalidar en starter y cada adopción |
 | G-02 | Autonomía propia, capacidades Git/PR/CI y continuidad/merge comprobadas | verificado | Propia: AUTONOMY y PR#1–#4 2026-10-17/19 con CI, revisión de sesión distinta y squash confirmados (T-000…T-003); la copia nace con AUTONOMY pendiente (T-004 · E1) | Frontera/revisor; revalidar en starter y cada adopción |
 | G-03 | PRs revisados en sesión distinta, checks y merges confirmados sobre SHA/base | pendiente | PR#1–#4 revisados y mergeados con evidencia en T-000…T-003; falta revisión independiente, CI y merge confirmados de PR#5 | Reviewer/merger de T-004 |
@@ -35,6 +35,6 @@ Checklist propia de 22 criterios. Las reglas y suites del snapshot son heredadas
 ## Pendientes externos
 Esta checklist es aceptación/traspaso, no un formulario de progreso diario. Actualizar solo criterios cuya evidencia cambie o quede invalidada; progreso y comandos en la tarea actual, acción/rol en STATUS.
 
-A/B/C/D MERGED con evidencia propia en sus [tareas](BACKLOG.md#hechas-recientes); beta limitada al camino local/OIDC ficticio. [T-004](tasks/T-004-clean-adoption.md) ejecutó el ensayo E el 2026-10-19 y concilió los criterios con fuentes propias; V-03 y G-03 esperan CI del HEAD final, revisión independiente y MERGED de PR#5. Sin STARTER_VALIDADO mientras E siga abierta; ninguna ejecución Junie acreditada.
+A/B/C/D MERGED con evidencia propia en sus [tareas](BACKLOG.md#hechas-recientes); beta limitada al camino local/OIDC ficticio. [T-004](tasks/T-004-clean-adoption.md) ejecutó E el 2026-10-19; revisión completa independiente favorable el 2026-10-20 con FULL/huellas/dirigidos corroborados. V-03 tiene evidencia propia y exige reconsulta de CI del HEAD documental final antes de APROBADO; G-03 espera MERGED de PR#5 y se confirma en su cierre canónico sin commits en rama mergeada. Sin STARTER_VALIDADO mientras E siga abierta; ninguna ejecución Junie acreditada.
 
 Google real pendiente externo del dueño según SETUP; sin fallback del perfil real. El destino autosuficiente y retiro posterior del kit están en [PROJECT_CONTEXT](../PROJECT_CONTEXT.md#adopción-futura). Kit conservado hasta E MERGED y validada, retiro por el dueño. Única continuidad final de este starter: [PROVENANCE](PROVENANCE.md).

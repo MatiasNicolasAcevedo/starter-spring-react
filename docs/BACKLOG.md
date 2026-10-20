@@ -3,7 +3,7 @@
 Acción actual y único prompt en [STATUS](STATUS.md); estados y evidencia canónicos en cada tarea. Cambiar este índice solo al cambiar orden/dependencias.
 
 ## En curso
-- [T-004](tasks/T-004-clean-adoption.md): preparación revisada y ensayo E ejecutado; in_review para revisión independiente de la tarea completa en el mismo PR#5. Depende de D MERGED. Sin otra tarea/PR activa.
+- [T-004](tasks/T-004-clean-adoption.md): revisión completa favorable; mergeable en PR#5, pendiente de CI/veredicto del HEAD documental final y MERGED para habilitar la única continuidad PROVENANCE. D MERGED. Sin otra tarea/PR activa.
 
 ## Siguientes
 Tras revisión favorable y MERGED de T-004: única continuidad PROVENANCE y retiro del kit por el dueño. No hay otra tarea ready de producto en este starter. El microensayo Junie tiene contrato preparado, sin ejecución ni PR paralelos.
