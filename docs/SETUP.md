@@ -1,6 +1,6 @@
 # SETUP · Entorno y operación
 
-Versiones congeladas y efectivas en [DEPENDENCIES](DEPENDENCIES.md). Comandos heredados conservados; evidencia propia por SHA en la tarea activa. No actualizaciones a latest durante extracción.
+Versiones congeladas y efectivas en [DEPENDENCIES](DEPENDENCIES.md). Comandos y versiones vigentes; evidencia por SHA en la tarea activa. Actualizaciones mediante tarea explícita.
 
 ## Requisitos del host
 Docker Desktop abierto (Linux/WSL2), Compose V2 y Git Bash. Node >=24 en host para control cerrado E2E; npm para scripts de navegador. JDK 21 solo para IDE/alternativa backend host; builds ordinarios en contenedor. Entorno de A: Docker 28.5.1, Compose v2.40.2-desktop.1, Git 2.51.1, gh 2.96.0, Node 24.21.0/npm 11.19.0, Corretto 21.0.9. Contenedores Temurin 21.0.12+8, Node 24.21.0, PostgreSQL 18.6.
@@ -35,7 +35,7 @@ up construye y espera el stack, o comprueba uno propio ya activo sin recrearlo; 
 
 OIDC local conserva http://host.docker.internal:PUERTO/default desde navegador y backend. Los runners usan DNS Docker y el origen público exacto, sin hosts globales ni desactivar validaciones. Un navegador host es opcional. En Windows, para login manual usar un perfil de navegador efímero propio y resolución por proceso --host-resolver-rules="MAP host.docker.internal 127.0.0.1" (TR-11); no afecta otros perfiles ni el sistema. Las sondas/navegador containerizados son el ensayo portable. No usar un navegador preexistente con cookies personales para automatización.
 
-El harness heredado sigue separado: bash scripts/dev-auth.sh nginx starter-dev-auth-local-nginx session (o vite con su namespace). Perfil e2e y fixtures ficticias explícitas; Ctrl-C/stop elimina su DB. Acciones status/restart/rebuild/stop conservan la sesión efímera y sus negativos. No editar scripts Bash mientras estén corriendo.
+El harness efímero es una entrada separada: bash scripts/dev-auth.sh nginx starter-dev-auth-local-nginx session (o vite con su namespace). Perfil e2e y fixtures ficticias explícitas; Ctrl-C/stop elimina su DB. Acciones status/restart/rebuild/stop conservan la sesión efímera y sus negativos. No editar scripts Bash mientras estén corriendo.
 
 ## Comandos de verificación aislada
 ```bash
@@ -56,7 +56,7 @@ Un origen absoluto sin path/query/fragment/userinfo: HTTPS o HTTP loopback. Prox
 
 ## Google OIDC real
 Solo el dueño configura y opera este camino. Perfil default google exige APP_PUBLIC_URL, GOOGLE_CLIENT_ID y GOOGLE_CLIENT_SECRET backend. Issuer fijo https://accounts.google.com, scopes openid profile email; no fallback ni mezcla con test/e2e.
-Guía heredada, a revalidar por el dueño al usarla: en Google Auth Platform crear app/audiencia y cliente Web; incluir cuenta de prueba si está Testing. Redirect URI exacta http://127.0.0.1:5173/login/oauth2/code/google (o 5174 si se elige Vite), sin comodines; despliegue real HTTPS. No requiere JavaScript origins ni SDK browser. Guardar secreto en gestor y .env privado ignorado, nunca chats/PR/logs.
+Configuración a realizar por el dueño: en Google Auth Platform crear app/audiencia y cliente Web; incluir cuenta de prueba si está Testing. Redirect URI exacta http://127.0.0.1:5173/login/oauth2/code/google (o 5174 si se elige Vite), sin comodines; despliegue real HTTPS. No requiere JavaScript origins ni SDK browser. Guardar secreto en gestor y .env privado ignorado, nunca chats/PR/logs.
 Con su configuración privada: `docker compose up -d --build --wait`; abrir UI, ingresar, recargar, logout y me 401. Cancelación muestra mensaje fijo; logout local no cierra Google. Reiniciar/rebuild conserva identidad DB pero pierde sesión en memoria. `docker compose down` conserva volumen; no usar down -v con datos persistentes sin autorización específica.
 Registrar fecha/resultado saneados en HANDOFF S-03, sin emails/nombres/cookies. Estado actual: pendiente externo del dueño; agentes no lo operan.
 Fuentes de la guía: [Google servidor web](https://developers.google.com/identity/protocols/oauth2/web-server), [clientes](https://support.google.com/cloud/answer/15549257), [audiencia](https://support.google.com/cloud/answer/15549945).
@@ -81,7 +81,7 @@ Perfil real apagado/restringido según ADR, CSRF intacto en mutaciones. Probar n
 | TR-10 | headless window-size a 375 recorta por mínimo 504 | CDP Emulation.setDeviceMetricsOverride para smokes; Playwright viewport 375/1280 |
 | TR-11 | host.docker.internal Windows no apunta a loopback publicado | Resolución por proceso del hostname exacto en probe/Edge; preservar URL/Host/issuer/claims. Docker usa alias de red; sin hosts globales ni desactivar validaciones |
 | TR-12 | TEMP Git Bash aparece /tmp y control E2E no ve request.json | Con MSYS_NO_PATHCONV, convertir solo STARTER_E2E_ARTIFACTS con cygpath -m; Node Windows y bind Docker usan misma ruta nativa. Linux conserva ruta. Verificar bind/sonda bidireccional; no aumentar timeouts |
-| TR-13 | Docker reasigna el puerto host dinámico al stop/start; el datasource de Testcontainers conserva el anterior | ReadinessIT interrumpe PostgreSQL con pause/unpause en la misma dirección; el ensayo Compose prueba stop/start por servicio interno. No ampliar timeouts ni cambiar el datasource para ocultar el fallo.. |
+| TR-13 | Docker reasigna el puerto host dinámico al stop/start; el datasource de Testcontainers conserva el anterior | ReadinessIT interrumpe PostgreSQL con pause/unpause en la misma dirección; el ensayo Compose prueba stop/start por servicio interno. No ampliar timeouts ni cambiar el datasource para ocultar el fallo. |
 | TR-14 | El ensayo contaba como recuperación el check negativo con la DB aún detenida | Sincronizar navegador/controlador antes de start: la ventana de 30 s incluye arranque y recuperación, después del check negativo. Mantener caída y recuperación separadas y los límites intactos. |
 | TR-15 | En Linux Docker crea un bind source ausente como root y el host no puede escribir IPC/HMR | El ensayo crea su directorio nuevo de artefactos desde el host antes del primer bind, después de validar ausencia e instalar cleanup. No cambiar permisos globales. |
 

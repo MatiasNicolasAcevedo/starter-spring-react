@@ -1,6 +1,6 @@
 ---
 id: T-005
-status: in_progress
+status: in_review
 priority: P1
 size: M
 milestone: M0
@@ -11,9 +11,9 @@ spec_version: null
 depends_on: []
 branch: codex/t-005-generic-baseline
 risk: standard
-role: implementer
+role: reviewer
 executor: frontier
-pr: null
+pr: 6
 ---
 # T-005 · Base inicial genérica y operación económica
 
@@ -31,20 +31,30 @@ Autorización del dueño 2026-10-20: limpiar documentación/historia operativa; 
 - AC-05: docs-check, regresiones afectadas y FULL local válidos; PR propio a revisión independiente. Esta sesión no revisa ni mergea su implementación.
 
 ## Pruebas y checkpoint
-Rol planner/implementer de frontera autorizado por el nuevo pedido; Codex desktop/API, familia GPT-6 expuesta; runtime exacto y esfuerzo efectivo no verificables. Sin delegación ni selección simulada. Herramientas: terminal PowerShell/Git Bash, Git/gh, Python/Node/Docker, web y documentación oficial. Impacto: documentos, personalización documental y observabilidad del gate; comportamiento de aplicación/API/permisos/datos/UI sin cambios.
+Rol planner/implementer de frontera por el pedido del dueño; Codex desktop/API, familia GPT-6 expuesta, runtime exacto y esfuerzo efectivo no verificables. Sin delegación ni selección simulada. Terminal/Git/gh, Python/Node/Git Bash/Docker, web y documentación oficial. Impacto: documentos, personalización y observabilidad del gate; aplicación/API/auth/datos/UI sin cambios. Una assertion previa fortalece la precondición de un test de sesión; client/AGENTS leído.
 
-Base `cbaf5b0aaca3212f9c08d870a085a6ba85c8d0b3`, main remoto comprobado y cero PR abiertos. Rama exacta del frontmatter. Evidencia local ignorada en `.orchestrator/t-005/`. Preservar cambios externos y kit. Antes de FULL guardar aquí comando/recursos/cleanup; no editar fuentes durante la corrida.
+Base `cbaf5b0aaca3212f9c08d870a085a6ba85c8d0b3`, main remoto comprobado, único trabajo activo. Evidencia ignorada: `.orchestrator/t-005/` (dirigidos, full.log, full-result.json, full-line-times.jsonl, full-before/full-after.json, timing-analysis.json). Fuentes congeladas durante FULL, todas las huellas antes/después idénticas.
 
-Dirigidos: `node scripts/docs-check.mjs`; `node --test scripts/test-init-project.mjs scripts/ci/docs-check.test.mjs`; matrices de herramientas según TESTING; FULL `bash scripts/verify.sh` sin opciones, entorno ficticio y proyectos únicos. Primera regresión del inicializador: la copia no debe recibir `docs/archive`; log initializer-red.log, resultado pendiente. Próxima acción: completar limpieza, comprobar rojos/verdes y medir FULL antes de publicar.
+Gate exacto: `COMPOSE_ENV_FILES=.env.example COMPOSE_PROJECT_NAME=starter-verify-t005-baseline-20261020 STARTER_E2E_PROJECT=starter-e2e-t005-baseline-20261020 STARTER_SERVER_TESTS=container bash scripts/verify.sh`, sin opciones. Preflight vacío, fixtures y namespaces propios; cleanup por labels, nunca prune, kit/Google real/recursos ajenos sin operar.
 
-## Pendientes
-Proveedor, región, dominio y compra quedan para el dueño. La arquitectura de producción se documenta como propuesta; no acredita despliegue ni capacidad medida. Revisión y merge de esta tarea en sesión distinta.
+Resultado 2026-10-20: FULL exit 0 en 2513.545 s (41m53.5s), cleanup 0/0/0 y huellas iguales. Backend 91 unitarios/slices + 75 IT, client 133, Playwright 15/15 sin omitidos. Dirigidos inicializador/documentación 48/48; dirigido de sesión 19/19. Posteriores cambios solo Markdown conservan la evidencia si base/fuentes técnicas coinciden; docs-check antes de publicar. No se acredita despliegue ni uso real de Junie.
 
-## Validación de fuentes finales
-Regresión roja confirmada: la copia heredaba docs/archive. Tras retirar el archivado y mantener lista explícita de bajas, 48/48 dirigidos verdes (31 inicializador + 17 contrato documental), sin omitidos/cancelados; docs-check 42 Markdown/1 tarea/0 de 22. Diagnósticos resueltos antes del gate: bajas documentales aún sin indexar en el export de fixtures; una llamada residual a rewriteLinks tras retirar el archivo. No se rebajaron controles ni assertions útiles.
+| Etapa medida | Tiempo de pared |
+|---|---|
+| Docs / backend / client | 4 s / 244 s / 49 s |
+| Matriz inicializador / copia compilable / guardias | 48 s / 308 s / 27 s |
+| Desarrollo persistente nginx / Vite | 286 s / 297 s |
+| Fallos/rollback/preservación | 548 s |
+| Copia sin Git/kit / señales proxies / matriz proxies | 120 s / 25 s / 134 s |
+| Bloque stack/Playwright/saneador/cleanup | 422 s |
 
-Antes de FULL: base/HEAD de partida cbaf5b0aaca3212f9c08d870a085a6ba85c8d0b3; comando exacto COMPOSE_ENV_FILES=.env.example COMPOSE_PROJECT_NAME=starter-verify-t005-baseline-20261020 STARTER_E2E_PROJECT=starter-e2e-t005-baseline-20261020 STARTER_SERVER_TESTS=container bash scripts/verify.sh, sin opciones. Preflight vacío por labels exactos; stacks hijos ficticios con namespaces propios y cleanup interno. Logs full.log/full-line-times.jsonl/full-result.json y huellas full-before/full-after.json en .orchestrator/t-005. Cleanup solo del proyecto de verificación propio y comprobación 0/0/0 del E2E; nunca prune ni recursos persistentes ajenos. Fuentes congeladas durante la corrida. Siguiente paso: interpretar tiempos y resultados, publicar al pasar gate; cerrar Markdown sin repetir FULL si base/fuentes coinciden.
+Playwright reporta 383.134 s de ejecución total; suma por casos 180.665 s (diferencia incluye preparación/fixtures/runner). Backend original: Surefire ~39 s, Failsafe ~144 s; Maven total 239 s, wrapper 244 s. Vitest 20.66 s en origen y 17.74 s en copia. Tiempos de pared, no perfil de CPU/I/O puro; etapas secuenciales y red/caché variables. La validación del tooling anterior al bloque final consume 1793 s (29m53s): separar frecuencias por alcance es una propuesta futura, sin suprimir suites en este cambio.
 
-FULL intento 1: exit 1 a los 311.9 s, docs 6 s/backend 257 s verdes; client 47 s (132/133, un fallo), E2E no ejecutada. Cleanup 0/0/0 y huellas idénticas. Evidencia conservada en attempt1-*. Causa de la prueba de logout fallida: su assertion de conservar datos privados no esperaba que esos datos existieran antes de cerrar sesión; la habilitación del botón depende de auth/CSRF, no de completar la consulta privada. Arreglo mínimo: esperar explícitamente Datos de Persona A antes de la acción, conservando todas las assertions posteriores, casos, cobertura y deadlines. client/AGENTS leído; solo cambia una precondición del test, sin código de aplicación. Validar dirigido antes de repetir FULL; no reintentar para buscar verde.
+## Correcciones significativas
+- Regresión roja propia: la aplicación nueva recibía docs/archive. El inicializador retira tareas de mantenimiento sin archivarlas; conserva guardias, dry-run/idempotencia y compilación. Matriz verde 48/48. Diagnósticos previos resueltos: bajas sin indexar en fixtures y llamada residual al reescritor de enlaces retirado.
+- Primer FULL falló en client (132/133; E2E no ejecutada, cleanup completo); evidencia attempt1-* conservada. El test exigía conservar datos sin esperar su carga inicial. Se añadió esa precondición, manteniendo assertions posteriores/casos/cobertura/timeouts/retries. Dirigido 19/19 y FULL final verdes; sin código de aplicación modificado.
 
-Dirigido del arreglo de precondición: npm test -- --run src/features/auth/AuthSession.test.tsx desde client, exit 0, 19/19 en 9.51 s. Reiniciar FULL con los mismos controles, nueva huella de fuentes y namespaces propios ya comprobados vacíos; conservar attempt1 como fallo real, sin atribuirlo a FULL verde. Sin cambios de comportamiento de sesión.
+## Entrega y pendientes
+Limpieza del árbol actual; historial Git conservado sin reescribir. Revisión independiente de este PR pendiente; no merge propio ni done con PR abierto. Proveedor/región/dominio y gasto quedan para el dueño; DEPLOYMENT es propuesta, sin contratación. Kit no copiado/borrado. Implementación publicada en PR #6, commit c048aaa. Esta transición solo Markdown fija in_review/reviewer; exigir CI propia del HEAD final antes del veredicto independiente.
+
+Matriz local equivalente a CI: 99/99 exit 0, 43.8 s; docs-check y diff-check finales exit 0. Cambios posteriores al FULL solo Markdown, huella técnica comprobada idéntica. Árbol sin identificadores del origen ni referencias a la continuidad retirada; 1110 líneas netas menos antes de la transición final. Descripción pública actualizada a Generic Spring Boot, React and PostgreSQL starter; is_template=true y base main conservados. Sin modificación de protecciones, visibilidad ni permisos.

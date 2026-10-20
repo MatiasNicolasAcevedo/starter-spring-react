@@ -8,7 +8,7 @@ tasks: []
 # S-001 · Identidad Google, sesión backend y CSRF
 
 ## Problema y usuario
-Visitante y usuario autenticado necesitan entrar, reconocer su sesión y salir sin exponer credenciales a la SPA. Contrato heredado vigente, revalidado por las suites de auth. Decisión duradera: [ADR 0002](../adr/0002-google-oidc-session-csrf-and-proxy.md).
+Visitante y usuario autenticado necesitan entrar, reconocer su sesión y salir sin exponer credenciales a la SPA. Contrato vigente, comprobado por las suites de auth. Decisión duradera: [ADR 0002](../adr/0002-google-oidc-session-csrf-and-proxy.md).
 
 ## Historias y reglas
 1. Visitante inicia una navegación completa a `/oauth2/authorization/google`; Spring Security ejecuta Authorization Code con `openid profile email`. Intercambio del code, ID token, validación y UserInfo ocurren en backend. No password, Basic, JWT propio, implicit flow ni tokens del proveedor en JavaScript, almacenamiento o respuestas API.
@@ -58,20 +58,20 @@ Logout: deshabilitar botón mientras pendiente, cancelar requests de usuario y e
 Usar `app_user` y constraint única de V1; ninguna nueva tabla de dominio o token persistido. Actualizar atributos y `updated_at` con Clock UTC, conservar `id/issuer/subject/created_at`. Probar alta repetida/concurrente sobre PostgreSQL real. No borrar usuarios al logout. Sin migración prevista; si cambia el esquema, justificar dentro de esta tarea con prueba desde DB vacía y existente, sin tocar V1 publicada. Reversión de código de auth conserva identidades; no elimina volumen ni datos. OpenAPI documenta me/csrf y seguridad cookie/CSRF sin ejemplo de credencial real.
 
 ## Criterios de aceptación
-Contrato y matriz heredados, sin estado operativo del origen. Las pruebas siguen presentes; ejecutar FULL/CI sobre el SHA publicado. OpenAPI apagado conserva denegaciones; ADR 0003 define opt-in local GET bajo /api/docs. Google real siempre pendiente externo del dueño hasta su evidencia.
+Contrato y matriz de autenticación. Las pruebas siguen presentes; ejecutar FULL/CI sobre el SHA publicado. OpenAPI apagado conserva denegaciones; ADR 0003 define opt-in local GET bajo /api/docs. Google real siempre pendiente externo del dueño hasta su evidencia.
 
 | ID | Dado / cuando / entonces | Contrato | Nivel / archivo previsto | Estado |
 |---|---|---|---|---|
-| AC-01 | OIDC válido crea usuario; segundo login conserva ID y actualiza atributos; mismo email con identidad distinta no fusiona; concurrencia no duplica | Contrato genérico de auth | unit `IdentityServiceTest`; PostgreSQL `IdentityServiceIT` | Heredada; revalidar |
-| AC-02 | Login por HTTP real recorre authorize/token/JWKS/UserInfo/callback, cambia session ID y me identifica al usuario; recarga conserva sesión | Contrato genérico de auth | protocolo `OidcLoginIT` + smoke navegador | Heredada; revalidar |
-| AC-03 | Anónimo me/privada → 401 JSON; login no da roles de aplicación; rutas vecinas no se abren | Contrato genérico de auth | slice `AuthControllerTest`, `SecurityConfigTest` con oidcLogin | Heredada; revalidar |
-| AC-04 | CSRF obtenido permite POST; ausente/incorrecto → 403; login/logout renuevan cookie y el token anterior no valida sin su cookie correspondiente | Contrato genérico de auth | slice + HTTP `OidcLoginIT`, client `csrf.test.ts` | Heredada; revalidar |
-| AC-05 | Logout POST → 204, sesión vieja no accede a me, cookies borradas; GET no cierra; DB conserva usuario | Contrato genérico de auth | slice + protocolo `OidcLoginIT` | Heredada; revalidar |
-| AC-06 | state/nonce erróneos o ausentes, issuer/aud erróneos, firma alterada, token vencido y cancelación fallan sin alta/auth; callback huérfano/repetido no reutiliza sesión | Contrato genérico de auth | HTTP `OidcLoginIT` con proveedor/fixtures reales | Heredada; revalidar |
-| AC-07 | Proxy respeta APP_PUBLIC_URL, callback/origen público/puerto exactos; HTTPS Secure, HTTP local permitido; spoofing y acceso directo no amplían confianza | Contrato genérico de auth | HTTP `PublicOriginIT` + comprobación nginx/Vite aislados | Heredada; revalidar |
-| AC-08 | Perfiles reales no seleccionan mock; perfil mixto/config inválida falla; sin credenciales no hay fallback; issuer/JWKS alcanzables desde ambos lados | Contrato genérico de auth | arranque `OidcProfileTest` + integración/red | Heredada; revalidar |
-| AC-09 | UI entrada/sesión/logout/cancelación/error/reintento accesibles; 401 limpia cache; 403/red no fingen logout; no tokens del proveedor en browser | Contrato genérico de auth | componentes `AuthSession.test.tsx`, `AppRoutes.test.tsx`, `http.test.ts` + navegador 375/1280 | Heredada; revalidar |
-| AC-10 | Docs y OpenAPI corresponden al código; guía Google exacta y estado real externo explícito; FULL verde local y CI del HEAD | Contrato genérico de auth | gate `bash scripts/verify.sh`; revisión SHA/CI; smoke Google externo separado | Heredada; revalidar |
+| AC-01 | OIDC válido crea usuario; segundo login conserva ID y actualiza atributos; mismo email con identidad distinta no fusiona; concurrencia no duplica | Contrato genérico de auth | unit `IdentityServiceTest`; PostgreSQL `IdentityServiceIT` | Verificar en la adopción |
+| AC-02 | Login por HTTP real recorre authorize/token/JWKS/UserInfo/callback, cambia session ID y me identifica al usuario; recarga conserva sesión | Contrato genérico de auth | protocolo `OidcLoginIT` + smoke navegador | Verificar en la adopción |
+| AC-03 | Anónimo me/privada → 401 JSON; login no da roles de aplicación; rutas vecinas no se abren | Contrato genérico de auth | slice `AuthControllerTest`, `SecurityConfigTest` con oidcLogin | Verificar en la adopción |
+| AC-04 | CSRF obtenido permite POST; ausente/incorrecto → 403; login/logout renuevan cookie y el token anterior no valida sin su cookie correspondiente | Contrato genérico de auth | slice + HTTP `OidcLoginIT`, client `csrf.test.ts` | Verificar en la adopción |
+| AC-05 | Logout POST → 204, sesión vieja no accede a me, cookies borradas; GET no cierra; DB conserva usuario | Contrato genérico de auth | slice + protocolo `OidcLoginIT` | Verificar en la adopción |
+| AC-06 | state/nonce erróneos o ausentes, issuer/aud erróneos, firma alterada, token vencido y cancelación fallan sin alta/auth; callback huérfano/repetido no reutiliza sesión | Contrato genérico de auth | HTTP `OidcLoginIT` con proveedor/fixtures reales | Verificar en la adopción |
+| AC-07 | Proxy respeta APP_PUBLIC_URL, callback/origen público/puerto exactos; HTTPS Secure, HTTP local permitido; spoofing y acceso directo no amplían confianza | Contrato genérico de auth | HTTP `PublicOriginIT` + comprobación nginx/Vite aislados | Verificar en la adopción |
+| AC-08 | Perfiles reales no seleccionan mock; perfil mixto/config inválida falla; sin credenciales no hay fallback; issuer/JWKS alcanzables desde ambos lados | Contrato genérico de auth | arranque `OidcProfileTest` + integración/red | Verificar en la adopción |
+| AC-09 | UI entrada/sesión/logout/cancelación/error/reintento accesibles; 401 limpia cache; 403/red no fingen logout; no tokens del proveedor en browser | Contrato genérico de auth | componentes `AuthSession.test.tsx`, `AppRoutes.test.tsx`, `http.test.ts` + navegador 375/1280 | Verificar en la adopción |
+| AC-10 | Docs y OpenAPI corresponden al código; guía Google exacta y estado real externo explícito; FULL verde local y CI del HEAD | Contrato genérico de auth | gate `bash scripts/verify.sh`; revisión SHA/CI; smoke Google externo separado | Verificar en la adopción |
 
 Para CSRF cookie/header no prometer revocación server-side de toda pareja antigua: demostrar borrado/renovación y rechazo del header viejo con cookie vigente. Timeout con configuración acotada o invalidación controlada, sin esperar 30 minutos.
 
@@ -80,4 +80,4 @@ Dominio, roles propios del producto, invitaciones, JWT/passwords propios, SDK Go
 
 ## Compatibilidad y pruebas
 Todas las reglas y los diez AC se conservan. Protocolo real: OidcLoginIT/OidcFailureIT; origen/perfiles: PublicOriginIT/OidcProfileTest; client AuthSession/AppRoutes/http/csrf; OpenAPI y Playwright. Specs de propiedad futuras se agregan sobre esta base, sin permisos derivados de claims.
-Callback fallido con sesión previa la invalida: evita replay pero permite logout forzado cross-site; decisión heredada que debe evaluarse explícitamente antes de cambiarla.
+Callback fallido con sesión previa la invalida: evita replay pero permite logout forzado cross-site; conducta que debe evaluarse explícitamente antes de cambiarla.

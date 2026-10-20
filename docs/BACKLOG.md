@@ -1,11 +1,11 @@
 # Cola del starter
 
-Próxima acción: T-005, completar base genérica, medición y propuesta de alojamiento. Estado y prompt en [STATUS](STATUS.md).
+Próxima acción: T-005, revisión independiente de base genérica, medición y propuesta de alojamiento. Estado y prompt en [STATUS](STATUS.md).
 
 ## En vuelo
 | Tarea | Estado | Resultado |
 |---|---|---|
-| [T-005](tasks/T-005-generic-baseline.md) | in_progress | Documentación inicial, copia limpia y diagnóstico del gate |
+| [T-005](tasks/T-005-generic-baseline.md) | in_review | Documentación inicial, copia limpia y diagnóstico del gate |
 
 ## Por refinar
 - Implementar despliegue compartido después de elegir proveedor/región y aprobar el contrato de [DEPLOYMENT](DEPLOYMENT.md).

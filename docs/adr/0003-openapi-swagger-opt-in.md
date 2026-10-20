@@ -1,6 +1,6 @@
 # ADR 0003 · Publicación opt-in de OpenAPI y Swagger UI
 
-- **Estado:** decisión heredada vigente; implementación y suites conservadas, evidencia propia pendiente de revalidación.
+- **Estado:** decisión vigente; implementación y suites conservadas, evidencia propia pendiente de revalidación.
 - **Ámbito:** starter genérico y futura adopción, sin dominio de negocio.
 
 ## Contexto
