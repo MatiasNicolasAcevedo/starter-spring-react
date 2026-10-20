@@ -6,7 +6,7 @@ import { tmpdir } from 'node:os';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync, execFileSync } from 'node:child_process';
-import { JAVA_FILES, TEXT_FILES, RESET_FILES, ARCHIVE_FILES, IDENTITY_FILE, archivePath } from './lib/init-project-manifest.mjs';
+import { JAVA_FILES, TEXT_FILES, RESET_FILES, REMOVE_FILES, IDENTITY_FILE } from './lib/init-project-manifest.mjs';
 
 const root = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const initialized = JSON.parse(readFileSync(join(root, IDENTITY_FILE), 'utf8')).initialized;
@@ -63,7 +63,7 @@ test('help is available without inputs; default dry-run has zero byte/path chang
   assert.equal(result.status, 0, result.stderr);
   assert.match(result.stdout, /^DRY-RUN: [1-9]/);
   const java = Object.entries(JAVA_FILES).flatMap(([kind, list]) => list.map(file => `server/src/${kind}/java/org/demo/agenda/${file}`));
-  const writes = [...TEXT_FILES, ...RESET_FILES, ...ARCHIVE_FILES.map(archivePath), ...java, IDENTITY_FILE].sort();
+  const writes = [...TEXT_FILES, ...RESET_FILES, ...java, IDENTITY_FILE].sort();
   assert.deepEqual(result.stdout.split('\n').filter(s => s.startsWith('write ')).map(s => s.slice(6)).sort(), writes);
   assert.deepEqual(snapshot(path), before);
 });
@@ -77,8 +77,9 @@ test('apply connects identity and resets adoption, preserves inventory/auth/migr
   let result = run(path, entries, true);
   assert.equal(result.status, 0, result.stderr);
   const first = snapshot(path);
+  assert.ok(!existsSync(join(path, 'docs/archive')), 'a new application must not receive maintenance history');
   const modified = new Set([...Object.keys(before), ...Object.keys(first)].filter(key => before[key] !== first[key] && !key.endsWith('/')));
-  const allowed = new Set([...TEXT_FILES, ...RESET_FILES, ...ARCHIVE_FILES, ...ARCHIVE_FILES.map(archivePath), IDENTITY_FILE,
+  const allowed = new Set([...TEXT_FILES, ...RESET_FILES, ...REMOVE_FILES, IDENTITY_FILE,
     ...Object.entries(JAVA_FILES).flatMap(([kind, list]) => list.flatMap(file => [`server/src/${kind}/java/com/example/starter/${file}`, `server/src/${kind}/java/org/demo/agenda/${file}`]))]);
   for (const key of modified) assert.ok(allowed.has(key), `unexpected mutation ${key}`);
   assert.match(readFileSync(join(path, 'server/pom.xml'), 'utf8'), /<artifactId>agenda-demo-server<\/artifactId>/);
@@ -90,22 +91,14 @@ test('apply connects identity and resets adoption, preserves inventory/auth/migr
   assert.match(agents, /^# AGENTS · Agenda Demo/);
   assert.match(agents, /org.demo.agenda/);
   assert.match(agents, /HANDOFF solo en adopción\/traspaso/);
-  assert.doesNotMatch(agents, /starter-only|Construcción de este starter|A…E|T-004|GPT-6.1/);
+  assert.doesNotMatch(agents, /starter-only|Mantenimiento de esta base|GPT-6.1/);
   assert.match(readFileSync(join(path, 'docs/ORCHESTRATION.md'), 'utf8'), /Estados de tarea/);
   assert.doesNotMatch(readFileSync(join(path, 'docs/tasks/T-000-adoption.md'), 'utf8'), /counts_for_cycle|product_cycle/);
   assert.match(readFileSync(join(path, 'docs/templates/junie-trial.md'), 'utf8'), /ejecución y resultado todavía pendientes/);
   assert.match(readFileSync(join(path, 'README.md'), 'utf8'), /Trabajo diario con Junie/);
   assert.doesNotMatch(readFileSync(join(path, 'README.md'), 'utf8'), /A\/B\/C\/D|E lista|PR#4/);
-  for (const old of ARCHIVE_FILES) {
-    const archive = archivePath(old);
-    const text = readFileSync(join(path, archive), 'utf8').replace(/^(```|~~~)[\s\S]*?^\1/gm, '');
-    assert.match(text, /Registro histórico del starter/);
-    for (const match of text.matchAll(/\[[^\]]*\]\(([^)\s]+)\)/g)) {
-      if (/^(https?:|mailto:|#)/.test(match[1])) continue;
-      assert.ok(existsSync(resolve(path, dirname(archive), match[1].split('#')[0])), `broken archive link: ${archive} ${match[1]}`);
-    }
-  }
-  assert.doesNotMatch(readFileSync(join(path, 'PROJECT_CONTEXT.md'), 'utf8'), /A…E|MERGED|stockpilot/i);
+  for (const removed of REMOVE_FILES) assert.ok(!existsSync(join(path, removed)), 'maintenance tasks must not be inherited');
+  assert.doesNotMatch(readFileSync(join(path, 'PROJECT_CONTEXT.md'), 'utf8'), /Mantenimiento de esta base|MERGED/i);
   result = spawnSync(process.execPath, ['scripts/docs-check.mjs'], { cwd: path, encoding: 'utf8' });
   assert.equal(result.status, 0, result.stderr);
   result = spawnSync(process.execPath, ['--test', 'scripts/ci/docs-check.test.mjs'], { cwd: path, encoding: 'utf8' });
@@ -133,6 +126,60 @@ for (const [label, value, key] of [
   rejectUnchanged(fixture(), args);
 });
 for (const args of [[], [...entries, '--unknown'], [...entries, '--name', 'Duplicado'], entries.slice(0, -1)]) test(`unknown/duplicate/incomplete inputs reject: ${JSON.stringify(args)}`, () => rejectUnchanged(fixture(), args));
+
+test('R1: adoption keeps a generic deployment proposal without maintenance decisions', () => {
+  const path = fixture();
+  const maintenance = readFileSync(join(path, 'docs/DEPLOYMENT.md'), 'utf8');
+  assert.match(maintenance, /Decisión del dueño 2026-10-20: portfolio personal/);
+  assert.match(maintenance, /4 vCPU compartidas y 8 GB RAM/);
+  assert.match(maintenance, /US\$10–15\/mes/);
+  const result = run(path, entries, true);
+  assert.equal(result.status, 0, result.stderr);
+  const proposal = readFileSync(join(path, 'docs/DEPLOYMENT.md'), 'utf8');
+  assert.doesNotMatch(proposal, /Decisión del dueño|2026-10-20|portfolio personal|4–5 proyectos|US\$10–15|Punto de partida aceptado|techo acordado|starter-only/);
+  assert.match(proposal, /Pendiente de decisión del dueño/);
+  assert.match(proposal, /PostgreSQL 18 compartido/);
+  assert.match(proposal, /OIDC\/sesión\/CSRF/);
+  assert.match(proposal, /sin SUPERUSER\/CREATEDB\/CREATEROLE/);
+  assert.match(proposal, /backup\/restore/);
+  const first = snapshot(path);
+  assert.equal(run(path, entries, true).status, 0);
+  assert.deepEqual(snapshot(path), first);
+  writeFileSync(join(path, 'docs/DEPLOYMENT.md'), proposal + '\nDecisión propia posterior.\n');
+  rejectUnchanged(path, entries, /modificada o parcial/);
+});
+
+test('R2: source and adopted technical guides reference current contracts without retired phases', () => {
+  const path = fixture();
+  const obsolete = /parte C|regresiones de B|Entorno de A|\(B\)|Objetivo aceptado|Alcance y secuencia|B agrega/;
+  const guides = ['docs/specs/S-003-reference-security.md', 'docs/SETUP.md', 'docs/ARCHITECTURE.md'];
+  for (const guide of guides) assert.doesNotMatch(readFileSync(join(path, guide), 'utf8'), obsolete, guide);
+  const result = run(path, entries, true);
+  assert.equal(result.status, 0, result.stderr);
+  for (const guide of guides) assert.doesNotMatch(readFileSync(join(path, guide), 'utf8'), obsolete, guide);
+  const spec = readFileSync(join(path, guides[0]), 'utf8');
+  assert.match(spec, /\[S-001\]\(S-001-auth-google.md\)/);
+  assert.match(spec, /\[S-002\]\(S-002-local-stack.md\)/);
+  assert.match(spec, /C-AC-10/);
+  assert.match(spec, /ReferenceItemIT/);
+});
+
+test('deployment boundary is required and rejects missing, repeated or reversed markers before writes', () => {
+  for (const transform of [
+    text => text.replace('<!-- starter-only:start -->', ''),
+    text => text.replace('<!-- starter-only:end -->', ''),
+    text => text.replace('starter-only:start', 'starter-only:swap').replace('starter-only:end', 'starter-only:start').replace('starter-only:swap', 'starter-only:end'),
+    text => text + '\n<!-- starter-only:start -->\n',
+    text => text + '\n<!-- starter-only:end -->\n',
+  ]) {
+    const path = fixture(), file = join(path, 'docs/DEPLOYMENT.md');
+    writeFileSync(file, transform(readFileSync(file, 'utf8')));
+    rejectUnchanged(path, entries, /Frontera de despliegue del starter ausente/);
+  }
+  const path = fixture();
+  unlinkSync(join(path, 'docs/DEPLOYMENT.md'));
+  rejectUnchanged(path, entries, /requerido ausente/);
+});
 
 test('missing source and altered late marker reject before any writes', () => {
   const path = fixture();
@@ -183,8 +230,8 @@ test('adoption resets every criterion even when the template previously verified
   assert.equal([...reset.matchAll(/\| pendiente \|/g)].length, 22);
   assert.match(reset, /NO_LISTO.*0\/22/);
 });
-test('rename target and archive target collisions reject', () => {
-  for (const target of ['server/src/main/java/org/demo/agenda/ServerApplication.java', archivePath(ARCHIVE_FILES[0]), 'docs/tasks/T-000-adoption.md']) {
+test('rename target and adoption task collisions reject', () => {
+  for (const target of ['server/src/main/java/org/demo/agenda/ServerApplication.java', 'docs/tasks/T-000-adoption.md']) {
     const path = fixture(); mkdirSync(dirname(join(path, target)), { recursive: true }); writeFileSync(join(path, target), 'sentinel');
     rejectUnchanged(path);
   }
@@ -213,9 +260,9 @@ test('junction/symlink ancestor and leaf plus hardlinks reject; outside sentinel
   assert.deepEqual(snapshot(externalJava), javaBefore);
 });
 
-test('an initialized missing file or reappearing archived source cannot bypass the guard', () => {
+test('an initialized missing file or reappearing maintenance source cannot bypass the guard', () => {
   const path = fixture(); assert.equal(run(path, entries, true).status, 0);
-  const removed = ARCHIVE_FILES.find(file => !RESET_FILES.includes(file));
+  const removed = REMOVE_FILES[0];
   writeFileSync(join(path, removed), 'partial sentinel');
   rejectUnchanged(path);
   unlinkSync(join(path, removed)); unlinkSync(join(path, 'LICENSE'));

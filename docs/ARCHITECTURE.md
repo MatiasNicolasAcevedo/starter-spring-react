@@ -1,6 +1,6 @@
 # Arquitectura de Starter
 
-Base heredada y neutralizada; evidencia del starter registrada en sus propias tareas. Versiones: DEPENDENCIES, decisiones duraderas: adr/.
+Base genérica; evidencia de cada cambio registrada en su tarea/PR. Versiones: DEPENDENCIES, decisiones duraderas: adr/.
 
 ## Vista general
 Monolito modular Spring Boot `/api/v1` + SPA React/nginx o Vite + PostgreSQL 18.6. El navegador usa un único origen client; API/OIDC/logout atraviesan el proxy sin CORS. El server queda interno salvo diagnóstico loopback explícito con forwarding none.
@@ -13,11 +13,11 @@ navegador → client (SPA/proxy) → server (MVC/Security/JPA) → db
 ## Backend y datos
 Paquete neutral `com.example.starter`, groupId com.example, artifactId starter-server. Feature contiene controller/DTO/servicio/persistencia; separar web/application/persistence/domain al crecer. Sin ciclos ni acceso al repositorio de otra feature.
 identity crea/recupera app_user por issuer/subject, UUID v7 y constraint única; email/nombre mutables sin otorgar permisos. security mantiene OIDC/sesión/CSRF/origen. shared/error ofrece ProblemDetail con errors de campo ordenados. system expone GET /api/v1/system/info con nombre/versión reales.
-Flyway V1 se conserva, JPA validate y open-in-view=false. Instant/TIMESTAMPTZ y JVM UTC; Clock inyectado. DB de pruebas efímera separada del volumen de desarrollo. Sin tablas/reglas del dominio anterior.
-La feature CRUD privada `reference` agrega V2, consultas por dueño y contrato S-003. Conexiones y retiro seguro en [REFERENCE](REFERENCE.md); estado/evidencia de C en T-002. B incorpora readiness DB y la pantalla conectada; evidencia propia en T-001.
+Flyway V1 se conserva, JPA validate y open-in-view=false. Instant/TIMESTAMPTZ y JVM UTC; Clock inyectado. DB de pruebas efímera separada del volumen de desarrollo. El dominio de cada aplicación se define en su contexto.
+La feature CRUD privada `reference` agrega V2, consultas por dueño y contrato S-003. Conexiones y retiro seguro en [REFERENCE](REFERENCE.md); readiness DB y pantalla conectada incluidas.
 
 ## Seguridad
-Contrato heredado: [auth](specs/S-001-auth-google.md), ADR 0002 y ADR 0003. Revalidar las suites en esta base.
+Contrato vigente: [auth](specs/S-001-auth-google.md), ADR 0002 y ADR 0003. Revalidar las suites en esta base.
 - **Rutas:** health y GET system/info/csrf públicos; inicio `/oauth2/authorization/google` y callback `/login/oauth2/code/google` GET exactos. GET me y GET `/logout` (405) requieren sesión; POST `/logout` exige CSRF. Todo lo demás denegado (incluidas las rutas de documentación salvo el opt-in de [ADR 0003](adr/0003-openapi-swagger-opt-in.md)): una sesión no concede permisos de recursos privados. Formulario/Basic/Bearer deshabilitados; 401/403 como ProblemDetail sin redirects para API.
 - **Identidad y sesión:** OAuth2 Login de Spring (`openid profile email`); tras la validación de Spring, `IdentityService` crea/recupera `app_user` por issuer/subject exactos (concurrencia recuperada por la constraint) y el principal lleva solo el UUID local. Sesión en memoria 30 min, `JSESSIONID` HttpOnly/SameSite=Lax/Secure según origen, cambio de ID al login, fallo del callback invalida la sesión previa; destinos fijos `/` y `/login?error=authentication`. me devuelve id/displayName/email/emailVerified, sin tokens/issuer/subject/roles.
 - **CSRF:** `csrf.spa()` con cookie `XSRF-TOKEN` legible y header `X-XSRF-TOKEN` exclusivamente (sin query); GET `/api/v1/auth/csrf` 204 la materializa. Login y logout la renuevan.
@@ -28,13 +28,13 @@ Contrato heredado: [auth](specs/S-001-auth-google.md), ADR 0002 y ADR 0003. Reva
 ## Frontend
 Estructura `src/app`, `src/features/<feature>`, `src/shared/ui`, `src/shared/forms`, `src/services/http.ts`, `src/test`. Material UI con tema único, TanStack Query para datos remotos, React Hook Form + Zod para formularios de negocio, React Router en modo declarativo. Reglas en [client/AGENTS.md](../client/AGENTS.md).
 
-Implementación heredada:
+Implementación:
 - `app/`: `App` (BrowserRouter), `AppProviders` (Query + tema + CssBaseline, compartido con las pruebas), `AppRoutes` (shell con rutas hijas y 404), `theme.ts` (tema único, locale `esES`), `queryClient.ts` (reintenta solo red/5xx, hasta 2 veces; nunca 4xx ni respuestas fuera de contrato).
 - `services/http.ts`: único cliente `fetch`. `credentials: 'same-origin'`; header CSRF en métodos no seguros mediante un `CsrfTokenResolver` (token leído desde cookie vigente); 4xx/5xx → `ApiError` con `ProblemDetail` (o `null` si el cuerpo no lo es, p. ej. 502 del proxy); red caída → `NetworkError`; cuerpo vacío/no JSON/fuera de esquema → `UnexpectedResponseError`; el aborto se propaga sin envolver. Toda respuesta con cuerpo se valida con un esquema Zod: no hay `any` ni casts en la frontera.
 - `shared/ui`: `ErrorAlert` + `errorMessage` (mensajes en español sin detalles técnicos). `shared/forms`: `FormTextField` (TextField controlado por RHF, error accesible por `aria-describedby`) y `applyServerFieldErrors` (vuelca `errors[]` del server junto a cada campo, foco al primero, el resto en `root.server`).
 - `features/system`: primera feature de referencia (api + hook de Query + componente con estados cargando/error/éxito).
 
-Implementación heredada:
+Implementación:
 - `services/csrf.ts` lee la cookie `XSRF-TOKEN` vigente en cada mutación; `services/http.ts` envía su valor en `X-XSRF-TOKEN` solo en mutaciones same-origin y publica cada 401 en `services/sessionEvents.ts` antes de rechazar, sin reintento.
 - `features/auth/`: `api.ts` (Zod de me, me 401 = visitante, `renewCsrf`, `withCsrfRenewal` que pide reintento explícito, `logout`), hooks de sesión/CSRF/logout y `AuthSessionProvider`, único intérprete del canal de 401: con usuario es expiración (cancela consultas, elimina la cache Query que no es `['auth', …]` y las mutaciones, mensaje fijo, sin redirección). Logout cancela, limpia, renueva CSRF y navega a `/login`. Si la revalidación trae otra identidad, la cache privada se descarta antes de publicarla. `AppShell` remonta las rutas con key por identidad. `LoginPage` usa un enlace de navegación completa al inicio OIDC.
 - Regla para features futuras: datos privados en queries fuera del prefijo `auth`; mutaciones que invaliden en lugar de escribir la cache (ver BACKLOG).
@@ -44,11 +44,11 @@ Operación: el contenedor `client` (target `runtime`) sirve el build con nginx y
 
 ## Pruebas y operación
 [TESTING](TESTING.md) conserva FULL, negativos y políticas CI; [SETUP](SETUP.md) conserva comandos y trampas. README diferencia el harness local efímero de dev.sh persistente; comandos y parámetros tienen su fuente canónica en SETUP.
-ADR 0001: versiones/Java/PostgreSQL/build; ADR 0002: OIDC/sesión/CSRF/proxies; ADR 0003: Swagger opt-in loopback/GET/api/docs. Todas heredadas; cambios futuros requieren tarea/ADR/pruebas, sin reinterpretar evidencia previa como ejecución actual.
+ADR 0001: versiones/Java/PostgreSQL/build; ADR 0002: OIDC/sesión/CSRF/proxies; ADR 0003: Swagger opt-in loopback/GET/api/docs. Los cambios requieren tarea, decisión y pruebas propias.
 
-## Disponibilidad y desarrollo local (B)
+## Disponibilidad y desarrollo local
 GET /actuator/health/readiness agrega readinessState y db explícitamente; liveness conserva independencia de DB. Backend admite solo GET de health/root, readiness y liveness internos. Los proxies publican exclusivamente GET readiness y rechazan el resto de Actuator antes del fallback SPA, reconstruyendo metadata desde el origen validado. JSON público contiene solo status, sin componentes/detalles; la caída de DB devuelve 503. Adquisición Hikari 2 s, validación 1 s y connectTimeout/socketTimeout PostgreSQL 2 s acotan el probe y su recuperación; afectan también las conexiones ordinarias de esta base sin dominio. Los loggers del health/pool no publican causas de driver de la caída. Contexto de la decisión: [grupos health de Spring Boot](https://docs.spring.io/spring-boot/reference/actuator/endpoints.html).
 
 La UI combina system/info con readiness UP mediante HTTP/Zod/Query; revalida readiness cada 5 s, sin retries y con timeout de petición 5 s. Un error de refetch tiene prioridad sobre datos de cache anteriores. El reintento solicita ambos contratos; conserva el botón montado y lo deshabilita durante fetch. No cambia sesión/CSRF/cache privada.
 
-El desarrollo persistente usa entrada dev.sh separada del harness efímero. Cada recurso tiene labels de propiedad, source/mode/proxy/origin/puerto OIDC y proyecto Compose. El CLI valida esos recursos antes de mutar y verifica puertos antes de build/up; rollback retira solo IDs nuevos, down conserva volumen. Fixtures y runners reutilizan las versiones inventariadas. Guía y límites de operación en SETUP; criterios/ensayos en S-002/T-001, sin duplicar evidencia aquí.
+El desarrollo persistente usa entrada dev.sh separada del harness efímero. Cada recurso tiene labels de propiedad, source/mode/proxy/origin/puerto OIDC y proyecto Compose. El CLI valida esos recursos antes de mutar y verifica puertos antes de build/up; rollback retira solo IDs nuevos, down conserva volumen. Fixtures y runners reutilizan las versiones inventariadas. Guía y límites de operación en SETUP; criterios/ensayos en S-002, sin duplicar evidencia aquí.

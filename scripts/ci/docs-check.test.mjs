@@ -15,7 +15,8 @@ cpSync(root, temporary, { recursive: true, filter: source => {
   const name = basename(source);
   return !excluded.has(name) && !(name.startsWith('.env') && !name.endsWith('.example')) && !/\.(log|local|pem|p12|jks)$/.test(name);
 } });
-const firstTask = 'docs/tasks/' + readdirSync(join(temporary, 'docs/tasks')).find(name => /^T-000-.*\.md$/.test(name));
+const firstTask = 'docs/tasks/' + readdirSync(join(temporary, 'docs/tasks')).find(name => /^T-\d{3}-.*\.md$/.test(name));
+const firstId = firstTask.match(/T-\d{3}/)[0];
 const originals = new Map(['docs/HANDOFF.md', 'docs/STATUS.md', 'docs/BACKLOG.md',
   firstTask, '.github/workflows/ci.yml', '.github/workflows/full.yml',
   'scripts/verify.sh'].map(path => [path, readFileSync(join(temporary, path), 'utf8')]));
@@ -76,8 +77,8 @@ test('STATUS must report the actual handoff count', () => {
 });
 test('backlog and task state must agree', () => {
   // Legacy tables still validate explicit states; a modern queue need not repeat them.
-  change('docs/BACKLOG.md', text => text + `\n## Bloqueadas\n| Tarea | Estado | Salida |\n|---|---|---|\n| [T-000](tasks/${firstTask.split('/').pop()}) | blocked | fixture |\n`);
-  rejects(/T-000 figura como blocked, frontmatter dice/);
+  change('docs/BACKLOG.md', text => text + `\n## Bloqueadas\n| Tarea | Estado | Salida |\n|---|---|---|\n| [${firstId}](tasks/${firstTask.split('/').pop()}) | blocked | fixture |\n`);
+  rejects(new RegExp(`${firstId} figura como blocked, frontmatter dice`));
 });
 
 test('daily progress updates task and STATUS without rewriting queue or HANDOFF', () => {
@@ -95,9 +96,9 @@ test('daily progress updates task and STATUS without rewriting queue or HANDOFF'
 
 test('simplified queue still rejects an unlisted active task and unknown task', () => {
   change('docs/BACKLOG.md', () => '# Cola\n');
-  const filename = readdirSync(join(temporary, 'docs/tasks')).find(name => name.startsWith('T-000-'));
+  const filename = readdirSync(join(temporary, 'docs/tasks')).find(name => name.startsWith(firstId + '-'));
   change(firstTask, text => text.replace(/^status: \w+/m, 'status: in_progress'));
-  rejects(/T-000 \(in_progress\) no figura/);
+  rejects(new RegExp(`${firstId} \\(in_progress\\) no figura`));
   change('docs/BACKLOG.md', text => text + `\n- [T-999](tasks/${filename})\n`);
   rejects(/T-999 sin archivo de tarea/);
 });
@@ -119,10 +120,23 @@ test('a second active task is rejected', () => {
   // Arrange two active tasks regardless of the live board's current lifecycle state.
   change(firstTask, text => text.replace(/^status: \w+/m, 'status: in_progress'));
   const path = join(temporary, 'docs/tasks/T-999-negative-fixture.md');
-  const old = originals.get(firstTask).replace(/^id: T-000$/m, 'id: T-999').replace(/^depends_on:.*$/m, 'depends_on: []');
+  const old = originals.get(firstTask).replace(new RegExp(`^id: ${firstId}$`, 'm'), 'id: T-999').replace(/^depends_on:.*$/m, 'depends_on: []');
   try {
     writeFileSync(path, old.replace(/^status: \w+/m, 'status: in_progress'));
     assert.match(readFileSync(path, 'utf8'), /^status: in_progress$/m);
     rejects(/más de una tarea en vuelo/);
   } finally { rmSync(path); }
+});
+
+test('application FULL cannot invoke the expensive legacy wrapper', () => {
+  change('scripts/verify.sh', text => text.replace('exec bash scripts/e2e.sh', 'exec bash scripts/verify-local-and-e2e.sh'));
+  rejects(/debe ejecutar Playwright real directamente/);
+});
+test('starter gate cannot omit tooling', () => {
+  change('scripts/verify.sh', text => text.replace('--starter) suites=(docs server client tooling e2e)', '--starter) suites=(docs server client e2e)'));
+  rejects(/perfil STARTER sin matriz tooling/);
+});
+test('manual STARTER cannot skip tooling', () => {
+  change('.github/workflows/full.yml', text => text.replace('run: bash scripts/verify.sh --tooling', 'run: echo skip'));
+  rejects(/perfil STARTER remoto sin tooling/);
 });

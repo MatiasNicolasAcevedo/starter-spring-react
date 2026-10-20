@@ -3,7 +3,7 @@
 Reglas del frontend; complementan el AGENTS.md raíz. Detalle de diseño en docs/ARCHITECTURE.md.
 
 ## Estado y comandos
-Base heredada sobre el scaffold Vite `react-ts` (React 19, Vite 8, TypeScript 6, ESLint 10); versiones en docs/DEPENDENCIES.md.
+Base Vite `react-ts` (React 19, Vite 8, TypeScript 6, ESLint 10); versiones en docs/DEPENDENCIES.md.
 Gate client: `bash scripts/verify.sh --client` desde la raíz (runner client-tests). Equivale a `npm run verify`:
 `typecheck` (`tsc -b`, incluye tests) · `lint` (cero warnings) · `format:check` · `test:ci` (cobertura) · `build`.
 Iteración en el host: `npm ci`, `npm test`, `npm run format`. Dependencias nuevas solo con `npm install --save-exact`.

@@ -4,7 +4,7 @@ Autorización del dueño registrada una vez; las sesiones la heredan. Autoriza o
 
 | Campo | Valor |
 |---|---|
-| Fecha de autorización | 2026-10-17 (prompt explícito de extracción del dueño) |
+| Fecha de autorización | 2026-10-20, mantenimiento y limpieza solicitados por el dueño; permisos Git existentes conservados |
 | Repositorio | [MatiasNicolasAcevedo/starter-spring-react](https://github.com/MatiasNicolasAcevedo/starter-spring-react), público, GitHub Free |
 | Rama base | `main` |
 | Licencia | MIT, titular Matias Nicolas Acevedo (confirmado por el dueño el 2026-10-17) |
@@ -13,7 +13,7 @@ Autorización del dueño registrada una vez; las sesiones la heredan. Autoriza o
 El traspaso a Junie Lite no revoca estos permisos Git. Si una tarea requiere redefinir arquitectura, modelo de autenticación o alcance, Junie Lite prepara evidencia y propuesta para el dueño, que decide y puede abrir una sesión de frontera. Cambios pequeños ya especificados no se bloquean por tocar server o client.
 
 ## Operaciones ordinarias autorizadas
-Configuración declarada por el dueño el 2026-10-19: Junie Lite con Qwen 3.6 27B; ejecución todavía no observada. Frontera prepara contexto/decisiones y tareas, Junie implementa contratos pequeños. No abrir sesiones/modelos por cuenta propia. Preparación previa a E autorizada dentro de T-004; mismo PR, revisión independiente de preparación antes del ensayo en otra sesión. No habilita E en esta sesión ni un merge anticipado de T-004.
+Frontera prepara decisiones y contratos; Junie implementa tareas pequeñas. No abrir sesiones/modelos por cuenta propia.
 
 - Leer código y documentación del proyecto; crear specs y tareas dentro del brief ([PROJECT.md](PROJECT.md)).
 - Implementar y mantener Java/Spring Boot/React, tests y documentación de una tarea refinada.
@@ -25,7 +25,7 @@ Configuración declarada por el dueño el 2026-10-19: Junie Lite con Qwen 3.6 27
 - Corregir CI, configuración de desarrollo, autenticación y migraciones no destructivas mediante tareas explícitas con pruebas reforzadas.
 - Mejorar localmente `plantilla/` con lecciones genéricas de la tarea; esos archivos nunca entran en commits ni PRs.
 
-## Configuración inicial única propia (2026-10-17)
+## Configuración efectiva del repositorio
 | Ajuste | Valor comprobado |
 |---|---|
 | Visibilidad | Pública |
@@ -34,7 +34,7 @@ Configuración declarada por el dueño el 2026-10-19: Junie Lite con Qwen 3.6 27
 | Auto-merge de GitHub | Deshabilitado |
 | Secret scanning / push protection | Activos |
 | Ruleset `main-protection` (id 25305930) | refs/heads/main; PR obligatorio con 0 aprobaciones formales; solo squash; sin eliminación; sin force push (non-fast-forward); sin actores con bypass |
-| Check requerido | `verify-required` (GitHub Actions, integración 15368), rama actualizada (`strict`), do_not_enforce_on_create=false; agregado el 2026-10-17 después del primer reporte terminado en PR #1 (run 39042564145) |
+| Check requerido | `verify-required` (GitHub Actions, integración 15368), rama actualizada (`strict`), do_not_enforce_on_create=false |
 
 Después de esta configuración ningún agente modifica, relaja ni elimina rulesets, ajustes de merge, visibilidad, permisos o planes. Si una protección bloquea un PR, se conserva el checkpoint y se informa al dueño.
 
@@ -53,7 +53,7 @@ Decisiones reversibles dentro de la tarea no requieren confirmación. Para decis
 1. PR del repositorio y rama base autorizados; tarea y spec vigentes; alcance respetado.
 2. HEAD publicado coincide con el SHA revisado y probado; sin cambios propios pendientes.
 3. Revisión de una sesión distinta de la implementación: veredicto `APROBADO` con SHA de HEAD y SHA de base registrados en el PR.
-4. `verify-required` liviano existe y está verde sobre el HEAD publicado. Además, evidencia FULL local válida para las fuentes/base y comprobada por el revisor conforme a TESTING. El check automático no acredita FULL ni sustituye esa evidencia; checks exigidos fallidos/cancelados/ausentes no cuentan como verde. Decisión del dueño 2026-10-18: FULL remoto solo manual, sin modificar el ruleset.
+4. `verify-required` liviano existe y está verde sobre el HEAD publicado. Además, evidencia local del gate correspondiente al alcance: FULL de aplicación y, si el perfil es STARTER, matriz tooling sobre las mismas fuentes/base, comprobados por el revisor conforme a TESTING. El check automático no acredita FULL ni sustituye esa evidencia; checks exigidos fallidos/cancelados/ausentes no cuentan como verde. Decisión del dueño 2026-10-18: FULL remoto solo manual, sin modificar el ruleset.
 5. Sin conversaciones bloqueantes ni cambios pedidos pendientes.
 6. Base actualizada según el ruleset y pruebas de la combinación actual. Si cambia base o HEAD, se revalida lo afectado y se publica un veredicto nuevo.
 7. El tablero indica `mergeable` (no `done`) y no hay otro PR de tarea activo.
@@ -68,9 +68,7 @@ Una sesión nueva reduce el arrastre de contexto, pero no es una revisión human
 | Aspecto | Valor | Evidencia / condición |
 |---|---|---|
 | Continuidad | `POR_SESION` | El dueño abre cada sesión con el prompt de [STATUS.md](STATUS.md). No hay dispatcher instalado ([ORCHESTRATION.md](ORCHESTRATION.md)) |
-| Merge | `AUTOMATICO_ELEGIBLE` | Bootstrap completo; requiere veredicto de sesión distinta y checks verdes del HEAD/base vigentes. Ningún merge propio ejecutado |
+| Merge | `AUTOMATICO_ELEGIBLE` | Bootstrap completo; requiere veredicto de sesión distinta y checks verdes del HEAD/base vigentes. Sujeto a revisión independiente y controles efectivos |
 
 ## Alcance de esta autorización
-Autorización inicial para creación/configuración de este repo y partes A…E secuenciales; fase actual y preparación previa a E autorizada por el dueño en T-004/STATUS. La referencia inicial a implementar solo A quedó consumida con su cierre y no activa por sí sola otras partes. No crear/borrar otros repos ni operar Google real, datos persistentes ajenos u origen. Beta habilitada tras D MERGED; adopción solo tras E. Constancia final limitada exclusivamente por PROVENANCE.
-
-Respuesta efectiva de GitHub al crear ruleset: required_review_thread_resolution=true (pedido), required_reviewers=[] y require_extra_approval_for_unattributed_changes=true (defaults añadidos por GitHub); allowed_merge_methods=[squash], 0 aprobaciones, sin bypass. Registrar y observar en el primer merge; no modificarlos para destrabar. Visibilidad/merge/secret scanning/push protection reconsultados activos; auto-merge deshabilitado.
+El dueño autoriza el mantenimiento genérico solicitado en PROJECT_CONTEXT y la tarea vigente. Proponer infraestructura es parte del alcance; comprar, desplegar, operar datos reales o cambiar permisos requiere decisión específica. Cada aplicación adopta permisos propios. No crear/borrar otros repos ni operar el kit.

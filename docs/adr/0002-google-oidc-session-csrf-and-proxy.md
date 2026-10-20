@@ -1,6 +1,6 @@
 # ADR 0002 · Google OIDC, sesión, CSRF y frontera del proxy
 
-- **Estado:** decisión heredada vigente; implementación y suites conservadas, evidencia propia pendiente de revalidación.
+- **Estado:** decisión vigente; implementación y suites conservadas, evidencia propia pendiente de revalidación.
 - **Ámbito:** starter genérico y futura adopción, sin dominio de negocio.
 
 ## Contexto

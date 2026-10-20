@@ -122,7 +122,7 @@ test('la política técnica es la fase declarada', () => {
 });
 
 test('técnico: diff vacío', () => {
-  assert.deepEqual(classifyRange(BASE, BASE), { status: 0, policy: 'FULL', changed: '0', reason: 'diff vacío' });
+  assert.deepEqual(classifyRange(BASE, BASE), { status: 0, policy: 'FULL', changed: '0', reason: 'diff vacío', profile: 'STARTER' });
 });
 
 test('técnico: base ausente o de ceros', () => {
@@ -152,4 +152,28 @@ test('fase inválida: exit 2 sin política', () => {
     assert.equal(result.status, 2);
     assert.equal(result.policy, undefined);
   }
+});
+
+test('application sources select APPLICATION, including migrations, deletions and mixed docs', () => {
+  for (const changes of [
+    { 'server/src/main/java/App.java': 'class App {}' },
+    { 'server/src/main/resources/db/migration/V2__x.sql': 'select 1;' },
+    { 'client/src/App.tsx': 'export {}', 'docs/guide.md': '# Change' },
+    { 'e2e/tests/example.spec.ts': 'test()' },
+  ]) {
+    const result = classifyRange(BASE, commit(changes, BASE));
+    assert.equal(result.policy, 'FULL');
+    assert.equal(result.profile, 'APPLICATION');
+  }
+  const added = commit({ 'client/src/old.ts': 'export {}' }, BASE);
+  assert.equal(classifyRange(added, commit({ 'client/src/old.ts': null }, added)).profile, 'APPLICATION');
+});
+test('tooling, shared runtime, dependencies and unknown paths require STARTER', () => {
+  for (const path of ['scripts/dev.sh', 'scripts/init-project.mjs', 'docker-compose.yml',
+    'client/Dockerfile', 'client/package-lock.json', 'server/pom.xml', '.github/workflows/full.yml',
+    'unknown.file']) {
+    assert.equal(classifyRange(BASE, commit({ [path]: 'changed' }, BASE)).profile, 'STARTER', path);
+  }
+  assert.equal(classifyRange(BASE, commit({ 'server/src/main/App.java': 'x', 'scripts/dev.sh': 'x' }, BASE)).profile, 'STARTER');
+  assert.equal(classifyRange(BASE, commit({ 'client/src/link': { mode: '120000', content: '../x' } }, BASE)).profile, 'STARTER');
 });

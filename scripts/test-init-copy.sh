@@ -62,9 +62,9 @@ node --input-type=module - "$native_snapshot" <<'NODE'
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import assert from 'node:assert/strict';
-import { TEXT_FILES, RESET_FILES, ARCHIVE_FILES, IDENTITY_FILE } from './scripts/lib/init-project-manifest.mjs';
+import { TEXT_FILES, RESET_FILES, REMOVE_FILES, IDENTITY_FILE } from './scripts/lib/init-project-manifest.mjs';
 const temp = process.argv[2];
-const mutable = new Set([...TEXT_FILES, ...RESET_FILES, ...ARCHIVE_FILES, IDENTITY_FILE]);
+const mutable = new Set([...TEXT_FILES, ...RESET_FILES, ...REMOVE_FILES, IDENTITY_FILE]);
 let preserved = 0;
 for (const path of readFileSync(join(temp, 'files')).toString().split('\0').filter(Boolean)) {
   if (mutable.has(path) || /^server\/src\/(main|test)\/java\//.test(path)) continue;
@@ -89,4 +89,4 @@ node scripts/docs-check.mjs
 run node --test scripts/test-init-adopted.mjs scripts/ci/docs-check.test.mjs
 run docker compose --env-file .env.example -p "$PROJECT" --profile verify run --rm server-tests ./mvnw -B -ntp spotless:check clean verify
 run docker compose --env-file .env.example -p "$PROJECT" --profile verify run --build --rm client-tests
-echo 'D copy: personalized backend clean verify + client verify + docs-check PASS; not adoption E.'
+echo 'D copy: personalized backend clean verify + client verify + docs-check PASS.'

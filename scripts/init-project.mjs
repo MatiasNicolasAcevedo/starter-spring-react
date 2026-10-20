@@ -4,7 +4,7 @@ import { lstatSync, readFileSync, readdirSync, mkdirSync, writeFileSync, unlinkS
 import { resolve, relative, dirname, sep, posix } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
-import { JAVA_FILES, TEXT_FILES, RESET_FILES, ARCHIVE_FILES, GUARD_FILES, IDENTITY_FILE, archivePath } from './lib/init-project-manifest.mjs';
+import { JAVA_FILES, TEXT_FILES, RESET_FILES, REMOVE_FILES, GUARD_FILES, IDENTITY_FILE } from './lib/init-project-manifest.mjs';
 import { adoptionDocuments } from './lib/init-project-documents.mjs';
 
 const DEFAULT = { name: 'Starter', slug: 'starter', packageName: 'com.example.starter', holder: 'Matias Nicolas Acevedo' };
@@ -85,9 +85,9 @@ function initialize({ root, identity, apply = false }) {
   if (current.initialized) {
     if (Object.keys(DEFAULT).some(key => current[key] !== identity[key]) || !current.files || !Array.isArray(current.absent)) throw new Error('Reinicialización incompatible');
     assertJavaTree(current.packageName);
-    const expected = [...TEXT_FILES, ...RESET_FILES, ...ARCHIVE_FILES.map(archivePath), ...javaPaths(current.packageName)].sort();
+    const expected = [...TEXT_FILES, ...RESET_FILES, ...javaPaths(current.packageName)].sort();
     if (JSON.stringify(Object.keys(current.files).sort()) !== JSON.stringify(expected)) throw new Error('Inventario de identidad incompatible');
-    const absent = [...ARCHIVE_FILES.filter(path => !RESET_FILES.includes(path)), ...javaPaths(DEFAULT.packageName).filter(path => !javaPaths(current.packageName).includes(path))].sort();
+    const absent = [...REMOVE_FILES, ...javaPaths(DEFAULT.packageName).filter(path => !javaPaths(current.packageName).includes(path))].sort();
     if (JSON.stringify(current.absent) !== JSON.stringify(absent)) throw new Error('Inventario ausente incompatible');
     for (const [path, digest] of Object.entries(current.files)) if (hash(read(path)) !== digest) throw new Error('Copia inicializada modificada o parcial');
     for (const path of current.absent) if (inspect(path)) throw new Error('Colisión de estado inicializado');
@@ -104,18 +104,9 @@ function initialize({ root, identity, apply = false }) {
     if (!fresh) inspect(path, true);
     plan.set(path, content);
   };
-  const linkTargets = new Map(ARCHIVE_FILES.map(path => [path, archivePath(path)]));
-  const rewriteLinks = (text, from, to) => text.replace(/(\[[^\]]*\]\()([^\s)]+)(\))/g, (all, prefix, target, suffix) => {
-    if (/^(https?:|mailto:|#)/.test(target)) return all;
-    const [path, anchor] = target.split('#');
-    const resolved = posix.normalize(posix.join(posix.dirname(from), path));
-    const destination = linkTargets.get(resolved) ?? resolved;
-    return prefix + posix.relative(posix.dirname(to), destination) + (anchor ? `#${anchor}` : '') + suffix;
-  });
-  for (const path of ARCHIVE_FILES) {
-    const destination = archivePath(path);
-    put(destination, '> Registro histórico del starter. No acredita estado, pruebas ni permisos de este producto.\n\n' + rewriteLinks(read(path), path, destination), true);
-    if (!RESET_FILES.includes(path)) remove.add(path);
+  for (const path of REMOVE_FILES) {
+    inspect(path, true);
+    remove.add(path);
   }
   const replace = (text, old, value) => {
     if (!text.includes(old)) throw new Error('Marcador de identidad incompatible');
@@ -161,7 +152,6 @@ function initialize({ root, identity, apply = false }) {
     else {
       text = text.replaceAll('com.example.starter', identity.packageName).replaceAll('com/example/starter', packagePath)
         .replaceAll('groupId com.example', `groupId ${identity.packageName.split('.').slice(0, -1).join('.')}`).replaceAll('artifactId starter-server', `artifactId ${identity.slug}-server`);
-      text = rewriteLinks(text, path, path);
     }
     put(path, text);
   }

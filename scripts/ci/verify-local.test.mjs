@@ -13,7 +13,12 @@ const bin = join(workspace, 'bin');
 mkdirSync(scripts);
 mkdirSync(bin);
 copyFileSync(fileURLToPath(new URL('../verify.sh', import.meta.url)), join(scripts, 'verify.sh'));
-writeFileSync(join(scripts, 'verify-local-and-e2e.sh'), '#!/usr/bin/env bash\necho e2e >> "$CALLS"\nexit 0\n');
+for (const [file, suite] of [['e2e.sh', 'e2e'], ['verify-tooling.sh', 'tooling'], ['verify-local-and-e2e.sh', 'legacy']]) {
+  writeFileSync(join(scripts, file), `#!/usr/bin/env bash
+echo ${suite} >> "$CALLS"
+[[ "${suite}" != "$FAIL_SUITE" ]]
+`);
+}
 writeFileSync(join(bin, 'docker'), `#!/usr/bin/env bash
 if [[ "$*" == *" down "* ]]; then exit 0; fi
 suite=""
@@ -28,10 +33,11 @@ chmodSync(join(bin, 'docker'), 0o755);
 after(() => rmSync(workspace, { recursive: true, force: true }));
 const bash = process.platform === 'win32' ? 'C:/Program Files/Git/bin/bash.exe' : 'bash';
 
-function run(failSuite) {
-  const calls = join(workspace, `calls-${failSuite || 'green'}.txt`);
+let runIndex = 0;
+function run(failSuite, args = []) {
+  const calls = join(workspace, `calls-${++runIndex}-${failSuite || 'green'}.txt`);
   const inherited = Object.fromEntries(Object.entries(process.env).filter(([key]) => key.toUpperCase() !== 'PATH'));
-  const result = spawnSync(bash, ['scripts/verify.sh'], {
+  const result = spawnSync(bash, ['scripts/verify.sh', ...args], {
     cwd: workspace, encoding: 'utf8',
     env: { ...inherited, PATH: `${bin}${delimiter}${process.env.PATH}`, CALLS: calls.replaceAll('\\', '/'),
       FAIL_SUITE: failSuite, STARTER_SERVER_TESTS: 'container' },
@@ -56,3 +62,52 @@ for (const [suite, expected] of [['docs', ['docs']], ['server', ['docs', 'server
     assert.match(result.stdout, /FALLÓ \(exit 1\)/);
   });
 }
+
+for (const [args, expected] of [
+  [[], ['docs', 'server', 'client', 'e2e']],
+  [['--starter'], ['docs', 'server', 'client', 'tooling', 'e2e']],
+  [['--tooling'], ['tooling']],
+  [['--e2e'], ['e2e']],
+  [['--fast'], ['docs', 'server', 'client']],
+]) {
+  test(`profile ${args.join(' ') || 'application'} executes its actual runners exactly once`, () => {
+    const result = run('', args);
+    assert.equal(result.status, 0, result.stdout + result.stderr);
+    assert.deepEqual(result.calls, expected);
+  });
+}
+test('starter gate stops at a tooling failure before Playwright', () => {
+  const result = run('tooling', ['--starter']);
+  assert.equal(result.status, 1, result.stdout + result.stderr);
+  assert.deepEqual(result.calls, ['docs', 'server', 'client', 'tooling']);
+});
+
+test('actual tooling entry runs every retained regression and stops on failure', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'starter-tooling-entry-'));
+  try {
+    mkdirSync(join(dir, 'scripts'));
+    mkdirSync(join(dir, 'bin'));
+    copyFileSync(fileURLToPath(new URL('../verify-tooling.sh', import.meta.url)), join(dir, 'scripts/verify-tooling.sh'));
+    const shellCommands = ['test-init-copy.sh', 'test-local-guards.sh', 'test-dev-stack.sh',
+      'test-dev-stack-failures.sh', 'test-local-copy.sh', 'test-auth-proxies-signals.sh', 'test-auth-proxies.sh'];
+    const fixture = '#!/usr/bin/env bash\ncommand="${0##*/} $*"\necho "$command" >> "$CALLS"\n[[ "$command" != "$FAIL_COMMAND" ]]\n';
+    for (const command of shellCommands) writeFileSync(join(dir, 'scripts', command), fixture);
+    writeFileSync(join(dir, 'bin/node'), '#!/usr/bin/env bash\necho "node $*" >> "$CALLS"\n');
+    chmodSync(join(dir, 'bin/node'), 0o755);
+    const expected = ['node --test scripts/probe-dev-stack.test.mjs', 'node --test scripts/test-init-project.mjs',
+      'test-init-copy.sh ', 'test-local-guards.sh ', 'test-dev-stack.sh nginx', 'test-dev-stack.sh vite',
+      'test-dev-stack-failures.sh ', 'test-local-copy.sh ', 'test-auth-proxies-signals.sh ', 'test-auth-proxies.sh '];
+    for (const fail of ['', 'test-dev-stack.sh nginx']) {
+      const calls = join(dir, `calls-${fail ? 'red' : 'green'}`);
+      const inherited = Object.fromEntries(Object.entries(process.env).filter(([key]) => key.toUpperCase() !== 'PATH'));
+      const result = spawnSync(bash, ['scripts/verify-tooling.sh'], { cwd: dir, encoding: 'utf8',
+        env: { ...inherited, PATH: `${join(dir, 'bin')}${delimiter}${process.env.PATH}`,
+          CALLS: calls.replaceAll('\\', '/'), FAIL_COMMAND: fail } });
+      assert.ifError(result.error);
+      assert.equal(result.status, fail ? 1 : 0, result.stdout + result.stderr);
+      const actual = readFileSync(calls, 'utf8').trimEnd().split(/\r?\n/).map(line => line.trim());
+      assert.deepEqual(actual, (fail ? expected.slice(0, 5) : expected).map(line => line.trim()));
+      assert.match(result.stdout, /TIMING integration=/);
+    }
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});

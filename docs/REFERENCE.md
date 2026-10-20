@@ -1,6 +1,6 @@
 # Referencia privada removible
 
-La ruta `/reference` demuestra un flujo completo con datos ficticios propios de la sesión: crear, listar con páginas de 20, consultar, editar y confirmar borrado. No incorpora reglas comerciales. Contrato único de campos, propiedad, errores y paginación: [S-003](specs/S-003-reference-security.md). Evidencia propia y estado de entrega: [T-002](tasks/T-002-reference-security.md); código presente no equivale a revisión/merge ni a validación global del starter.
+La ruta `/reference` demuestra un flujo completo con datos ficticios propios de la sesión: crear, listar con páginas de 20, consultar, editar y confirmar borrado. No incorpora reglas comerciales. Contrato único de campos, propiedad, errores y paginación: [S-003](specs/S-003-reference-security.md).
 
 ## Conexiones
 
@@ -12,7 +12,7 @@ Client en `client/src/features/reference/`: API valida con Zod, hooks usan keys 
 
 `services/http.ts` acepta una guardia opcional `sessionIsCurrent` para requests privados: un 401 tardío de A se rechaza ante su caller pero no publica expiración de B. Sin guardia mantiene la conducta de auth existente. El proveedor de sesión conserva cancelación/limpieza y el shell remonta por identidad; limpiar MutationCache por sí solo no cancela una mutación. La feature nunca escribe su respuesta en cache; tampoco renueva CSRF de otra identidad ni muestra mensajes tardíos en ella.
 
-La paginación backend liga el offset `long` y el límite en SQL PostgreSQL, con orden fijo y filtro por dueño; el conteo usa el mismo UUID de dueño. `PageRequest`/`PageImpl` calculan offset y metadata sin aplicar el offset mediante JPA (`setFirstResult` solo acepta int). Las páginas válidas fuera de rango conservan contenido vacío y conteo real, incluso más allá de ese límite; no restringir la entrada ni abrir `/error` para resolver un límite de persistencia. Regresión HTTP/PostgreSQL y evidencia R1-01 en T-002.
+La paginación backend liga el offset `long` y el límite en SQL PostgreSQL, con orden fijo y filtro por dueño; el conteo usa el mismo UUID de dueño. `PageRequest`/`PageImpl` calculan offset y metadata sin aplicar el offset mediante JPA (`setFirstResult` solo acepta int). Las páginas válidas fuera de rango conservan contenido vacío y conteo real, incluso más allá de ese límite; no restringir la entrada ni abrir `/error` para resolver un límite de persistencia. Regresión HTTP/PostgreSQL en ReferenceItemIT.
 
 ## Sustituir o retirar
 
@@ -21,8 +21,8 @@ La paginación backend liga el offset `long` y el límite en SQL PostgreSQL, con
 3. Actualizar pruebas propias en `server/src/test/.../reference/`, `client/src/features/reference/*.test.*`, fixture de componentes `client/src/test/msw/referenceBackend.ts` y `e2e/tests/reference.spec.ts`. Retirar de las pruebas compartidas solo las conexiones de referencia: mock/negativos en SecurityConfigTest y test adicional de OpenApiContractIT; conservar todas las assertions de auth/B/Swagger. Helpers HTTP OIDC ampliados siguen siendo útiles para las suites existentes. La operación `reference-login` de `scripts/run-e2e.mjs` prepara solo el login nativo ficticio del proveedor para dos sesiones simultáneas; las operaciones heredadas no dependen de ella.
 4. Ajustar las reglas de cobertura específicas en `server/pom.xml` y `client/vite.config.ts` al flujo sustituto; conservar mínimos y política base. Actualizar esta guía y enlaces/arquitectura con el nuevo contrato, ejecutar docs-check y FULL/CI según [TESTING](TESTING.md).
 
-En una copia nueva con DB vacía y V2 todavía no aplicada puede retirarse la migración junto al ejemplo, antes del primer arranque. En una DB existente **V2 aplicada es inmutable**: retirar UI/código no borra sus datos. Conservar V1, app_user y el historial Flyway; cualquier futura migración de retiro requiere tarea y decisión explícita sobre datos. Ningún comando de C borra datos persistentes, migra hacia atrás ni personaliza otra aplicación. El inicializador/template y la adopción pertenecen a D/E.
+En una copia nueva con DB vacía y V2 todavía no aplicada puede retirarse la migración junto al ejemplo, antes del primer arranque. En una DB existente **V2 aplicada es inmutable**: retirar UI/código no borra sus datos. Conservar V1, app_user y el historial Flyway; cualquier migración de retiro requiere tarea y decisión explícita sobre datos. La personalización no borra datos persistentes ni migra hacia atrás.
 
 ## Pruebas propias
 
-Mapa canónico C-AC-01…10 en S-003. Unit/slices, PostgreSQL vacío/V1, HTTP con OIDC real, componentes y respuestas retenidas cubren los límites; Playwright recorre API/DB/proveedor reales en 1280/375 sin mocks de API propia. Mínimos de dominio/servicios backend y API/hooks client, negativos y gate: TESTING. Los ensayos usan namespaces nuevos, fixtures ficticias y cleanup por labels; resultados por SHA en T-002/PR, sin heredar evidencia de B ni marcar HANDOFF.
+Mapa canónico C-AC-01…10 en S-003. Unit/slices, PostgreSQL vacío/V1, HTTP con OIDC real, componentes y respuestas retenidas cubren los límites; Playwright recorre API/DB/proveedor reales en 1280/375 sin mocks de API propia. Mínimos de dominio/servicios backend y API/hooks client, negativos y gate: TESTING. Los ensayos usan namespaces nuevos, fixtures ficticias y cleanup por labels; resultados por SHA en la tarea/PR vigente.
