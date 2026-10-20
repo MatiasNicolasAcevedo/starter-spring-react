@@ -3,13 +3,13 @@ id: S-002
 status: approved
 version: 1
 milestone: M0
-tasks: [T-001]
+tasks: []
 ---
-# S-002 · B: desarrollo local persistente y estado conectado
+# S-002 · Desarrollo local persistente y estado conectado
 
 ## Problema y usuario
 El mantenedor necesita levantar, comprobar, detener y retomar el starter sin credenciales Google ni herramientas de build instaladas en host. La pantalla actual obtiene nombre/versión reales de la API, pero eso no demuestra disponibilidad de PostgreSQL. El harness dev-auth es efímero y su cierre elimina datos ficticios; no satisface el desarrollo persistente.
-Referencias de contexto: [PROJECT_CONTEXT](../../PROJECT_CONTEXT.md), secciones «Objetivo aceptado», «Alcance y secuencia» y «Decisiones trazadas»; parte B y límites de [ROADMAP](../ROADMAP.md). El contexto genérico no tiene IDs F-/RN-/CA-: los criterios B-AC siguientes trazan este contrato, sin inventar IDs de negocio.
+Contrato técnico vigente de la base; contexto de uso en [PROJECT_CONTEXT](../../PROJECT_CONTEXT.md).
 
 ## Historias y reglas
 1. Modo local explícito: `bash scripts/dev.sh up|check|down --mode local --proxy nginx|vite --project starter-dev-<sufijo>`. Cada invocación requiere modo, proxy y proyecto; el texto entre ángulos es un sufijo único elegido por el operador. Sin defaults de proyecto global, elevación de permisos ni lectura implícita de `.env`. Usar una fixture ficticia versionada explícita; admitir `--env-file` solo para parámetros locales documentados, sin cargar credenciales Google. Mantener el default real `google` sin fallback ni mezclas con `test/e2e`.
@@ -36,7 +36,7 @@ Pruebas de componente con MSW incluyen respuesta retenida, 503 tras UP, JSON inv
 PostgreSQL 18.6 y Flyway V1 publicada intactos, JPA validate. Arranque desde volumen vacío aplica migración y login local genera una identidad ficticia. Capturar solo huella saneada id/created_at/conteo (sin datos personales, cookies ni claims) para comparar restart/rebuild/down/up del stack propio. Sin nuevas migraciones previstas. Revertir cambios de B mediante código/config, conservando el volumen de desarrollo; borrar datos de ensayo únicamente después de demostrar retoma.
 
 ## Criterios de aceptación
-Los archivos nuevos indicados son destinos previstos para la implementación, no pruebas existentes o ejecutadas. Cada criterio pertenece solo a [T-001](../tasks/T-001-local-stack.md).
+Los criterios describen el comportamiento a conservar; ejecución y evidencia en la tarea vigente.
 
 | ID | Dado / cuando / entonces | Contrato | Nivel / archivo de prueba previsto |
 |---|---|---|---|
@@ -50,13 +50,7 @@ Los archivos nuevos indicados son destinos previstos para la implementación, no
 | B-AC-08 | Swagger por nginx/Vite carga config/JSON/index/recurso con Content-Type/contenido correctos y Try it out real conserva denegaciones | ADR 0003 | `e2e/tests/swagger.spec.ts` en ambos proxies; IT opt-in/off vigentes |
 | B-AC-09 | UI loading/error/éxito/recuperación y teclado a 1280/375; API en E2E sin mocks; HMR Vite restaura fuente | Frontend | `SystemInfoPanel.test.tsx`, E2E sistema/local-stack y ensayo HMR vigente |
 | B-AC-10 | Perfil real sin credenciales y perfiles mezclados fallan sin fallback; suites OIDC/CSRF/logout/propiedad y Swagger negativos siguen verdes | Reglas 1, 8; S-001 | suites auth/negativos vigentes + FULL completo, sin Google real |
-| B-AC-11 | Copia de trabajo sin kit: README literal, checks/lifecycle/FULL/CI sobre SHA publicado; recursos de ensayo 0/0/0; desarrollo persiste antes del cleanup | Datos y reglas 6–7 | documentación y gate FULL; evidencia propia por SHA/labels en T-001/PR |
-
-## Tareas y dependencias
-T-000 done → T-001 unidades B1 → B2 → B3 → B4 → revisión independiente/merge → C aún draft. La división detallada y checkpoints se mantienen en T-001. Son unidades secuenciales revisables en una sola tarea/PR de M0 (tamaño excepcional previsto por planner), sin abrir contratos paralelos ni adelantar otra parte.
+| B-AC-11 | Copia de trabajo sin kit: README literal, checks/lifecycle/FULL/CI sobre SHA publicado; recursos de ensayo 0/0/0; desarrollo persiste antes del cleanup | Datos y reglas 6–7 | documentación y gate FULL; evidencia propia por SHA/labels en la tarea/PR vigente |
 
 ## Fuera de alcance
-CRUD/migración de dominio/RHF de C, inicializador/template/Dependabot de D, adopción validada de E, smoke Google real, redistribuir auth, cambiar decisiones ADR, debilitar suites/umbrales o modificar protecciones/versiones. No operar origen, otros repos, datos/volúmenes ajenos, hosts globales ni infraestructura de producción. El único límite posterior a E sigue exclusivamente en PROVENANCE.
-
-## Validación de planificación
-2026-10-17, planner en sesión nueva: Codex desktop/API y terminal PowerShell/Git Bash; familia declarada GPT-6, runtime exacto/esfuerzo efectivo no expuestos, sin atribuir Sol/high ni selección/delegación. `approved` significa alineada con el brief autorizado; no aprobación humana ni veredicto de revisión de código. Predecesora y ambas CI FULL comprobadas en T-000. Ninguna prueba de B ejecutada en esta planificación, ningún criterio HANDOFF acreditado por estos textos.
+Cambiar autenticación, dominio de aplicación, versiones o controles; producción y recursos ajenos. Las tareas nuevas se derivan del contexto de cada aplicación.

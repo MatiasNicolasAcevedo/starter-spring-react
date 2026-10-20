@@ -23,11 +23,11 @@ Revisión en sesión distinta sobre HEAD/base publicados; no revisar/mergear imp
 ## Seguridad y entorno
 Auth Google OIDC con sesión backend/CSRF y autorización por propietario; sin auth propia ni tokens en navegador. No leer/imprimir secretos, .env real, cookies, tokens, claims completos ni datos personales.
 Stacks propios con .env.example o fixtures ficticias, nombres únicos y cleanup por labels exactos; nunca datos/volúmenes ajenos, Google real, hosts globales ni prune. Producción, datos reales, costos y permisos nuevos requieren dueño. No crear/borrar otros repos.
-Kit local plantilla/ nunca se versiona, publica, empaqueta, copia automáticamente ni borra. Origen en lectura, nunca usar su clon local; docs/PROVENANCE.md es su único límite. La aplicación nueva decide su propia AUTONOMY; no hereda permisos.
+Kit local plantilla/ nunca se versiona, publica, empaqueta, copia automáticamente ni borra. La aplicación nueva decide su propia AUTONOMY; no hereda permisos.
 Dev persistente sin Google: `bash scripts/dev.sh up --mode local --proxy nginx --project starter-dev-local-nginx`; parámetros y retoma en SETUP. dev-auth.sh conserva sintaxis/semántica efímeras, no usar para datos persistentes.
 Buscar con rg y leer por rangos; no cargar dependencias, reportes ni lockfiles completos por defecto.
 
 <!-- starter-only:start -->
-## Construcción de este starter
-Contrato secuencial A…E en docs/ROADMAP.md; cada parte depende de revisión/merge anterior. No acreditar beta, adopción ni HANDOFF por herencia. Frontera solicitada: GPT-6.1 Sol/Codex u Opus 5.5/Claude Code, high; registrar solo lo expuesto, sin abrir sesiones/modelos/delegaciones. Preparación previa y ensayo E son fases de T-004, mismo PR; ambas ejecutadas, pendiente revisión independiente de T-004 completa y merge. HANDOFF cambia solo con evidencia propia específica y sigue NO_LISTO hasta 22/22 con todas las partes done. Tras E MERGED y validada, únicamente continuidad de PROVENANCE y retiro del kit por el dueño.
+## Mantenimiento de esta base
+El starter se mantiene como base inicial genérica. La acción vigente está en STATUS; cada cambio exige contrato, pruebas y revisión independiente. No trasladar tareas, evidencia, permisos ni decisiones del mantenimiento a una aplicación nueva. Las versiones de herramientas se conservan salvo una tarea explícita de actualización. El dueño decide cuándo la base está lista para su uso.
 <!-- starter-only:end -->

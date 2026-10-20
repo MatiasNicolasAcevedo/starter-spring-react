@@ -73,15 +73,7 @@ export const JAVA_FILES = {
     "system/SystemInfoControllerTest.java"
   ]
 };
-export const ARCHIVE_FILES = [
-  "PROJECT_CONTEXT.md",
-  "docs/tasks/T-000-starter-extraction.md",
-  "docs/tasks/T-001-local-stack.md",
-  "docs/tasks/T-002-reference-security.md",
-  "docs/tasks/T-003-initializer-beta.md",
-  "docs/tasks/T-004-clean-adoption.md",
-  "docs/specs/S-004-initializer-beta.md"
-];
+export const REMOVE_FILES = ["docs/tasks/T-005-generic-baseline.md"];
 export const TEXT_FILES = [
   "server/pom.xml",
   "server/Dockerfile",
@@ -114,7 +106,6 @@ export const RESET_FILES = [
   "docs/tasks/T-000-adoption.md"
 ];
 export const IDENTITY_FILE = 'project-identity.json';
-export const archivePath = path => 'docs/archive/starter/' + path.replace(/^docs\//, '');
 
 // Read-only compatibility guards: the known destinations must remain outside versioned ignores.
 export const GUARD_FILES = {

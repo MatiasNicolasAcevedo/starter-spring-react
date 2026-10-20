@@ -326,6 +326,7 @@ describe('Cierre de sesión', () => {
       const { user } = renderSession()
       const button = await within(banner()).findByRole('button', { name: 'Cerrar sesión' })
       await waitFor(() => expect(button).toBeEnabled())
+      expect(await screen.findByText('Datos de Persona A')).toBeVisible()
 
       await user.click(button)
 

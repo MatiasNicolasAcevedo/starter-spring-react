@@ -14,7 +14,7 @@ navegador → client (SPA/proxy) → server (MVC/Security/JPA) → db
 Paquete neutral `com.example.starter`, groupId com.example, artifactId starter-server. Feature contiene controller/DTO/servicio/persistencia; separar web/application/persistence/domain al crecer. Sin ciclos ni acceso al repositorio de otra feature.
 identity crea/recupera app_user por issuer/subject, UUID v7 y constraint única; email/nombre mutables sin otorgar permisos. security mantiene OIDC/sesión/CSRF/origen. shared/error ofrece ProblemDetail con errors de campo ordenados. system expone GET /api/v1/system/info con nombre/versión reales.
 Flyway V1 se conserva, JPA validate y open-in-view=false. Instant/TIMESTAMPTZ y JVM UTC; Clock inyectado. DB de pruebas efímera separada del volumen de desarrollo. Sin tablas/reglas del dominio anterior.
-La feature CRUD privada `reference` agrega V2, consultas por dueño y contrato S-003. Conexiones y retiro seguro en [REFERENCE](REFERENCE.md); estado/evidencia de C en T-002. B incorpora readiness DB y la pantalla conectada; evidencia propia en T-001.
+La feature CRUD privada `reference` agrega V2, consultas por dueño y contrato S-003. Conexiones y retiro seguro en [REFERENCE](REFERENCE.md); readiness DB y pantalla conectada incluidas.
 
 ## Seguridad
 Contrato heredado: [auth](specs/S-001-auth-google.md), ADR 0002 y ADR 0003. Revalidar las suites en esta base.
@@ -51,4 +51,4 @@ GET /actuator/health/readiness agrega readinessState y db explícitamente; liven
 
 La UI combina system/info con readiness UP mediante HTTP/Zod/Query; revalida readiness cada 5 s, sin retries y con timeout de petición 5 s. Un error de refetch tiene prioridad sobre datos de cache anteriores. El reintento solicita ambos contratos; conserva el botón montado y lo deshabilita durante fetch. No cambia sesión/CSRF/cache privada.
 
-El desarrollo persistente usa entrada dev.sh separada del harness efímero. Cada recurso tiene labels de propiedad, source/mode/proxy/origin/puerto OIDC y proyecto Compose. El CLI valida esos recursos antes de mutar y verifica puertos antes de build/up; rollback retira solo IDs nuevos, down conserva volumen. Fixtures y runners reutilizan las versiones inventariadas. Guía y límites de operación en SETUP; criterios/ensayos en S-002/T-001, sin duplicar evidencia aquí.
+El desarrollo persistente usa entrada dev.sh separada del harness efímero. Cada recurso tiene labels de propiedad, source/mode/proxy/origin/puerto OIDC y proyecto Compose. El CLI valida esos recursos antes de mutar y verifica puertos antes de build/up; rollback retira solo IDs nuevos, down conserva volumen. Fixtures y runners reutilizan las versiones inventariadas. Guía y límites de operación en SETUP; criterios/ensayos en S-002, sin duplicar evidencia aquí.

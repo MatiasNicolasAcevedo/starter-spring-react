@@ -3,7 +3,7 @@
 Fuente canónica del inventario declarado y de la última disponibilidad comprobada de MCP servers y Agent Skills para este proyecto. Sirve a Junie CLI y al plugin de IntelliJ IDEA/AIR; no configura, instala ni autoriza herramientas. Reglas y permisos en [AGENTS](../AGENTS.md) y [AUTONOMY](../docs/AUTONOMY.md).
 
 ## Estado y procedencia
-Inventario declarado por el dueño el 2026-10-19: cinco MCP y siete skills. Inspección de este checkout ese día: antes de crear este documento no existía `.junie/`; no hay configuración MCP ni skills de proyecto observadas. Esto no demuestra ausencia en el IDE, contexto ACP o configuración global del dueño. No se inspeccionan archivos privados globales ni secretos. No se ha observado una sesión Junie ni un runtime Qwen; las herramientas expuestas a Codex no acreditan las de Junie.
+Inventario declarado: cinco MCP y siete skills. La tabla indica disponibilidad declarada, no instalación o ejecución comprobada. Cada sesión Junie verifica las herramientas expuestas en su propio entorno; las de otro agente no acreditan las suyas. No inspeccionar archivos privados globales ni secretos.
 
 Estados: **declarado** = informado sin comprobar disponibilidad; **activo verificado** = listado en la sesión indicada y sonda pertinente exitosa; **filtrado/deshabilitado** = existe pero no está expuesto/habilitado en ese contexto; **no instalado** = ausencia comprobada en el alcance indicado, sin generalizar a otros; **error/autorización pendiente** = existe y no se puede usar. Una definición en disco no basta para afirmar activo. Registrar fecha, superficie CLI/IDE/ACP, alcance proyecto/usuario/cliente y evidencia saneada al cambiar un estado.
 

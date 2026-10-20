@@ -1,4 +1,4 @@
-"""Inventory fixed direct dependencies; compare with the immutable archive anchor.
+"""Inventory fixed direct dependencies; compare with a chosen Git baseline (HEAD by default).
 
 Usage: python scripts/dependency-inventory.py --effective-pom PATH [--write]
 Resolve PATH first with server/mvnw help:effective-pom -Doutput=PATH.
@@ -45,8 +45,9 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--effective-pom", required=True, type=Path)
     parser.add_argument("--write", action="store_true")
+    parser.add_argument("--baseline", default="HEAD", help="Git ref whose dependency versions must be preserved")
     args = parser.parse_args()
-    anchor = subprocess.check_output(["git", "rev-list", "--max-parents=0", "HEAD"], cwd=ROOT, text=True).strip()
+    anchor = args.baseline
     pom = xml((ROOT / "server/pom.xml").read_text(encoding="utf-8"))
     baseline = xml(git_text(anchor, "server/pom.xml"))
     effective = xml(args.effective_pom.read_text(encoding="utf-8"))
@@ -55,9 +56,9 @@ def main():
     assert ET.tostring(pom.find("m:parent", NS)) == ET.tostring(baseline.find("m:parent", NS)), "Parent changed"
     assert ET.tostring(pom.find("m:properties", NS)).replace(b"\r", b"") == ET.tostring(baseline.find("m:properties", NS)).replace(b"\r", b""), "Version properties changed"
     lines = ["# DEPENDENCIES · Inventario conciliado", "",
-             "Versiones congeladas; sin actualizaciones a latest. Procedencia: [PROVENANCE](PROVENANCE.md).",
+             "Versiones congeladas; sin actualizaciones a latest. El inventario describe la base actual.",
              "Generado con POM efectivo (Maven) y lockfiles npm; no se documentan transitivas como directas.",
-             "Comparación con el ancla de extracción: igualdad de coordenadas, versiones y scopes, plugins, parent, propiedades de versión, wrappers y resolución npm.", "",
+             "Comparación con la referencia Git seleccionada: coordenadas/versiones/scopes, plugins, parent, propiedades, wrappers y resolución npm.", "",
              "## Backend", "", "| Coordenada | Declarada | Resuelta | Scope | Función / fuente |", "|---|---|---|---|---|"]
     parent = pom.find("m:parent", NS)
     lines.append(f"| {coordinates(parent)} | {value(parent, 'version')} | {value(parent, 'version')} | parent/BOM | Gestión del stack · server/pom.xml |")
@@ -115,7 +116,7 @@ def main():
     assert actions == list(dict.fromkeys(re.findall(r"uses:\s*([^\s]+)", git_text(anchor, ".github/workflows/ci.yml")))), "CI action versions changed"
     for entry in actions:
         lines.append(f"| Acción CI | `{entry}` | .github/workflows/ci.yml |")
-    lines += ["", "§19.3.4 conciliado: backend 20 directas; client 32 directas; E2E 1 directa; siete plugins Maven declarados más formateador y annotation processor. JUnit/Mockito/AssertJ transitivas continúan en el BOM; no duplicadas.",
+    lines += ["", "Inventario: backend 20 directas; client 32 directas; E2E 1 directa; siete plugins Maven declarados más formateador y annotation processor. JUnit/Mockito/AssertJ transitivas continúan en el BOM; no duplicadas.",
               "Los rangos del scaffold se conservan junto a sus versiones exactas de lockfile. Imágenes sin digest se conservan tal como estaban; Playwright mantiene tag + digest. Java 21 y Node 24.21.0 se conservan también en CI.",
               "", "Reproducir: resolver un POM efectivo y ejecutar `python scripts/dependency-inventory.py --effective-pom RUTA --write`. El script falla ante diferencias de dependencias/lockfiles/wrappers. Revisar cualquier diferencia antes de aceptarla.", ""]
     body = "\n".join(lines)

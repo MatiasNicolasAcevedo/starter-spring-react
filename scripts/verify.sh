@@ -10,7 +10,7 @@
 #   bash scripts/verify.sh --policy <base>   muestra la política del diff contra <base> sin ejecutar suites
 set -uo pipefail
 
-# Fase del gate: FULL desde base heredada (BOOTSTRAP fue la fase de base heredada..base heredada). Debe coincidir con ci.yml (docs-check).
+# Fase local FULL; debe coincidir con ci.yml (docs-check).
 GATE_PHASE="FULL"
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -115,7 +115,9 @@ for suite in "${suites[@]}"; do
   fi
   echo "==> suite $suite"
   code=0
+  suite_started=$SECONDS
   run_suite "$suite" || code=$?
+  printf 'TIMING suite=%s seconds=%s exit=%s\n' "$suite" "$((SECONDS - suite_started))" "$code"
   if [[ "$SIGNAL_CODE" != 0 ]]; then
     result[$suite]="INTERRUMPIDA (señal; exit $code tras su cleanup)"
     overall=1

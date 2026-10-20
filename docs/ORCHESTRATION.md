@@ -41,7 +41,7 @@ Contrato mínimo para encadenar sesiones. **No hay dispatcher instalado:** la co
 | HANDOFF | Aceptación/traspaso; cambia al aportar evidencia o invalidar un criterio, no con cada fix |
 | ROADMAP | Objetivos e hitos; revisión cada cinco tareas de producto mergeadas, hito o cambio relevante |
 
-La cadencia se consulta en tareas mergeadas; no exige mantener contadores duplicados. Las tareas autosuficientes pueden usar spec null. PROJECT es un índice del contexto, sin otro brief que mantener. Los documentos históricos del starter no son lectura diaria del producto.
+La cadencia se consulta en tareas mergeadas; no exige mantener contadores duplicados. Las tareas autosuficientes pueden usar spec null. PROJECT es un índice del contexto, sin otro brief que mantener. Las tareas de mantenimiento no se copian al producto.
 
 ## Continuidad mínima vigente
 Frontera deja ROADMAP por versiones/iteraciones, specs agrupadas por capacidad/épica y sus tareas pequeñas con decisiones resueltas. Puede haber muchas tareas definidas, aunque solo cinco ready y una en vuelo. Una tarea draft puede estar completa y esperar únicamente la dependencia indicada; Junie la habilita al comprobarla sin pedir otro planner. Si falta una decisión de verdad, no la trata como ready.
@@ -52,6 +52,6 @@ El tablero agrupa En curso, Siguientes y Hechas, o una cola equivalente que iden
 
 Checkpoint vigente para retoma; tabla breve por tarea para correcciones significativas; evidencia y PR/Git para trabajo anterior. No convertir el tablero en diario ni crear copias de cada estado. Esto deja trazabilidad sin una bitácora de cada edición.
 
-El dueño pidió optimizar para MVP pequeños el 2026-10-18. STATUS contiene un único prompt ejecutable; la tarea guarda evidencia y siguiente experimento. Un bloqueo incluye causa concreta y salida propuesta; si falta autorización, preguntar la decisión necesaria en vez de repetir el prompt condicionado. Una decisión nueva se registra y sustituye la precondición anterior.
+STATUS contiene un único prompt ejecutable; la tarea guarda evidencia y siguiente experimento. Un bloqueo incluye causa concreta y salida propuesta; si falta autorización, preguntar la decisión necesaria en vez de repetir el prompt condicionado. Una decisión nueva se registra y sustituye la precondición anterior.
 
-Dispatcher, adaptador de resultados JSON, locks y automatizaciones de sesiones quedan fuera del cierre del starter. El ejemplo histórico orchestration.example.yml no se usa ni se exige para adoptar un MVP. Reconsiderar esa infraestructura solo con una tarea futura y necesidad observada.
+Dispatcher, adaptador de resultados JSON, locks y automatizaciones de sesiones quedan fuera del cierre del starter. Reconsiderar esa infraestructura solo con una tarea futura y necesidad observada.

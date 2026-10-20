@@ -1,8 +1,8 @@
 # DEPENDENCIES · Inventario conciliado
 
-Versiones congeladas; sin actualizaciones a latest. Procedencia: [PROVENANCE](PROVENANCE.md).
+Versiones congeladas; sin actualizaciones a latest. El inventario describe la base actual.
 Generado con POM efectivo (Maven) y lockfiles npm; no se documentan transitivas como directas.
-Comparación con el ancla de extracción: igualdad de coordenadas, versiones y scopes, plugins, parent, propiedades de versión, wrappers y resolución npm.
+Comparación con la referencia Git seleccionada: coordenadas/versiones/scopes, plugins, parent, propiedades, wrappers y resolución npm.
 
 ## Backend
 
@@ -107,7 +107,7 @@ Comparación con el ancla de extracción: igualdad de coordenadas, versiones y s
 | Acción CI | `actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6` | .github/workflows/ci.yml |
 | Acción CI | `actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9` | .github/workflows/ci.yml |
 
-§19.3.4 conciliado: backend 20 directas; client 32 directas; E2E 1 directa; siete plugins Maven declarados más formateador y annotation processor. JUnit/Mockito/AssertJ transitivas continúan en el BOM; no duplicadas.
+Inventario: backend 20 directas; client 32 directas; E2E 1 directa; siete plugins Maven declarados más formateador y annotation processor. JUnit/Mockito/AssertJ transitivas continúan en el BOM; no duplicadas.
 Los rangos del scaffold se conservan junto a sus versiones exactas de lockfile. Imágenes sin digest se conservan tal como estaban; Playwright mantiene tag + digest. Java 21 y Node 24.21.0 se conservan también en CI.
 
 Reproducir: resolver un POM efectivo y ejecutar `python scripts/dependency-inventory.py --effective-pom RUTA --write`. El script falla ante diferencias de dependencias/lockfiles/wrappers. Revisar cualquier diferencia antes de aceptarla.

@@ -3,9 +3,9 @@ id: S-003
 status: approved
 version: 1
 milestone: M0
-tasks: [T-002]
+tasks: []
 ---
-# S-003 · C: referencia removible con propiedad y seguridad
+# S-003 · Referencia removible con propiedad y seguridad
 
 ## Problema y usuario
 El mantenedor necesita un ejemplo completo que pueda reemplazar al crear otra aplicación: persistencia, API, formulario y permisos comprobados con dos identidades. La base actual demuestra auth y disponibilidad; todavía no tiene CRUD de usuario. La referencia será una lista privada de elementos con título y descripción, sin significado comercial ni permisos derivados del proveedor.
@@ -43,7 +43,7 @@ Ruta `/reference` bajo el shell y enlace «Referencia»; mantener `/` y `/login`
 Estados observables: cargando, vacío, listado, guardando/borrando (evitar doble envío), validación de cliente/servidor, error red/5xx con reintento explícito, 404 de recurso retirado con regreso/listado actualizado y 403 con mensaje de rechazo sin fingir fin de sesión. 401 aplica el canal existente y elimina datos privados; CSRF rechazado renueva token pero exige una nueva acción, sin repetir la mutación. Éxito solo tras confirmación real; después de borrar el último elemento de una página, ajustar a una página válida. Labels/roles, foco tras errores y al cerrar edición/confirmación, teclado y 1280/375 sin overflow. Mostrar texto como contenido React, nunca HTML crudo.
 
 ## Criterios de aceptación
-Destinos de test previstos, todavía no implementados ni ejecutados. Todos pertenecen solo a [T-002](../tasks/T-002-reference-security.md).
+Los criterios describen el comportamiento a conservar; ejecución y evidencia en la tarea vigente.
 
 | ID | Dado / cuando / entonces | Regla / nivel y destino previsto |
 |---|---|---|
@@ -61,8 +61,5 @@ Destinos de test previstos, todavía no implementados ni ejecutados. Todos perte
 ## Removibilidad
 Encapsular backend en `reference/`, client en `features/reference/`, tests junto a esas rutas y E2E en su spec; enumerar conexiones mínimas (security matchers, ruta/enlace, configuración de cobertura, migración y pruebas/docs). La guía distinguirá copia nueva/DB vacía de DB existente: en una copia nueva se puede retirar la migración aún no aplicada; en una DB existente V2 es inmutable y no se promete borrar datos al quitar UI/código. Una futura migración de retiro requiere tarea/decisión sobre datos; ningún inicializador de C la ejecuta. Conservar V1, identity/security, infra de formularios y disponibilidad. La guía pertenece al repo; no al kit personal.
 
-## División y fuera de alcance
-C1 datos/servicio → C2 HTTP/permisos → C3 UI/cache → C4 integración/cobertura/guía/FULL, detallados en T-002. Una tarea/PR de M0 con unidades secuenciales, sin delegación. No implementar D/E, init-project, beta/template, adopción de otro producto, smoke Google real ni el endurecimiento futuro del callback. Sin roles, búsqueda, adjuntos, versiones de edición, soft delete, CORS, auth propia, cambios de dependencias/locks, origen, recursos ajenos, hosts globales o protecciones. No optimizar el gate como parte de este CRUD.
-
-## Validación de planificación · 2026-10-18
-Planner nuevo: Codex desktop/API y terminal PowerShell/Git Bash; familia declarada GPT-6, identificador runtime exacto y esfuerzo efectivo no expuestos. Sol/high es preferencia del dueño, sin simular selección, delegación ni otra sesión/modelo. `approved` significa alineación con el brief/autonomía vigentes, no aprobación humana ni revisión de implementación. B MERGED y CI FULL PR/main comprobadas en el cierre de T-001. Esta sesión solo publica planificación y conciliación; ninguna prueba de C ejecutada ni criterio HANDOFF acreditado.
+## Fuera de alcance
+Roles comerciales, búsqueda, adjuntos, soft delete, CORS, auth propia y cambios de dependencias. Nuevas capacidades requieren contexto y tarea propios.
