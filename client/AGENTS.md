@@ -7,9 +7,8 @@ Base heredada sobre el scaffold Vite `react-ts` (React 19, Vite 8, TypeScript 6,
 Gate client: `bash scripts/verify.sh --client` desde la raíz (runner client-tests). Equivale a `npm run verify`:
 `typecheck` (`tsc -b`, incluye tests) · `lint` (cero warnings) · `format:check` · `test:ci` (cobertura) · `build`.
 Iteración en el host: `npm ci`, `npm test`, `npm run format`. Dependencias nuevas solo con `npm install --save-exact`.
-Stack: `docker compose up -d --build --wait` → http://127.0.0.1:5173 exige `GOOGLE_CLIENT_ID`/`GOOGLE_CLIENT_SECRET` reales en `.env`
-(perfil `google`, sin fallback; no leerlos ni imprimirlos); HMR opcional con el perfil `dev` (docs/SETUP.md).
-Sin credenciales: gate client y `node scripts/test-auth-ui-smoke.mjs [--vite]` (stack aislado con proveedor OIDC local).
+Leer este archivo explícitamente cuando la tarea toque client; no presumir carga automática por Junie.
+Desarrollo conectado sin Google: comando persistente de README/SETUP con `--proxy nginx` o `--proxy vite` para HMR; nunca leer .env real. Prueba dirigida y motivo definidos por frontera en la tarea; `npm test -- --run src/ruta.test.tsx` desde client/ es iteración, no FULL. Gate client y smoke aislado: TESTING.
 Proxy de `/api/`, `/oauth2/`, `/login/oauth2/code/`, `/logout` y GET exacto `/actuator/health/readiness`: mantener iguales `nginx.conf` y `vite.config.ts`; el resto de Actuator se rechaza sin fallback SPA.
 
 ## Estructura

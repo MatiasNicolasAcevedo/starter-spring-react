@@ -1,4 +1,6 @@
-// D1: explicit write/rename allowlist. New source files require an intentional inventory update.
+// Explicit write/rename allowlist. New source files require an intentional inventory update.
+// AGENTS common rules are read from the root; starter-only instructions are excluded on reset.
+// Templates/protocols stay canonical and are preserved, not generated as divergent copies.
 export const JAVA_FILES = {
   "main": [
     "ServerApplication.java",

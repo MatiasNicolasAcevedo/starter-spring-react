@@ -1,28 +1,23 @@
-# Tablero vivo
+# Cola del starter
 
-Próxima acción: T-003 (D) mergeable tras R1 favorable sin bloqueantes; CI liviana/veredicto final y merge elegible del único PR#4. C done, cierre comprobado en T-002; mapa de cierre en ROADMAP y único prompt ejecutable en STATUS.
+Acción actual y único prompt en [STATUS](STATUS.md); estados y evidencia canónicos en cada tarea. Cambiar este índice solo al cambiar orden/dependencias.
 
-## En vuelo
-| Tarea | Estado | Salida |
-|---|---|---|
-| [T-003](tasks/T-003-initializer-beta.md) | mergeable | R1 favorable, FULL corroborado, dirigidos94/94 y cinco mutantes efectivos; CI/veredicto final antes del squash y beta |
+## En curso
+- [T-004](tasks/T-004-clean-adoption.md): revisión completa favorable; mergeable en PR#5, pendiente de CI/veredicto del HEAD documental final y MERGED para habilitar la única continuidad PROVENANCE. D MERGED. Sin otra tarea/PR activa.
 
-## Listas
-Ninguna otra tarea ready.
-
-## Bloqueadas
-E/T-004 permanece draft hasta D MERGED y conciliada; ver ROADMAP. D espera CI/veredicto final y merge; beta/template solo después.
+## Siguientes
+Tras revisión favorable y MERGED de T-004: única continuidad PROVENANCE y retiro del kit por el dueño. No hay otra tarea ready de producto en este starter. El microensayo Junie tiene contrato preparado, sin ejecución ni PR paralelos.
 
 ## Por refinar
-- Automatizaciones semanales, dispatcher, atestaciones de pruebas y optimizaciones de caché no medidas: fuera del cierre mínimo para MVP. Reconsiderar solo ante necesidad concreta; política de validación local ya decidida en TESTING.
-- E: ensayo literal de adopción sin kit, con otro contexto ficticio y retoma persistente, pendiente de D MERGED. Salida aceptada en T-004/PROJECT_CONTEXT; no refinar ni implementar aquí.
-- En una tarea futura, evaluar endurecimiento del callback fallido con sesión previa: cerrar replay invalida la sesión y permite logout forzado cross-site. No reabrir auth dentro de A o B.
+- Callback fallido con sesión previa: evaluar logout forzado cross-site en una tarea futura; no reabrir auth durante esta preparación.
+- Automatizaciones, dispatcher, atestaciones y caché sin medición: fuera del cierre mínimo; reconsiderar solo ante necesidad concreta.
+- docs-check del tablero de listas: validar sección/estado (En curso/Hechas) también en ítems de lista, con negativo; hoy una tarea en vuelo listada en Hechas pasa. Observación O1 de la revisión de preparación de T-004; no amplía E.
+- Huella de ruta de dev.sh: una copia bajo `%TEMP%` tiene dos grafías en Git Bash (`/tmp` y `/c/Users/.../Temp`) y el check con la otra falla cerrado sin mutar. Evaluar normalización compatible con volúmenes existentes. Observación E-O1 de T-004.
+- Imágenes de proyectos efímeros: los ensayos retiran contenedores/redes/volúmenes por label pero dejan imágenes `<proyecto>-*` de nombre único que se acumulan. Evaluar limpieza acotada a imágenes propias. Observación E-O2 de T-004.
+- Conteo de HANDOFF en STATUS: docs-check valida solo la primera ocurrencia y su negativo asume STATUS sin conteo; con un conteo correcto presente, un segundo falso pasa y la regresión falla. Validar todas las ocurrencias con negativo. Observación E-O3 de T-004; STATUS evita hoy ese patrón opcional.
 
 ## Hechas recientes
-| Tarea | Estado | Salida |
-|---|---|---|
-| [T-002](tasks/T-002-reference-security.md) | done | C: PR #3 MERGED, APROBADO R2/CI liviana final exactos y squash idéntico al árbol revisado; evidencia canónica en tarea |
-| [T-001](tasks/T-001-local-stack.md) | done | B: PR #2 MERGED, squash/CI FULL final PR y main comprobados; evidencia canónica en tarea |
-| [T-000](tasks/T-000-starter-extraction.md) | done | A: PR #1 MERGED, squash 47184f725f8a89528acac0aa3e7383f2334258de; FULL PR 39044690435 y main 39045270616 verificadas success, seis jobs verdes |
-
-Objetivo y estado de A…E: ROADMAP. Única tarea activa T-003. Cobertura y logout en vuelo de S-003 C-AC-07/09 comprobados en C, sin acreditar aceptación global ni D/E. HANDOFF 0/22 NO_LISTO; evidencia propia de A/B/C en sus tareas.
+- [T-003](tasks/T-003-initializer-beta.md): D y template beta, PR#4 MERGED.
+- [T-002](tasks/T-002-reference-security.md): C, PR#3 MERGED.
+- [T-001](tasks/T-001-local-stack.md): B, PR#2 MERGED.
+- [T-000](tasks/T-000-starter-extraction.md): A, PR#1 MERGED.

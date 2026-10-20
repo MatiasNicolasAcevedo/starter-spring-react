@@ -9,6 +9,16 @@ En PowerShell usar `& "C:\Program Files\Git\bin\bash.exe" scripts/verify.sh`. No
 ## Primer uso local sin Google
 Comandos persistentes mínimos en [README](../README.md#modo-local-explícito-sin-credenciales). Cada acción exige --mode local, --proxy nginx|vite y --project starter-dev- seguido de un sufijo propio. El namespace starter-dev-auth- está reservado al harness efímero. Docker Desktop/Compose V2/Git Bash bastan para up/check/down; Node >=24 host sigue siendo requisito separado del controlador FULL/E2E.
 
+## Instrucciones de Junie en IntelliJ IDEA y AIR
+Inventario y límites de MCP/skills: [.junie/TOOLS.md](../.junie/TOOLS.md). Es la única fuente de disponibilidad registrada; no asumirla desde una herramienta distinta o desde el catálogo del starter. La comprobación efectiva se hace en la sesión Junie del dueño, sin inspeccionar configuración privada ni secretos.
+
+
+Configuración declarada por el dueño: Junie Lite con Qwen 3.6 27B; no es evidencia de ejecución ni de capacidad en este repo. El dueño selecciona el modelo; ningún script abre sesiones, cambia modelos o instala agentes. El microensayo preparado vive en [la plantilla de ensayo](templates/junie-trial.md), sin ejecutarlo por frontera.
+
+Abrir la raíz del monorepo. En el plugin Junie, Settings → Tools → Junie → Project Settings: Project path = raíz y Guidelines path = `AGENTS.md`. Según [Project Settings oficial](https://junie.jetbrains.com/docs/junie-plugin-project-settings.html), la ruta explícita prevalece; sin ella `.junie/AGENTS.md` tiene preferencia exclusiva y luego se usa AGENTS raíz con playbook/rules si existen. Este repo no crea una copia `.junie/AGENTS.md`. Leer explícitamente server/AGENTS.md o client/AGENTS.md como parte de la tarea, sin presumir descubrimiento anidado.
+
+[AIR usa las instrucciones del agente elegido](https://www.jetbrains.com/help/air/project-instructions.html); no hay un formato AIR adicional que copiar. Si la versión instalada no ofrece el ajuste, adjuntar AGENTS raíz y el de la capa al prompt de la tarea, y pedir que informe las rutas leídas. Contraste documental realizado el 2026-10-19; configuración efectiva y lectura de la instalación del dueño siguen pendientes de observar. [Junie Lite oficial](https://junie.jetbrains.com/docs/junie-lite.html) describe su modelo actual como detalle sustituible, por lo que la declaración del dueño no prueba qué runtime ejecutó una tarea.
+
 ## Personalización en una copia propia
 
 Recorrido y ejemplo de CLI en [README](../README.md#crear-una-aplicación-y-su-primer-flujo); `node scripts/init-project.mjs --help` detalla entradas. Usar Node >=24 y copia limpia propia. Dry-run por defecto, `--apply` explícito. Nombre/titular admiten letras Unicode, números, espacios y `. , ( ) _ -` (1..100); slug de 2..50 caracteres minúsculos con letra inicial y guiones internos; paquete de al menos dos segmentos Java minúsculos sin palabras reservadas ni namespace java.*. No pasar secretos/contexto privado.

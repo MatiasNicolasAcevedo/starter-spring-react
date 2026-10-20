@@ -86,6 +86,16 @@ test('apply connects identity and resets adoption, preserves inventory/auth/migr
   assert.match(readFileSync(join(path, 'docs/AUTONOMY.md'), 'utf8'), /Pendiente de decisión del dueño/);
   assert.match(readFileSync(join(path, 'docs/tasks/T-000-adoption.md'), 'utf8'), /status: draft/);
   assert.equal(readdirSync(join(path, 'docs/tasks')).length, 1);
+  const agents = readFileSync(join(path, 'AGENTS.md'), 'utf8');
+  assert.match(agents, /^# AGENTS · Agenda Demo/);
+  assert.match(agents, /org.demo.agenda/);
+  assert.match(agents, /HANDOFF solo en adopción\/traspaso/);
+  assert.doesNotMatch(agents, /starter-only|Construcción de este starter|A…E|T-004|GPT-6.1/);
+  assert.match(readFileSync(join(path, 'docs/ORCHESTRATION.md'), 'utf8'), /Estados de tarea/);
+  assert.doesNotMatch(readFileSync(join(path, 'docs/tasks/T-000-adoption.md'), 'utf8'), /counts_for_cycle|product_cycle/);
+  assert.match(readFileSync(join(path, 'docs/templates/junie-trial.md'), 'utf8'), /ejecución y resultado todavía pendientes/);
+  assert.match(readFileSync(join(path, 'README.md'), 'utf8'), /Trabajo diario con Junie/);
+  assert.doesNotMatch(readFileSync(join(path, 'README.md'), 'utf8'), /A\/B\/C\/D|E lista|PR#4/);
   for (const old of ARCHIVE_FILES) {
     const archive = archivePath(old);
     const text = readFileSync(join(path, archive), 'utf8').replace(/^(```|~~~)[\s\S]*?^\1/gm, '');
@@ -131,6 +141,19 @@ test('missing source and altered late marker reject before any writes', () => {
   const missing = fixture();
   unlinkSync(join(missing, 'LICENSE'));
   rejectUnchanged(missing, entries, /requerido ausente/);
+});
+
+test('invalid instruction boundary rejects before writes rather than inheriting starter obligations', () => {
+  for (const transform of [
+    text => text.replace('<!-- starter-only:start -->', ''),
+    text => text.replace('<!-- starter-only:end -->', ''),
+    text => text.replace('starter-only:start', 'starter-only:swap').replace('starter-only:end', 'starter-only:start').replace('starter-only:swap', 'starter-only:end'),
+    text => text + '\n<!-- starter-only:start -->\n',
+  ]) {
+    const path = fixture(), file = join(path, 'AGENTS.md');
+    writeFileSync(file, transform(readFileSync(file, 'utf8')));
+    rejectUnchanged(path, entries, /Frontera de instrucciones del starter ausente/);
+  }
 });
 test('additional Java source and partial identity reject', () => {
   const path = fixture();

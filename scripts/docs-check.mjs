@@ -31,7 +31,7 @@ const REQUIRED = ['PROJECT_CONTEXT.md', 'LICENSE', 'README.md', 'CONTRIBUTING.md
   ...['PROJECT', 'ARCHITECTURE', 'ROADMAP', 'BACKLOG', 'STATUS', 'HANDOFF', 'AUTONOMY', 'ORCHESTRATION', 'SETUP',
     'TESTING'].map((d) => `docs/${d}.md`),
   ...['planner', 'implementer', 'reviewer', 'merger'].map((r) => `docs/agents/${r}.md`),
-  ...['task', 'spec', 'adr'].map((t) => `docs/templates/${t}.md`)];
+  ...['task', 'spec', 'adr', 'project-context', 'junie-trial'].map((t) => `docs/templates/${t}.md`)];
 for (const f of REQUIRED) if (!existsSync(join(ROOT, f))) fail(f, 'archivo obligatorio ausente');
 
 // 2. Cada CLAUDE.md solo importa su AGENTS.md hermano, y cada AGENTS.md tiene su CLAUDE.md
@@ -88,13 +88,12 @@ for (const f of files.filter((p) => /^docs\/tasks\/T-\d{3}-[a-z0-9-]+\.md$/.test
   if (!STATES.includes(fm.status)) fail(f, `status inválido: ${fm.status}`);
   if (!['frontier', 'junie'].includes(fm.executor)) fail(f, `executor inválido: ${fm.executor}`);
   if (!['planner', 'implementer', 'reviewer', 'merger'].includes(fm.role)) fail(f, `role inválido: ${fm.role}`);
-  if (typeof fm.counts_for_cycle !== 'boolean') fail(f, 'counts_for_cycle debe ser booleano');
+  if (fm.counts_for_cycle !== undefined && typeof fm.counts_for_cycle !== 'boolean') fail(f, 'counts_for_cycle debe ser booleano');
   if (fm.pr !== null && !Number.isInteger(fm.pr)) fail(f, 'pr debe ser null o un número');
   if (!Array.isArray(fm.depends_on)) fail(f, 'depends_on debe ser una lista');
-  if (fm.milestone === 'M0' && (fm.executor !== 'frontier' || fm.counts_for_cycle !== false)) {
+  if (fm.milestone === 'M0' && (fm.executor !== 'frontier' || fm.counts_for_cycle === true)) {
     fail(f, 'las tareas de M0 son executor frontier y counts_for_cycle false');
   }
-  if (fm.milestone !== 'M0' && fm.status === 'ready' && !fm.product_cycle) fail(f, 'ready posterior a M0 sin product_cycle');
   if (fm.status === 'ready') {
     const body = read(f);
     for (const h of ['## Objetivo', '## Alcance', '## Aceptación']) if (!body.includes(h)) fail(f, `ready sin sección "${h}"`);
@@ -139,9 +138,14 @@ if (existsSync(join(ROOT, 'docs/BACKLOG.md'))) {
     if (!task) { fail('docs/BACKLOG.md', `${id} sin archivo de tarea`); continue; }
     listed.add(id);
     const state = cells.find((c) => STATES.includes(c.replace(/`/g, '')))?.replace(/`/g, '');
-    if (state !== task.status) fail('docs/BACKLOG.md', `${id} figura como ${state}, frontmatter dice ${task.status}`);
+    if (state && state !== task.status) fail('docs/BACKLOG.md', `${id} figura como ${state}, frontmatter dice ${task.status}`);
     const allowed = SECTION_STATES[section];
     if (allowed && !allowed.includes(task.status)) fail('docs/BACKLOG.md', `${id} (${task.status}) en sección "${section}"`);
+  }
+  for (const match of read('docs/BACKLOG.md').matchAll(/\[T-\d{3}\]\(tasks\/[^)]+\)/g)) {
+    const id = match[0].match(/T-\d{3}/)[0];
+    if (!tasks.has(id)) fail('docs/BACKLOG.md', `${id} sin archivo de tarea`);
+    listed.add(id);
   }
   for (const t of [...inFlight, ...ready]) if (!listed.has(t.id)) fail('docs/BACKLOG.md', `${t.id} (${t.status}) no figura`);
 }
@@ -191,6 +195,7 @@ if (existsSync(join(ROOT, 'docs/STATUS.md'))) {
     if (inFlight.length === 1 && inFlight[0].id !== id) fail('docs/STATUS.md', `la tarea en vuelo es ${inFlight[0].id}`);
     if (!taskRow.includes(tasks.get(id).file.replace(/^docs\//, ''))) fail('docs/STATUS.md', 'falta el enlace al contrato');
   }
+  if ((status.match(/^```text$/gm) ?? []).length !== 1) fail('docs/STATUS.md', 'debe haber un único prompt vigente');
   const prompt = status.match(/### Prompt de la siguiente sesión\s*\n```text\n([\s\S]*?)```/)?.[1];
   if (!prompt) fail('docs/STATUS.md', 'falta el prompt de la siguiente sesión');
   else {
@@ -198,10 +203,10 @@ if (existsSync(join(ROOT, 'docs/STATUS.md'))) {
     if (/T-NNN|S-NNN|<[a-z][^>]*>|\bTODO\b|\bTBD\b/.test(prompt)) fail('docs/STATUS.md', 'el prompt contiene placeholders');
   }
   const count = status.match(/HANDOFF del (?:starter|producto):\s*(\d+)\/22 verificados/)?.[1];
-  if (verified !== null && Number(count) !== verified) fail('docs/STATUS.md', `conteo ${count}/22 distinto de HANDOFF ${verified}/22`);
+  if (count !== undefined && verified !== null && Number(count) !== verified) fail('docs/STATUS.md', `conteo ${count}/22 distinto de HANDOFF ${verified}/22`);
   if (existsSync(join(ROOT, 'docs/BACKLOG.md'))) {
     const next = read('docs/BACKLOG.md').match(/^Próxima acción:[^\n]*/m)?.[0] ?? '';
-    if (id && !next.includes(id)) fail('docs/BACKLOG.md', `la próxima acción no coincide con STATUS (${id})`);
+    if (next && id && !next.includes(id)) fail('docs/BACKLOG.md', `la próxima acción no coincide con STATUS (${id})`);
   }
 }
 

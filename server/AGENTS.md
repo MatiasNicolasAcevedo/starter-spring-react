@@ -6,7 +6,8 @@ Reglas del backend; complementan el AGENTS.md raíz. Detalle de diseño en docs/
 Java 21 (Temurin en contenedores) · Spring Boot 4.1.1 · Maven Wrapper (Maven 3.10.0) · PostgreSQL 18.6 · Flyway.
 Versiones efectivas: pom.xml y docs/SETUP.md (deben concordar).
 Gate backend: `bash scripts/verify.sh --server` desde la raíz (runner server-tests de Compose).
-Iteración en el IDE/host (Git Bash): `./mvnw spotless:apply` y `./mvnw clean verify` con Docker Desktop abierto.
+Leer este archivo explícitamente cuando la tarea toque server; no presumir carga automática por Junie.
+Iteración en el IDE/host desde server/ (Git Bash/JDK21): `./mvnw spotless:apply` y `./mvnw clean verify` con Docker Desktop abierto. Test dirigido y motivo ya definidos por frontera en la tarea.
 `./mvnw test` solo corre unitarios/slices: no demuestra la integración (`*IT` corre en `verify` con Failsafe).
 
 ## Estructura

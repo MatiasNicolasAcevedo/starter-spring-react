@@ -13,6 +13,8 @@ Autorización del dueño registrada una vez; las sesiones la heredan. Autoriza o
 El traspaso a Junie Lite no revoca estos permisos Git. Si una tarea requiere redefinir arquitectura, modelo de autenticación o alcance, Junie Lite prepara evidencia y propuesta para el dueño, que decide y puede abrir una sesión de frontera. Cambios pequeños ya especificados no se bloquean por tocar server o client.
 
 ## Operaciones ordinarias autorizadas
+Configuración declarada por el dueño el 2026-10-19: Junie Lite con Qwen 3.6 27B; ejecución todavía no observada. Frontera prepara contexto/decisiones y tareas, Junie implementa contratos pequeños. No abrir sesiones/modelos por cuenta propia. Preparación previa a E autorizada dentro de T-004; mismo PR, revisión independiente de preparación antes del ensayo en otra sesión. No habilita E en esta sesión ni un merge anticipado de T-004.
+
 - Leer código y documentación del proyecto; crear specs y tareas dentro del brief ([PROJECT.md](PROJECT.md)).
 - Implementar y mantener Java/Spring Boot/React, tests y documentación de una tarea refinada.
 - Crear ramas, commits de rutas explícitas, push, PR draft/ready y comentarios técnicos en esos PRs.
@@ -69,6 +71,6 @@ Una sesión nueva reduce el arrastre de contexto, pero no es una revisión human
 | Merge | `AUTOMATICO_ELEGIBLE` | Bootstrap completo; requiere veredicto de sesión distinta y checks verdes del HEAD/base vigentes. Ningún merge propio ejecutado |
 
 ## Alcance de esta autorización
-Solo creación/configuración inicial de este repo y partes A…E secuenciales; esta sesión implementa A. No crear/borrar otros repos. No operar Google real, datos persistentes ajenos ni el origen. No marcar template antes de D ni adopción validada antes de E. La constancia final tiene el único límite definido en PROVENANCE.
+Autorización inicial para creación/configuración de este repo y partes A…E secuenciales; fase actual y preparación previa a E autorizada por el dueño en T-004/STATUS. La referencia inicial a implementar solo A quedó consumida con su cierre y no activa por sí sola otras partes. No crear/borrar otros repos ni operar Google real, datos persistentes ajenos u origen. Beta habilitada tras D MERGED; adopción solo tras E. Constancia final limitada exclusivamente por PROVENANCE.
 
 Respuesta efectiva de GitHub al crear ruleset: required_review_thread_resolution=true (pedido), required_reviewers=[] y require_extra_approval_for_unattributed_changes=true (defaults añadidos por GitHub); allowed_merge_methods=[squash], 0 aprobaciones, sin bypass. Registrar y observar en el primer merge; no modificarlos para destrabar. Visibilidad/merge/secret scanning/push protection reconsultados activos; auto-merge deshabilitado.

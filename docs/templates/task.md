@@ -4,65 +4,47 @@ status: draft
 priority: P1
 size: S
 milestone: M1
-product_cycle: null
-counts_for_cycle: false
-spec: S-NNN
-spec_version: 1
+spec: null
 depends_on: []
-branch: feat/T-NNN-slug
-risk: standard
+branch: codex/t-nnn-slug
 role: implementer
 executor: junie
 pr: null
 ---
-# T-NNN · Resultado concreto
+# T-NNN · Un resultado observable
 
-<!-- Copiar a docs/tasks/T-NNN-slug.md y reemplazar todos los valores. Estados y campos válidos: docs/ORCHESTRATION.md.
-     executor: frontier (M0 y cambios fundacionales) o junie. counts_for_cycle: true solo si entrega o corrige
-     comportamiento del producto. product_cycle: ID de ciclo de ROADMAP antes de pasar a ready (fuera de M0). -->
+<!-- Frontera completa todos los valores antes de ready. Estado canónico aquí; STATUS enlaza la actual y BACKLOG ordena la cola. Campos/estados en docs/ORCHESTRATION.md. No copiar esta plantilla como otra tarea activa sin autorización. -->
 
-## Objetivo y evidencia
-Problema y comportamiento final observable, en pocas líneas, con referencias a PROJECT_CONTEXT (F-, RN-, CA-).
+## Objetivo
+Qué podrá observar el usuario o qué defecto dejará de ocurrir; referencia al contexto solo si aporta intención necesaria.
+Spec/épica e iteración a la que pertenece, si aplica. Siguiente tarea predefinida y dependencia que la habilita; criterio de salida que devuelve la iteración a frontera. El ejecutor no tiene que descubrir la ruta siguiente.
 
-## Alcance
-Incluye: …
-No incluye: …
-
-## Impacto
-Comportamiento que cambia y que queda igual · contratos/rutas/esquema · permisos y propiedad (actor permitido y denegado) · datos/migraciones · UI y documentación afectadas.
+## Alcance y decisiones resueltas
+Incluye/excluye; conducta y errores elegidos. API/schema, actor permitido/denegado, datos/migración y estados UI solo cuando apliquen. Ninguna decisión de arquitectura pendiente para el ejecutor.
 
 ## Leer antes
-Máximo cinco referencias específicas (sección o rango).
+Hasta cinco referencias a archivos/secciones concretas; AGENTS de la capa afectada. No mandar a leer todo el proyecto.
 
-## Archivos previstos
-Crear/modificar …; justificar cambios adicionales antes de incluirlos.
-
-## Pasos
-1. Test o comprobación del comportamiento acordado.
-2. Implementación mínima.
-3. Verificación y documentación.
+## Archivos y pasos
+Archivos previstos y 2–4 pasos ejecutables. Si hace falta ampliar capas o resolver otra decisión, devolver a frontera; una corrección ordinaria del contrato continúa.
 
 ## Aceptación y pruebas
-| Criterio de spec/tarea | Test/comando | Resultado esperado | Evidencia real |
+| Criterio observable | Capa elegida y por qué | Comando exacto (directorio/entorno) | Resultado esperado |
 |---|---|---|---|
-| AC-01 | … | … | pendiente |
+| AC-01 | Unitario/componente/integración/E2E según riesgo | Completar antes de ready | Completar |
 
-Política de gate: FULL por defecto; DOCS_ONLY solo si el diff y la CI lo permiten. No reducir asserts, suites ni umbrales.
-Bugfix de comportamiento: reproducir el fallo antes de arreglarlo.
+Bugfix: demostrar rojo antes de arreglar. Conservar regresiones y umbrales. Dirigidos durante iteración; FULL de cierre técnico o DOCS_ONLY según TESTING; escribir aquí comandos finales con namespaces propios si corresponden. No añadir E2E por costumbre.
 
-## Checkpoint de implementación
-- Sesiones (rol · modelo · herramienta):
-- Hecho:
-- Pendiente:
-- Decisiones y supuestos:
-- Archivos propios y cambios heredados:
-- Pruebas (comando · resultado · fecha · alcance probado):
-- Bloqueos (causa · intentos distintos · evidencia):
-- Rama / PR:
-- Último commit conocido (nunca el SHA de un commit futuro):
-- Publicación: local / publicada:
-- Próximo comando o acción:
-- Prompt de retoma: misma tarea, rama y PR.
+## Checkpoint vigente
+Rol/modelo/herramienta/esfuerzo reales una vez. Hecho y pendiente en pocas líneas; SHA/base conocidos; comando, exit, alcance y log saneado. Antes de una operación larga incluir recursos propios y cleanup. Ante bloqueo: causa, reproducción, intentos distintos y decisión/dato necesario. El prompt único de retoma vive en STATUS.
 
-## Resultado
-PR, merge confirmado o pendiente, criterios cumplidos, regresiones cubiertas y trabajo descubierto enlazado al BACKLOG.
+## Correcciones significativas
+| Fecha / SHA o pendiente de commit | Problema y causa comprobada | Corrección | Prueba y resultado |
+|---|---|---|---|
+| Completar solo ante una corrección útil | … | … | Rojo/verde y log saneado |
+
+Conservar hallazgos que explican decisiones o regresiones; no registrar cada edición, repetir comandos ya enlazados ni crear una bitácora global adicional. Trabajo anterior en tareas cerradas y Git/PR; el checkpoint no sustituye esa evidencia.
+
+## Cierre y siguiente tarea
+Criterios/evidencia, PR y revisión pendientes o confirmados. No done hasta MERGED comprobado. Actualizar STATUS al cambiar acción/rol; BACKLOG si cambia la cola; HANDOFF solo si afecta aceptación/traspaso. No reescribir cuatro documentos por cada corrección.
+El cierre entrega el único prompt de STATUS para revisar o para la siguiente tarea según el estado real. Tras MERGED, el siguiente implementer reconcilia done en el primer avance de su rama y toma la siguiente tarea ya definida; si solo esperaba esa dependencia, puede marcarla ready sin otra sesión de frontera. No hacer commits en la rama mergeada ni saltar revisión/merge.

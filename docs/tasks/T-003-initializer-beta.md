@@ -1,10 +1,10 @@
 ---
 id: T-003
-status: mergeable
+status: done
 priority: P1
 size: M
 executor: frontier
-role: reviewer
+role: merger
 milestone: M0
 counts_for_cycle: false
 product_cycle: null
@@ -48,7 +48,7 @@ Antes de operaciones largas: checkpoint con comandos, SHA/base, proyectos nuevos
 Inventario relevante comprobado por planner: `scripts/docs-check.mjs` fija hoy la ruta Java de Testcontainers y el rótulo de conteo de STATUS; `scripts/ci/docs-check.test.mjs` fija el nombre de T-000 del starter. D1/D2 deben adaptar esas conexiones para que la copia personalizada conserve los mismos controles/negativos después de renombrar/reiniciar, sin omitirlos ni aceptar una validación vacía. Es parte del ensayo compilable/docs-check, sin ampliar el producto.
 
 ## Aceptación y pruebas
-Matriz D-AC-01…07 canónica en S-004; resultados propios del implementer al final de esta tarea. D-AC-01…06 implementados y comprobados; D-AC-07 conserva revisión/merge y habilitación beta pendientes. FULL local sin opciones al cerrar fuentes técnicas, huella antes/después, base/HEAD y cleanup propios. Client verify incluye typecheck/lint/formato/tests/cobertura/build y backend clean verify incluye PostgreSQL IT/JaCoCo. Código publicado después del gate; cierre documental agrupado y CI liviana final sobre HEAD/base exactos. Repetir FULL solo bajo TESTING; no exigir CI automática de main ni remoto FULL manual por rutina.
+Matriz D-AC-01…07 canónica en S-004; resultados propios del implementer al final de esta tarea. D-AC-01…06 implementados y comprobados; D-AC-07 completado por revisión/CI/merge y template confirmados en la reconciliación posterior. FULL local sin opciones al cerrar fuentes técnicas, huella antes/después, base/HEAD y cleanup propios. Client verify incluye typecheck/lint/formato/tests/cobertura/build y backend clean verify incluye PostgreSQL IT/JaCoCo. Código publicado después del gate; cierre documental agrupado y CI liviana final sobre HEAD/base exactos. Repetir FULL solo bajo TESTING; no exigir CI automática de main ni remoto FULL manual por rutina.
 
 No done mientras PR abierto; no autorrevisión ni merge de implementación propia. Beta/template solo después del merge D comprobado; E/adopción validadas no se heredan de D. Marcar template es la autorización específica de ROADMAP, sin modificar protecciones.
 
@@ -58,7 +58,7 @@ Rol planner, Codex desktop/API y PowerShell; familia expuesta GPT-6, runtime exa
 Validación de esta planificación: `node scripts/docs-check.mjs` exit0 (44 Markdown/5 tareas/HANDOFF0/22), `node --test "scripts/ci/*.test.mjs"` **64/64 exit0**, sin fallos/cancelados/omitidos; incluye13 regresiones documentales. Primer intento de matrices restringido por permisos del sandbox al crear Git temporal/objetos MSYS; misma orden fuera del sandbox verde, sin modificar tests. `git diff --check` exit0; solo ocho Markdown documentales A/M, sin fuentes técnicas/locks/workflows modificados; clasificador DOCS_ONLY del commit publicado comprobable contra la base. Kit ignorado y ausente de Git/índice. Sin FULL nuevo, CI automática de main/rama sin PR ni recursos Docker levantados por planner. Commit/push en esta misma rama; confirmar HEAD local/tracking/remoto y árbol limpio al entregar, sin PR documental separado.
 
 ## Resultado
-Implementación D1→D4 publicada en PR #4, en revisión independiente. Inicializador seguro, contexto/T-000 propios, formulario/guía y ensayo compilable sin kit integrados y comprobados con FULL propio. Revisión, merge y habilitación beta/template pendientes; D no done mientras el PR esté abierto. T-004 draft y HANDOFF0/22 NO_LISTO. Continuidad posterior exclusivamente PROVENANCE.
+Implementación D1→D4 cerrada: PR #4 MERGED, APROBADO R1 y CI liviana exactos, squash idéntico al árbol revisado e isTemplate=true comprobados. Inicializador seguro, contexto/T-000 propios, formulario/guía y ensayo compilable sin kit integrados y comprobados con FULL propio. D done como template beta; adopción E pendiente, sin crédito por herencia. HANDOFF0/22 NO_LISTO. Evidencia de cierre en la reconciliación posterior; continuidad posterior exclusivamente PROVENANCE.
 
 ## Inicio implementer · 2026-10-18
 Codex desktop/API, terminal PowerShell/Git Bash; familia expuesta GPT-6, identificador runtime exacto y esfuerzo efectivo no expuestos. Sol/high solicitado; sin simular selección, delegación ni otras sesiones/modelos. Impacto: CLI/identidad y documentos propios de la copia, sin cambios de API/auth/permisos/propiedad/schema/UI de negocio.
@@ -161,3 +161,8 @@ Precondición comprobada antes de editar: árbol limpio y rama exacta; HEAD loca
 Primer intento de herramientas restringido por sandbox (fixtures Git/enlaces/Bash); misma orden fuera del sandbox94/94. Un error de sustitución del probe revisor de reset se corrigió únicamente en el comando temporal y se completó su control/negativo; no fue defecto ni corrección del producto. No se cambiaron tests/assertions/suites/umbrales/retries/deadlines ni fuentes publicadas. API conserva schema/rutas/auth; solo nombre configurado; UI/título leen identidad pública. Dependencias/locks/wrappers/migraciones/propiedad intactos. No hay condición de TESTING para repetir FULL.
 
 Antes de publicar: docs-check, dirigidos documentales y diff-check; kit ignorado/ausente de Git e índice. Este commit cambia HEAD solo por tres Markdown; el SHA final, CI liviana exacta y veredicto APROBADO se registrarán en PR#4 después de comprobarlos. No commits después del veredicto ni en rama mergeada. Continuación merger autorizada para este mismo PR conforme AUTONOMY, squash ligado al SHA revisado sin bypass. Solo tras MERGED/squash/árbol comprobados habilitar/comprobar isTemplate del mismo repo y registrar cierre en PR; conciliación documental/corte de D en el primer avance posterior según merger, sin ejecutar E aquí. HANDOFF0/22 NO_LISTO, T-004 draft; límites beta: OIDC ficticio/local, Google real pendiente del dueño y adopción E no validada. Continuidad posterior exclusivamente PROVENANCE.
+
+## Reconciliación posterior al merge · 2026-10-19
+Fuente canónica: [cierre merger de PR #4](https://github.com/MatiasNicolasAcevedo/starter-spring-react/pull/4#issuecomment-6277446910), con [APROBADO R1](https://github.com/MatiasNicolasAcevedo/starter-spring-react/pull/4#issuecomment-6277427167) y [CI final39325515279](https://github.com/MatiasNicolasAcevedo/starter-spring-react/actions/runs/39325515279). Reconsultados en esta sesión: MERGED el 2026-10-19 a las 18:12:37 America/Buenos_Aires; HEAD revisado `4cb81d3052381bead56af4e267d36443851204ca` / base `193f5a763af9ae61726daf20d30ae4ce8d5ce59d`; verify-required liviano completed/success vigente. Squash `6c5d4cd5395bdf871bc9bbbb5a536dcb53a44551` y HEAD revisado tienen árbol `0381f3b286f0712d7a74d01e47200b46562881f7` idéntico, diff vacío. Main local/tracking/remoto coincidentes con ese squash, árbol inicial limpio, ningún PR abierto y rama D remota ausente. GitHub confirma isTemplate=true en este mismo repo; límites beta visibles en S-004/README/PR. D-AC-07 completo, D done; FULL y dirigidos/cleanup propios se conservan sin repetirlos ni atribuirlos al planner.
+
+Primer avance de chore/t-004-clean-adoption desde main concilia tarea/STATUS/BACKLOG/HANDOFF/ROADMAP/README y concreta el contrato de E en T-004; sin PR documental separado ni commits en main/rama mergeada. Rol planner; Codex desktop/API y PowerShell/git/gh, familia expuesta GPT-6; runtime exacto/esfuerzo efectivo no expuestos. Sol/high solicitado, sin simular selección, delegar ni abrir sesiones/modelos. Impacto solo documental: sin cambios de comportamiento, API, permisos/propiedad, datos o UI. E pasa de draft a ready por contrato propio, sin ensayo ejecutado. HANDOFF0/22 NO_LISTO; Google real pendiente del dueño, kit conservado y única continuidad posterior a E MERGED y validada en PROVENANCE.
