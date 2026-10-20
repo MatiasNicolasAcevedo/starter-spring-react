@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 # Gate local de Starter (docs/TESTING.md). Ejecutar con Bash (Git Bash/WSL) desde cualquier carpeta del repo.
 # Despacha contenedores con Docker Compose; al primer fallo no inicia suites posteriores.
-#   bash scripts/verify.sh            todas las suites de la fase actual (FULL: único gate de entrega)
+#   bash scripts/verify.sh            FULL de aplicación: docs/backend/frontend/Playwright real
 #   bash scripts/verify.sh --docs     solo docs-check (gate de entrega solo si --policy informa DOCS_ONLY)
 #   bash scripts/verify.sh --server   solo backend (runner server-tests o alternativa host)
 #   bash scripts/verify.sh --client   solo client (runner client-tests: typecheck, lint, formato, tests, build)
-#   bash scripts/verify.sh --e2e      integración local y Playwright real (stacks aislados, Node 24 en el host)
+#   bash scripts/verify.sh --e2e      solo Playwright real con API/DB/OIDC (Node 24 host)
+#   bash scripts/verify.sh --starter  FULL más todos los ensayos de herramientas (cambios de starter/entorno)
+#   bash scripts/verify.sh --tooling  solo ensayos de herramientas, sin duplicar suites de aplicación
 #   bash scripts/verify.sh --fast     fase actual sin E2E (solo iteración; nunca habilita revisión ni merge)
 #   bash scripts/verify.sh --policy <base>   muestra la política del diff contra <base> sin ejecutar suites
 set -uo pipefail
@@ -56,8 +58,11 @@ suite_client() {
 
 # Proyecto Compose único y propio, env-file ficticio, sin puertos host; exporta solo reportes saneados y auditados.
 suite_e2e() {
-  # Normal FULL/--e2e executes the persistent CLI/browser/ownership/proxy/copy regressions first.
-  exec bash scripts/verify-local-and-e2e.sh
+  exec bash scripts/e2e.sh
+}
+
+suite_tooling() {
+  exec bash scripts/verify-tooling.sh
 }
 
 # INT/TERM/HUP: reenviar TERM a la suite en curso, esperar a que termine su cleanup y no iniciar las siguientes.
@@ -89,6 +94,8 @@ run_suite() {
 suites=()
 case "${1:-}" in
   "") read -r -a suites <<< "$(phase_suites)" ;;
+  --starter) suites=(docs server client tooling e2e) ;;
+  --tooling) suites=(tooling) ;;
   --fast) read -r -a all <<< "$(phase_suites)"; for s in "${all[@]}"; do [[ "$s" != e2e ]] && suites+=("$s"); done ;;
   --docs) suites=(docs) ;;
   --server) suites=(server) ;;
@@ -98,7 +105,7 @@ case "${1:-}" in
     base="${2:-origin/main}"
     node scripts/ci/classify-diff.mjs --base "$base" --head HEAD --phase "$GATE_PHASE"
     exit $? ;;
-  -h|--help) sed -n '2,10p' "$0"; exit 0 ;;
+  -h|--help) sed -n '2,12p' "$0"; exit 0 ;;
   *) echo "verify.sh: opción desconocida $1" >&2; exit 2 ;;
 esac
 
@@ -134,8 +141,8 @@ echo "Resumen verify.sh · fase $GATE_PHASE${1:+ · $1}"
 for suite in "${suites[@]}"; do printf '  %-7s %s\n' "$suite" "${result[$suite]}"; done
 if [[ "$GATE_PHASE" != FULL ]]; then
   echo "  Nota: $GATE_PHASE no es el gate completo; el cierre de M0 exige FULL."
-elif [[ -n "${1:-}" ]]; then
-  echo "  Nota: ejecución parcial (${1}); no habilita ready, revisión ni merge. El gate de entrega es FULL sin opciones (o --docs solo si --policy informa DOCS_ONLY)."
+elif [[ -n "${1:-}" && "${1:-}" != --starter ]]; then
+  echo "  Nota: ejecución parcial (${1}); no habilita ready, revisión ni merge. El gate de aplicación es FULL sin opciones; perfil STARTER exige --starter (o FULL + --tooling sobre las mismas fuentes/base). --docs solo si --policy informa DOCS_ONLY."
 fi
 if [[ "$SIGNAL_CODE" != 0 ]]; then
   exit "$SIGNAL_CODE"

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# FULL integration entry. An incomplete local lifecycle must fail the same e2e job; no extra check/protection.
+# Compatibility entry: starter tooling plus real Playwright. Daily app gate calls e2e.sh directly.
 set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 CHILD='' SIGNAL_CODE=0
@@ -20,14 +20,5 @@ run() {
   [[ "$SIGNAL_CODE" == 0 ]] || exit "$SIGNAL_CODE"
   return "$code"
 }
-run node --test scripts/probe-dev-stack.test.mjs
-run node --test scripts/test-init-project.mjs
-run bash scripts/test-init-copy.sh
-run bash scripts/test-local-guards.sh
-run bash scripts/test-dev-stack.sh nginx
-run bash scripts/test-dev-stack.sh vite
-run bash scripts/test-dev-stack-failures.sh
-run bash scripts/test-local-copy.sh
-run bash scripts/test-auth-proxies-signals.sh
-run bash scripts/test-auth-proxies.sh
+run bash scripts/verify-tooling.sh
 run bash scripts/e2e.sh

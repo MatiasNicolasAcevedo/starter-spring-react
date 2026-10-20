@@ -251,6 +251,15 @@ if (phaseSh === 'FULL' && phaseCi === 'FULL') {
     fail(manualPath, 'full-result no evalúa e2e con scripts/ci/verify-required.mjs');
   }
   if (!read('scripts/verify.sh').includes('FULL) echo "docs server client e2e"')) fail('scripts/verify.sh', 'FULL no ejecuta la suite e2e');
+  const gate = read('scripts/verify.sh');
+  if (!gate.includes('exec bash scripts/e2e.sh')) fail('scripts/verify.sh', 'FULL de aplicación debe ejecutar Playwright real directamente');
+  if (!gate.includes('--starter) suites=(docs server client tooling e2e)') || !gate.includes('exec bash scripts/verify-tooling.sh')) {
+    fail('scripts/verify.sh', 'perfil STARTER sin matriz tooling');
+  }
+  if (!manual.includes("if: needs.classify.outputs.profile == 'STARTER'") || !manual.includes('run: bash scripts/verify.sh --tooling')) {
+    fail(manualPath, 'perfil STARTER remoto sin tooling condicionado');
+  }
+
 }
 // Node: misma versión en CI, en el runner docs-check de Compose y en la imagen del client.
 const nodeCi = existsSync(join(ROOT, '.github/workflows/ci.yml')) && read('.github/workflows/ci.yml').match(/NODE_VERSION:\s*([\d.]+)/)?.[1];

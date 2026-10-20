@@ -127,3 +127,16 @@ test('a second active task is rejected', () => {
     rejects(/más de una tarea en vuelo/);
   } finally { rmSync(path); }
 });
+
+test('application FULL cannot invoke the expensive legacy wrapper', () => {
+  change('scripts/verify.sh', text => text.replace('exec bash scripts/e2e.sh', 'exec bash scripts/verify-local-and-e2e.sh'));
+  rejects(/debe ejecutar Playwright real directamente/);
+});
+test('starter gate cannot omit tooling', () => {
+  change('scripts/verify.sh', text => text.replace('--starter) suites=(docs server client tooling e2e)', '--starter) suites=(docs server client e2e)'));
+  rejects(/perfil STARTER sin matriz tooling/);
+});
+test('manual STARTER cannot skip tooling', () => {
+  change('.github/workflows/full.yml', text => text.replace('run: bash scripts/verify.sh --tooling', 'run: echo skip'));
+  rejects(/perfil STARTER remoto sin tooling/);
+});

@@ -92,7 +92,7 @@ El login local usa el proveedor ficticio y `host.docker.internal`; si se abre un
 | Momento | Qué comprueba el agente |
 |---|---|
 | Mientras implementa y antes de un commit con código | Test dirigido al comportamiento/corrección, rojo previo si es bug, tipos/formato pertinentes y diff/index sin secretos/kit. La tarea especifica comandos exactos y motivo de cada capa de prueba |
-| Al cerrar fuentes de un PR técnico | Un FULL local válido sobre fuentes finales/base, logs saneados, cleanup y correspondencia con lo publicado; no un FULL por cada commit |
+| Al cerrar fuentes de un PR técnico | Un FULL de aplicación válido y tooling si el perfil del diff es STARTER, sobre fuentes finales/base, logs saneados, cleanup y correspondencia con lo publicado; no un FULL por cada commit |
 | Si después cambia solo Markdown | docs-check y regresiones afectadas; conservar FULL si fuentes técnicas/base siguen idénticas. No llamar DOCS_ONLY a un diff que el clasificador trata como FULL |
 | Revisión independiente | Aceptación, diff, arquitectura/contratos/propiedad/migraciones, evidencia y pruebas dirigidas a riesgos; FULL solo si cambian fuentes/base, falta evidencia o hay motivo concreto |
 | Merge | CI requerida verde sobre HEAD/base vigentes, veredicto independiente y AUTONOMY propia; squash confirmado MERGED antes de la siguiente tarea |
@@ -107,7 +107,7 @@ COMPOSE_ENV_FILES=.env.example COMPOSE_PROJECT_NAME=starter-verify-mi-app STARTE
 docker compose --env-file .env.example -p starter-verify-mi-app --profile verify down --volumes --remove-orphans
 ```
 
-FULL conserva backend/IT PostgreSQL, client e integración/Playwright reales. CI automática `verify-required` comprueba herramientas/documentación y clasifica el diff; no ejecuta ni acredita FULL. No repetir FULL por cierre solo documental con base/fuentes idénticas. Política y elección de pruebas: [TESTING](docs/TESTING.md#elegir-pruebas-para-una-tarea-pequeña). Versiones: [DEPENDENCIES](docs/DEPENDENCIES.md).
+FULL cotidiano conserva backend/IT PostgreSQL, client y Playwright reales; los ensayos de inicializador/copia/CLI/proxies van aparte con --tooling, obligatorios para el perfil STARTER de --policy. --starter reúne ambos recorridos. CI automática `verify-required` comprueba herramientas/documentación y clasifica el diff; no ejecuta ni acredita FULL. No repetir FULL por cierre solo documental con base/fuentes idénticas. Política y elección de pruebas: [TESTING](docs/TESTING.md#elegir-pruebas-para-una-tarea-pequeña). Versiones: [DEPENDENCIES](docs/DEPENDENCIES.md).
 
 ## Formulario, kit y primera prueba sencilla
 

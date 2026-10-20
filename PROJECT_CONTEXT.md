@@ -10,7 +10,7 @@ API/DB conectadas, OIDC con sesión backend y CSRF, autorización por propietari
 Frontera resuelve las decisiones y prepara una iteración con specs por capacidad y tareas pequeñas ordenadas. Junie implementa cada contrato; otra sesión revisa antes del merge. Frontera vuelve al objetivo cumplido o ante una decisión fuera del contrato. El kit personal no es dependencia.
 
 ## Operación prevista
-Varias aplicaciones pequeñas en un VPS y un PostgreSQL con bases/roles separados. Presupuesto total objetivo del dueño: US$10–15/mes. Propuesta y decisiones pendientes en [DEPLOYMENT](docs/DEPLOYMENT.md); ninguna infraestructura contratada ni desplegada. La base no se considera lista para el uso del dueño hasta completar sus ajustes y revisión.
+Portfolio personal no comercial: hasta 4–5 proyectos alternables en un VPS de 4 vCPU/8 GB, frontend/backend juntos y un PostgreSQL con bases/roles separados. Primero desarrollar apps; sin contratación ni deploy ahora. Presupuesto total objetivo del dueño: US$10–15/mes. Propuesta y decisiones pendientes en [DEPLOYMENT](docs/DEPLOYMENT.md); ninguna infraestructura contratada ni desplegada. La base no se considera lista para el uso del dueño hasta completar sus ajustes y revisión.
 
 ## Límites
 Versiones y controles existentes conservados. Sin secretos, datos reales, Google real, producción ni gastos por agentes sin autorización específica. Cada copia define su AUTONOMY y acredita sus propias pruebas; no hereda permisos ni resultados del mantenimiento.

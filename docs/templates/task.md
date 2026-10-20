@@ -33,7 +33,7 @@ Archivos previstos y 2–4 pasos ejecutables. Si hace falta ampliar capas o reso
 |---|---|---|---|
 | AC-01 | Unitario/componente/integración/E2E según riesgo | Completar antes de ready | Completar |
 
-Bugfix: demostrar rojo antes de arreglar. Conservar regresiones y umbrales. Dirigidos durante iteración; FULL de cierre técnico o DOCS_ONLY según TESTING; escribir aquí comandos finales con namespaces propios si corresponden. No añadir E2E por costumbre.
+Bugfix: demostrar rojo antes de arreglar. Conservar regresiones y umbrales. Dirigidos durante iteración; FULL de aplicación, más tooling si el perfil es STARTER, o DOCS_ONLY según TESTING; escribir aquí comandos finales con namespaces propios si corresponden. No añadir E2E por costumbre.
 
 ## Checkpoint vigente
 Rol/modelo/herramienta/esfuerzo reales una vez. Hecho y pendiente en pocas líneas; SHA/base conocidos; comando, exit, alcance y log saneado. Antes de una operación larga incluir recursos propios y cleanup. Ante bloqueo: causa, reproducción, intentos distintos y decisión/dato necesario. El prompt único de retoma vive en STATUS.

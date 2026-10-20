@@ -30,6 +30,7 @@ jobs:
       pull-requests: read
     outputs:
       policy: ${{ steps.policy.outputs.policy }}
+      profile: ${{ steps.policy.outputs.profile }}
       draft: ${{ steps.policy.outputs.draft }}
       base: ${{ steps.policy.outputs.base }}
       head: ${{ steps.policy.outputs.head }}
@@ -143,7 +144,11 @@ jobs:
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: ${{ env.NODE_VERSION }}
-      - name: Integración local persistente y Playwright (1280 / 375)
+      - name: Herramientas del starter (solo perfil STARTER)
+        if: needs.classify.outputs.profile == 'STARTER'
+        timeout-minutes: 40
+        run: bash scripts/verify.sh --tooling
+      - name: Playwright real (1280 / 375)
         timeout-minutes: 40
         run: bash scripts/verify.sh --e2e
       # Solo el export saneado: sanitized/ existe únicamente si su auditoría pasó. Brutos, control y logs nunca se suben.

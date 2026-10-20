@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Clasificador determinista de la política de verificación (docs/TESTING.md).
 // Uso: node scripts/ci/classify-diff.mjs --base <sha|ref> --head <sha|ref> --phase <BOOTSTRAP|FULL>
-// Imprime en stdout líneas key=value aptas para $GITHUB_OUTPUT: policy, changed, reason.
+// Imprime en stdout líneas key=value aptas para $GITHUB_OUTPUT: policy, changed, reason, profile (DOCUMENTATION|APPLICATION|STARTER).
 // DOCS_ONLY solo si cada entrada es un archivo regular agregado/modificado de la allowlist. Ante cualquier duda
 // (diff ilegible, renombres/borrados, modos no regulares, rutas fuera de la allowlist) elige la fase técnica.
 // Este archivo es código de CI: modificarlo nunca califica como DOCS_ONLY. Regresiones: classify-diff.test.mjs.
@@ -18,8 +18,8 @@ function arg(name) {
   return i > -1 ? process.argv[i + 1] : undefined;
 }
 
-function emit(policy, changed, reason) {
-  process.stdout.write(`policy=${policy}\nchanged=${changed}\nreason=${reason}\n`);
+function emit(policy, changed, reason, profile = 'STARTER') {
+  process.stdout.write(`policy=${policy}\nchanged=${changed}\nreason=${reason}\nprofile=${profile}\n`);
 }
 
 // Formato --raw -z: ":<modo origen> <modo destino> <sha> <sha> <estado>\0<ruta>\0" (R/C agregan la ruta destino).
@@ -45,6 +45,15 @@ function documental({ srcMode, dstMode, status, paths }) {
   const regular = dstMode === REGULAR_FILE && (status === 'A' || srcMode === REGULAR_FILE);
   return (status === 'A' || status === 'M') && regular && !/[\x00-\x1f\x7f]/.test(path)
     && DOCS_ONLY_ALLOWLIST.some((re) => re.test(path));
+}
+
+// Only application code/tests are safe to omit template lifecycle checks. Dependencies, Docker,
+// scripts, workflow changes and unknown paths require STARTER. Fail closed for special modes.
+function application(entry) {
+  return entry.paths.every(path => /^(?:(?:server|client)\/src\/|e2e\/(?:tests|fixtures)\/)/.test(path)
+    && !/[\x00-\x1f\x7f]/.test(path))
+    && ['A', 'M', 'D', 'R'].includes(entry.status)
+    && [entry.srcMode, entry.dstMode].every(mode => mode === '000000' || mode === REGULAR_FILE);
 }
 
 const base = arg('base');
@@ -81,7 +90,8 @@ for (const entry of entries) {
 if (entries.length === 0) {
   emit(phase, 0, 'diff vacío');
 } else if (offending.length === 0) {
-  emit('DOCS_ONLY', entries.length, 'solo documentación permitida');
+  emit('DOCS_ONLY', entries.length, 'solo documentación permitida', 'DOCUMENTATION');
 } else {
-  emit(phase, entries.length, `${offending.length} ruta(s) técnicas`);
+  emit(phase, entries.length, `${offending.length} ruta(s) técnicas`,
+    offending.every(application) ? 'APPLICATION' : 'STARTER');
 }
