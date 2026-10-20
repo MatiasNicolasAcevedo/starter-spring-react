@@ -1,6 +1,6 @@
 ---
 id: T-005
-status: in_review
+status: changes_requested
 priority: P1
 size: M
 milestone: M0
@@ -11,7 +11,7 @@ spec_version: null
 depends_on: []
 branch: codex/t-005-generic-baseline
 risk: standard
-role: reviewer
+role: implementer
 executor: frontier
 pr: 6
 ---
@@ -60,3 +60,21 @@ Tiempos secuenciales de pared, no perfil de CPU/I/O ni promesa para otra máquin
 Implementación ampliada publicada en 8bbccad931e3aac20a29de267c0065ff468344fa. Cierre solo documental a in_review/reviewer; exigir CI propia del HEAD final antes del veredicto independiente. Regresiones documentales posteriores 20/20 y docs-check exit 0. Esta sesión implementó: no aprueba ni mergea su trabajo. Limpieza del árbol actual, historia Git conservada sin reescribir; adopciones sin historia ni permisos/evidencia heredados. Kit no copiado/borrado.
 
 Decisión del dueño: portfolio personal, 4–5 proyectos alternables, VPS 4 vCPU/8 GB, frontend/backend juntos y PG compartido por bases/roles. Presupuesto máximo US$10–15/mes. Primero desarrollar apps; proveedor/región/dominio y precio/stock/latencia desde Argentina se revalidan al contratar. DEPLOYMENT registra camino y candidatos, sin infraestructura configurada, pagos, deploy, datos reales ni Google real. La base sigue en ajuste para el uso del dueño.
+
+## Checkpoint de revisión independiente · 2026-10-20
+Sesión nueva, rol reviewer de frontera; Codex desktop/API, familia GPT-6 expuesta, identificador runtime exacto y esfuerzo efectivo no expuestos. Terminal PowerShell/Python/Node/Git Bash, Git/GitHub CLI, conector GitHub y web oficial. Sin selección simulada, delegación ni otras sesiones. Impacto de esta sesión: revisión y transición documental; sin cambios de código, API, permisos, datos ni UI.
+
+Revisión del HEAD publicado a3787267412777f81ab899ee364979bdf86754c2 contra main cbaf5b0aaca3212f9c08d870a085a6ba85c8d0b3. GitHub confirma PR #6 OPEN/ready, rama exacta, único PR abierto y CI propia 39492153912/verify-required success; sin reviews ni conversaciones bloqueantes previas. El parche remoto completo reconstruye los 52 blobs publicados desde la base. Workspace inicialmente limpio. Perfil calculado FULL/STARTER.
+
+Evidencia técnica corroborada, sin repetir suites largas: 279 huellas antes/después iguales en cada gate; las 237 fuentes técnicas finales coinciden con tooling. Única diferencia técnica entre gates: timeout del job E2E de full.yml de 55 a los 45 minutos previos de la base (huella anterior reproducida). Resto del avance posterior solo Markdown. Logs de aplicación: exit 0, 711.331 s, 91 unitarios/slices +75 IT, JaCoCo verde, frontend 133 y JUnit Playwright 15/0 fallos/0 errores/0 omitidos; reducción 71.7% frente a 2513.545 s. Tooling exit 0, 1837.722 s: copia compilable, 185 fuentes inmutables, guardias, nginx/Vite, nueve fallos, preservación, señales y cleanup por labels 0/0/0 conservados. Regresiones documentales finales previas 20/20 corroboradas. CI liviana no acredita FULL remoto. Tarifas y límites de DEPLOYMENT contrastados con las fuentes oficiales enlazadas, sin compra ni despliegue.
+
+Dirigidos propios: node --test "scripts/ci/*.test.mjs" 111/111 exit 0; node --test scripts/test-init-project.mjs 31/31 exit 0; desde client, npm test -- --run src/features/auth/AuthSession.test.tsx 19/19 exit 0. node scripts/docs-check.mjs y git diff --check exit 0. Logs ignorados review-ci-host.log, review-init-host.log y review-session.log en .orchestrator/t-005. Primer ensayo sandbox falló por carga de Git Bash y EPERM de enlaces; repetido en host autorizado sin cambiar fuentes. test-init-adopted.mjs se invocó inicialmente fuera de una copia inicializada: resultado inválido para este contexto, no hallazgo del PR; la matriz correcta lo ejercita donde corresponde.
+
+**Resultado: CAMBIOS REQUERIDOS, dos hallazgos P2.** No hay aprobación ni merge. AC-03/04 corroborados y evidencia técnica de AC-05 válida; AC-01/02 impiden el cierre:
+
+- R1 · docs/DEPLOYMENT.md:3 y manifiesto del inicializador: una copia nueva conserva byte por byte la decisión del dueño del mantenimiento fechada 2026-10-20, su portfolio y presupuesto como decisión ya aceptada. DEPLOYMENT no se reinicia ni se retira. Reproducción desde exportación exacta del HEAD sin Git/kit: aplicar identidad Revision Demo termina exit 0 y conserva esa atribución; docs-check de la copia pasa. La aplicación debe recibir una propuesta genérica o decisión propia pendiente, conservando en el starter la dirección VPS aceptada. Añadir negativo que impida trasladar decisiones/contexto de mantenimiento.
+- R2 · docs/specs/S-003-reference-security.md:12, docs/SETUP.md:6 y docs/ARCHITECTURE.md:49: persisten «parte C»/«regresiones de B», «Entorno de A» y el sufijo «(B)». S-003 remite además a «Objetivo aceptado»/«Alcance y secuencia», secciones ya retiradas de PROJECT_CONTEXT, y a una parte C inexistente del ROADMAP. La misma copia los conserva. Sustituir referencias de fases por contratos/secciones vigentes y cubrir esta regresión; no cambiar IDs técnicos ni assertions útiles por una limpieza textual indiscriminada.
+
+Evidencia propia de reproducción: .orchestrator/t-005/review-adoption-result.json y review-adoption-negative.log (dos negativos rojos, exit 1 esperado); copia descartable review-adoption exportada únicamente de archivos versionados, sin crear otro repo. Las suites verdes existentes no detectan estos contenidos. La sesión revisora solo publica tarea/STATUS y sincroniza el estado repetido de BACKLOG para cumplir docs-check. Diff documental revisado; docs-check/diff-check exit 0 y node --test scripts/ci/docs-check.test.mjs 20/20 exit 0 tras la transición (review-docs-transition.log). El veredicto del PR debe identificar el nuevo HEAD documental y su CI propia antes de cerrar esta sesión.
+
+Retoma: sesión implementer nueva, misma tarea/rama/PR; corregir R1/R2, demostrar rojo/verde y revalidar lo afectado según TESTING, con huellas/base/cleanup. Conservar suites y evidencia aún válida; no repetir FULL por rutina ni atribuir evidencia vieja a fuentes modificadas. Volver a in_review para una sesión revisora nueva. No iniciar otra tarea, declarar adopción/aceptación, contratar/desplegar, operar Google real ni el kit.
