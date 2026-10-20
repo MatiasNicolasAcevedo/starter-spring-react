@@ -1,11 +1,11 @@
 # Cola del starter
 
-Próxima acción: T-005, correcciones R1/R2 en sesión implementer nueva. Estado y prompt en [STATUS](STATUS.md).
+Próxima acción: revisión independiente de las correcciones R1/R2 de T-005. Estado y prompt en [STATUS](STATUS.md).
 
 ## En vuelo
 | Tarea | Estado | Resultado |
 |---|---|---|
-| [T-005](tasks/T-005-generic-baseline.md) | in_progress | Resolver los hallazgos de copia genérica y referencias retiradas |
+| [T-005](tasks/T-005-generic-baseline.md) | in_review | R1/R2 publicados; pendiente veredicto de otra sesión |
 
 ## Por refinar
 - Implementar despliegue compartido después de elegir proveedor/región y aprobar el contrato de [DEPLOYMENT](DEPLOYMENT.md).

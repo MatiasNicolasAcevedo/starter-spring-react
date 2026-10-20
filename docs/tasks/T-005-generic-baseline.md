@@ -1,6 +1,6 @@
 ---
 id: T-005
-status: in_progress
+status: in_review
 priority: P1
 size: M
 milestone: M0
@@ -11,7 +11,7 @@ spec_version: null
 depends_on: []
 branch: codex/t-005-generic-baseline
 risk: standard
-role: implementer
+role: reviewer
 executor: frontier
 pr: 6
 ---
@@ -52,6 +52,8 @@ Evidencia ignorada propia en .orchestrator/t-005: full* (diagnóstico anterior),
 Tiempos secuenciales de pared, no perfil de CPU/I/O ni promesa para otra máquina/app. Tras medir aplicación solo se restauró el timeout global del job remoto a los 45 min previos, validado por matriz CI/docs-check; no cambió ninguna fuente de aplicación. La comparación de huellas demuestra que esa es la única diferencia técnica entre ambos gates. Tooling final y publicación conservan exactamente las mismas fuentes técnicas; cierre posterior solo Markdown no repite suites si base/fuentes coinciden.
 
 ## Correcciones significativas
+- R1: DEPLOYMENT no estaba en el inventario de reinicio y trasladaba una decisión fechada del mantenimiento. Se conserva la guía técnica común, se retira en adopción un bloque obligatorio del starter y se protege DEPLOYMENT en las huellas/idempotencia. Rojo 2/2 antes del arreglo; negativos de frontera y edición propia verdes, matriz 114/114 y copia compilable actual; código db379b993e7578bfa98706435a76e71a0e44dfb7.
+- R2: referencias de S-003/SETUP/ARCHITECTURE apuntaban a fases/secciones retiradas. Sustituidas por contexto/recorrido propios y contratos S-001/S-002 vigentes, sin alterar C-AC, IDs ni assertions técnicas. Negativo rojo y fuente/copia verdes en la misma matriz y reproducción r1r2-adoption-result.json; código db379b993e7578bfa98706435a76e71a0e44dfb7.
 - Regresión roja propia: una app nueva recibía docs/archive. El inicializador retira tareas de mantenimiento sin archivarlas; mantiene guardias, dry-run/idempotencia y compilación. Dirigidos previos 48/48 y matriz/copia actuales verdes.
 - Primer FULL anterior falló en client 132/133, cleanup completo; attempt1-* conservado. El test exigía conservar datos sin esperar la carga inicial. Se añadió esa precondición sin debilitar assertions/casos/cobertura/timeouts/retries; dirigido 19/19 y gates completos verdes, sin código de aplicación modificado.
 - La matriz exhaustiva se ejecutaba en toda tarea: se separan aplicación y tooling; clasificador conservador exige STARTER para scripts/Compose/dependencias/configuración compartida/desconocidos. Pruebas de rutas, secuencia, no duplicación y fail-fast verdes. Se corrigió la reutilización de un archivo de llamadas entre fixtures de selección.
@@ -89,3 +91,5 @@ Preoperación larga: HEAD/base anteriores, fuentes sin commit listadas por r1r2-
 Resultado de revalidación afectada: bash scripts/test-init-copy.sh exit 0 en 353.261 s; copia personalizada sin Git/kit, 184 fuentes inmutables y dependencias/POM conservados, backend clean verify con IT PostgreSQL/JaCoCo, client verify completo y docs-check. Cleanup container/network/volume 0/0/0. r1r2-validation-before.json y after.json idénticos (base/fuentes inmóviles). r1r2-adoption-result.json demuestra propuesta propia pendiente, ninguna decisión/portfolio/presupuesto del mantenimiento ni fases retiradas; dirección VPS del starter conservada.
 
 Conservación acotada: r1r2-evidence-scope.json compara las 237 huellas técnicas de profiles-* con estas fuentes. Solo cambian scripts/lib/init-project-documents.mjs, scripts/lib/init-project-manifest.mjs y scripts/test-init-project.mjs frente a tooling; aplicación/infraestructura/lifecycle/proxies/señales idénticos, con base intacta y cleanup previo válido. Frente a aplicación se reproduce además la única diferencia ya revisada de full.yml (timeout 55→45). Se conserva evidencia previa únicamente para esos ámbitos intactos; no se repiten por rutina ni se declara un nuevo FULL o tooling exhaustivo. No cambia ninguna suite/assertion/cobertura/retry/deadline/señal/cleanup existente.
+
+Publicación de las correcciones: db379b993e7578bfa98706435a76e71a0e44dfb7, mismo PR OPEN/ready. Copia actual: 91 unitarios/slices +75 IT PostgreSQL, JaCoCo, frontend 133 con cobertura/typecheck/lint/formato/build y 23 regresiones de adopción/documentos; cero fallos/errores/omitidos. Namespace propio starter-verify-init-1792538076-94811: comprobación adicional r1r2-cleanup.json container/network/volume 0/0/0. Cierre posterior exclusivamente Markdown a in_review/reviewer; conserva las huellas técnicas probadas, exige docs-check y CI propia del HEAD final. HEAD/CI finales en el comentario de publicación más reciente del PR. Pendiente únicamente revisión de sesión distinta; esta sesión no aprueba/mergea ni acredita adopción/aceptación.
