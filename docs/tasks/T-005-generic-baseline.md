@@ -1,6 +1,6 @@
 ---
 id: T-005
-status: mergeable
+status: done
 priority: P1
 size: M
 milestone: M0
@@ -16,6 +16,9 @@ executor: frontier
 pr: 6
 ---
 # T-005 · Base inicial genérica y operación económica
+
+## Conciliación de merge · 2026-10-21
+PR #6 confirmado MERGED el 2026-10-20T23:33:23Z; commit acbc2c355e535069edb122f6ae544eaceea57fbc coincide con main publicado. CI verify-required success del HEAD aprobado caca2b4446c3757a4b9491470fd0b4213061a5b1, run 39515628957. Conciliación en el primer avance autorizado de T-006, sin commit en main/rama mergeada. Los checkpoints siguientes son evidencia histórica; no acreditan adopción/aceptación de una copia.
 
 ## Objetivo
 Presentar una base inicial autosuficiente, sin referencias al producto de origen ni bitácoras de construcción. Medir el costo temporal de FULL y proponer alojamiento para varias aplicaciones dentro de US$10–15/mes.

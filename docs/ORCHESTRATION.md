@@ -1,6 +1,6 @@
 # Orquestación y estados
 
-Contrato mínimo para encadenar sesiones. **No hay dispatcher instalado:** la continuidad es `POR_SESION` y el dueño abre cada sesión pegando el prompt de [STATUS.md](STATUS.md#prompt-de-la-siguiente-sesión). Este documento fija los valores que validan las tareas y docs-check; no describe la configuración interna de Junie Lite.
+Contrato mínimo para encadenar sesiones. **No hay dispatcher instalado:** la continuidad es `POR_SESION` y el dueño abre cada sesión pegando el prompt de [STATUS.md](STATUS.md#prompt-de-la-siguiente-sesión). Este documento fija los valores que validan las tareas y docs-check; no describe una instalación concreta. Ejecutores/superficies se acuerdan en la adopción; naturaleza y disponibilidad canónicas en [TOOLS](../.junie/TOOLS.md).
 
 ## Estados de tarea
 | Estado | Significado | Próximo rol |
@@ -23,7 +23,7 @@ Contrato mínimo para encadenar sesiones. **No hay dispatcher instalado:** la co
 |---|---|
 | `id` | `T-NNN` único; coincide con el nombre del archivo `docs/tasks/T-NNN-slug.md` |
 | `status` | uno de los estados anteriores |
-| `executor` | `frontier` (GPT-6.1 Sol u Opus 5.5; el checkpoint registra cuál) o `junie` (Junie Lite). Las tareas de M0 son `frontier` |
+| `executor` | `frontier` o `junie`; registrar modelo/herramienta/esfuerzo realmente expuestos en la sesión, sin imponer una instalación a las copias. Las tareas de M0 son `frontier` |
 | `role` | `planner`, `implementer`, `reviewer`, `merger` |
 | `depends_on` | lista de IDs existentes, sin ciclos |
 | `product_cycle` | Opcional, solo si ayuda a agrupar un objetivo; no bloquea una tarea pequeña ready |
@@ -55,3 +55,21 @@ Checkpoint vigente para retoma; tabla breve por tarea para correcciones signific
 STATUS contiene un único prompt ejecutable; la tarea guarda evidencia y siguiente experimento. Un bloqueo incluye causa concreta y salida propuesta; si falta autorización, preguntar la decisión necesaria en vez de repetir el prompt condicionado. Una decisión nueva se registra y sustituye la precondición anterior.
 
 Dispatcher, adaptador de resultados JSON, locks y automatizaciones de sesiones quedan fuera del cierre del starter. Reconsiderar esa infraestructura solo con una tarea futura y necesidad observada.
+
+## Cierre de adopción y primera tarea
+`STARTER_VALIDADO` cierra el alcance de base/adopción: exige 22/22 criterios con evidencia propia fechada, al menos una tarea M0 y todas las tareas M0 done. No exige terminar futuras tareas de producto: M1 draft no invalida adopción; la aceptación de producto depende de sus contratos. Una M0 abierta o el alcance M0 vacío lo rechazan. El mantenimiento del propio starter también conserva NO_LISTO mientras haya una M0 abierta; sus pruebas no acreditan una aplicación.
+
+Durante T-000, frontera acuerda ejecutor, revisor independiente y superficie, AUTONOMY propia y capacidades efectivas. La comprobación mínima temprana por función y evidencia antes de revisión se registra en T-000; [TOOLS](../.junie/TOOLS.md) distingue declarado/expuesto-listado/verificado de la naturaleza. No exigir el catálogo opcional completo ni repetir decisiones aceptadas.
+
+Antes de entregar adopción, frontera deja la primera tarea de producto especificada, aunque permanezca draft por T-000. El cierre de merge informa «adopción mergeada; producto todavía no iniciado», enlaza MERGED y nombra la conciliación inicial en la siguiente rama. El único prompt de STATUS identifica esa tarea y la comprobación previa; no inicia producto en la sesión que cierra adopción. Si falta contrato o decisión, la salida es frontera con evidencia concreta.
+
+## Hechos de entrega y traspaso
+| Hecho | Evidencia / responsable | Condición de salida |
+|---|---|---|
+| Entrega del autor | Implementer: alcance, HEAD/base, pruebas y pendientes publicados | Revisión independiente pendiente identificada; no equivale a aceptación |
+| Aceptación del dueño | Dueño: decisión propia de contexto/alcance/permisos en su documento canónico | Decisión referenciada una vez; no sustituye gate ni veredicto técnico |
+| Gate | Ejecutor: fuentes/base, comandos/exit, logs y cleanup según TESTING | Evidencia válida del alcance; CI liviana no acredita FULL |
+| APROBADO | Reviewer de otra sesión: HEAD/base exactos, evidencia y CI vigentes | Permite comprobar elegibilidad de merge; no significa MERGED |
+| MERGED | Merger autorizado: confirmación GitHub y commit de merge enlazados | Siguiente sesión concilia done en nueva rama y toma solo tarea predefinida |
+
+Cada traspaso explicita **pendiente, responsable y condición de salida**, también si falta aceptación, capacidad, gate, revisión o merge. Máximo dos rondas de revisión y tres correcciones distintas por bloqueo. Al agotar el límite: checkpoint con causa/evidencia/intentos, decisión necesaria y propuesta completa de cierre (quién corrige, quién revisa independientemente y qué habilita merge). Una revisión adicional requiere decisión específica del dueño; no hay excepción permanente ni aprobación propia. La corrección/aceptación posterior no produce APROBADO por sí sola. Conservar evidencia válida sin repetir suites ni pedir aceptaciones rutinarias por cambiar de rol.

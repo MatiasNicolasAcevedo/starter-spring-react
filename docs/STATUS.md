@@ -2,14 +2,14 @@
 
 | Campo | Valor |
 |---|---|
-| Tarea y contrato | [T-005](tasks/T-005-generic-baseline.md) |
+| Tarea y contrato | [T-006](tasks/T-006-adoption-handoff.md) |
 | Estado | mergeable |
-| Acción actual | Revisión R1/R2 favorable; publicar veredicto con CI propia del HEAD documental y continuar merger del mismo PR |
-| Rama / PR | codex/t-005-generic-baseline · [PR #6](https://github.com/MatiasNicolasAcevedo/starter-spring-react/pull/6) |
+| Acción actual | R1 favorable; publicar APROBADO con CI propia del HEAD documental y continuar merger del mismo PR |
+| Rama / PR | codex/t-006-adoption-handoff · [PR #7](https://github.com/MatiasNicolasAcevedo/starter-spring-react/pull/7) |
 
-La base sigue en ajuste para el uso del dueño. Evidencia y comandos en la tarea; HEAD/CI propios del cierre en el comentario de publicación más reciente del PR. Proveedor/región/dominio pendientes para cuando exista una app; ningún despliegue ni ejecución Junie acreditados. Kit sin operar.
+Contrato, revisión R1 y evidencia en la tarea; veredicto vinculante y confirmación de merge en el PR. Esta mejora no acredita adopción de aplicaciones ni ejecución Junie. No hay otra tarea predefinida ready en el starter.
 
 ### Prompt de la siguiente sesión
 ```text
-Retomar T-005/PR #6 en sesión nueva. Leer AGENTS, PROJECT_CONTEXT, tarea y último checkpoint de revisión R1/R2, AUTONOMY, TESTING y protocolo merger. Primero consultar estado remoto: si sigue OPEN, completar únicamente el merge elegible según el último APROBADO con HEAD/base/checks exactos; si falta veredicto vigente, devolver a revisión. Si está MERGED, confirmar SHA/fecha y reconciliar T-005/STATUS en el primer avance de una futura rama autorizada, nunca en main ni en la rama mergeada. El objetivo de mantenimiento vuelve a frontera/dueño: no hay otra tarea predefinida ready; no inventar ni iniciar implementación. Preservar cambios ajenos y evidencia válida, sin repetir suites largas por cierre Markdown. CI liviana no acredita FULL remoto. Sin operación Junie automática, compra/deploy, Google/datos reales, otros repos ni kit; sin aceptación/adopción por herencia.
+Retomar únicamente el cierre de T-006/PR #7. Leer AGENTS, PROJECT_CONTEXT, tarea/checkpoint R1, AUTONOMY, TESTING y protocolo merger. Primero comprobar el estado remoto: si OPEN, completar veredicto con CI propia y HEAD/base exactos o continuar merge únicamente con APROBADO vigente, checks verdes y elegibilidad reconsultada; si falta evidencia, devolver a revisión dentro del límite de dos rondas. Si MERGED, confirmar fecha/SHA y devolver al dueño para preparar adopción acotada en aplicación propia en otra sesión, sin operar esa aplicación desde aquí. No hay otra tarea predefinida ready ni implementación autorizada en este starter. Conciliar T-006/STATUS/cola únicamente en el primer avance de una futura rama autorizada, nunca en main ni en la rama mergeada; no hacer commits después de APROBADO. Mejora del starter mergeada no acredita adopción propia ni producto iniciado. Conservar el gate válido mientras fuentes/base coincidan; sin protecciones nuevas, datos reales, otros repos, despliegue ni kit.
 ```

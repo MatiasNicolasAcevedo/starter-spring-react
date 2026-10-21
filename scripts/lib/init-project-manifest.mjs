@@ -73,7 +73,7 @@ export const JAVA_FILES = {
     "system/SystemInfoControllerTest.java"
   ]
 };
-export const REMOVE_FILES = ["docs/tasks/T-005-generic-baseline.md"];
+export const REMOVE_FILES = ["docs/tasks/T-005-generic-baseline.md", "docs/tasks/T-006-adoption-handoff.md"];
 export const TEXT_FILES = [
   "server/pom.xml",
   "server/Dockerfile",

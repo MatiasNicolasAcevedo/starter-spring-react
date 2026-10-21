@@ -20,7 +20,7 @@ Estado: ajustes de la base inicial en curso, pendientes de revisión. [Acción a
 | Pruebas frontend/integración | Typecheck, ESLint, Prettier, Vitest/Testing Library/MSW, cobertura, build y Playwright desktop/móvil con API/DB/OIDC reales. Negativos de aislamiento, proxies, fallos y cleanup; export saneado |
 | Git y CI | Workflow automático liviano verify-required en PR y FULL remoto manual; revisión independiente, squash y evidencia local según configuración propia de cada repo. Los permisos/protecciones del starter no se transfieren por copiar código |
 | Personalización y agentes | CLI offline con dry-run/apply, guardias e idempotencia; formulario de idea, contexto, specs/tareas, tablero y prompts de continuación. AGENTS raíz/server/client; CLAUDE solo importa AGENTS |
-| Herramientas externas Junie | Catálogo [.junie/TOOLS.md](.junie/TOOLS.md) de cinco MCP y siete skills declarados por el dueño, con estado y límites. Documentado no significa instalado ni activo; revalidar en cada entorno |
+| Herramientas externas Junie | Catálogo [.junie/TOOLS.md](.junie/TOOLS.md) con naturaleza, nivel de evidencia, superficie y límites; es la fuente canónica de disponibilidad. Documentado no significa instalado ni activo; revalidar en cada entorno |
 
 Versiones completas y dependencias de runtime/build/test: [DEPENDENCIES](docs/DEPENDENCIES.md). Arquitectura y decisiones: [ARCHITECTURE](docs/ARCHITECTURE.md) y [ADR](docs/adr/0001-base-tecnica-y-alineacion-del-scaffold.md). La base es genérica: el dominio y los permisos de tu aplicación salen de tu contexto; despliegue, servicios pagos y operación de datos reales requieren decisiones propias.
 
@@ -35,7 +35,7 @@ Versiones completas y dependencias de runtime/build/test: [DEPENDENCIES](docs/DE
 | docs/ROADMAP.md y docs/specs/ | Iteraciones/versiones y contratos agrupados por capacidad/épica |
 | docs/STATUS.md, docs/BACKLOG.md y docs/tasks/ | Acción y prompt vigentes, cola de tareas, progreso/correcciones y evidencia |
 | docs/SETUP.md, TESTING.md y HANDOFF.md | Operación/trampas, validación y aceptación/traspaso |
-| .junie/TOOLS.md | Inventario de MCP/skills y disponibilidad comprobada por superficie |
+| .junie/TOOLS.md | Naturaleza de herramientas/agentes/skills y evidencia por superficie |
 
 ## Crear una aplicación y su primer flujo
 
@@ -50,8 +50,8 @@ Versiones completas y dependencias de runtime/build/test: [DEPENDENCIES](docs/DE
    ```
 
    No aplicar sobre el starter de mantenimiento ni reinicializar después de editar. La CLI no genera negocio, no opera GitHub y conserva locks/auth/migraciones/referencia. [Entradas, guardias y escrituras](docs/SETUP.md#personalización-en-una-copia-propia).
-4. Reemplazar el borrador de PROJECT_CONTEXT.md raíz por el contexto propio preparado y aceptado; conservar el formulario genérico en docs/templates, sin llenarlo con los datos de esa aplicación. Referenciar .junie/TOOLS.md y revalidar el inventario. Resolver [AUTONOMY](docs/AUTONOMY.md) para este repo y validar T-000 de adopción con evidencia propia. [STATUS](docs/STATUS.md) da la acción concreta. El inicializador retira las tareas de mantenimiento; permisos y pruebas se acreditan en cada aplicación. Levantar, comprobar y retomar con los comandos de abajo; aceptación y FULL según [TESTING](docs/TESTING.md).
-5. Frontera prepara la primera iteración y varias [tareas pequeñas](docs/templates/task.md), agrupadas en [specs por capacidad](docs/templates/spec.md), con decisiones, archivos, pasos, aceptación, pruebas y dependencias resueltos. Java y React por feature, usando la [arquitectura existente](docs/ARCHITECTURE.md); retirar/sustituir el ejemplo según [REFERENCE](docs/REFERENCE.md), sin modificar migraciones aplicadas.
+4. Reemplazar el borrador de PROJECT_CONTEXT.md raíz por el contexto propio preparado y aceptado; conservar el formulario genérico en docs/templates, sin llenarlo con los datos de esa aplicación. Acordar ejecutor, revisor independiente y superficie; comprobar temprano lectura/edición, terminal/pruebas, Git/PR/CI y devolución de resultados, registrando evidencia propia en T-000 antes de revisión. Referenciar [.junie/TOOLS.md](.junie/TOOLS.md); herramientas opcionales no requieren instalación ni llamada para comenzar. Resolver [AUTONOMY](docs/AUTONOMY.md) para este repo y validar T-000 de adopción con evidencia propia. [STATUS](docs/STATUS.md) da la acción concreta. El inicializador retira las tareas de mantenimiento; permisos y pruebas se acreditan en cada aplicación. Levantar, comprobar y retomar con los comandos de abajo; aceptación y FULL según [TESTING](docs/TESTING.md).
+5. Frontera prepara la primera iteración y varias [tareas pequeñas](docs/templates/task.md), agrupadas en [specs por capacidad](docs/templates/spec.md), con decisiones, archivos, pasos, aceptación, pruebas y dependencias resueltos. Dejar la primera tarea de producto predefinida antes de entregar adopción, draft si depende de T-000. Tras MERGED confirmado, el prompt nombra esa tarea y la conciliación inicial en la nueva rama; producto todavía no iniciado. STARTER_VALIDADO cierra M0 y los 22 criterios, sin exigir terminar M1; [definición y traspaso](docs/ORCHESTRATION.md). Java y React por feature, usando la [arquitectura existente](docs/ARCHITECTURE.md); retirar/sustituir el ejemplo según [REFERENCE](docs/REFERENCE.md), sin modificar migraciones aplicadas.
 
 ## Iteraciones y varias tareas seguidas de Junie
 
@@ -71,7 +71,7 @@ Cada tarea conserva una bitácora corta de correcciones significativas: problema
 
 Tu intervención diaria es copiar el único prompt de STATUS y abrir una sesión nueva del rol indicado: implementar, revisar/corregir o continuar con la siguiente tarea. El prompt lleva tarea/rama/PR, precondición y primera acción. Antes de pasar a la siguiente comprueba el cierre de la anterior; no tenés que reconstruir el contexto ni editar el tablero a mano. Si corresponde volver a frontera, el prompt explica qué objetivo se cumplió o qué decisión falta.
 
-Junie Lite con Qwen 3.6 27B es configuración declarada por el dueño, no ejecución comprobada. Hay un [microensayo unitario preparado](docs/templates/junie-trial.md); su resultado debe venir de Junie. No añade una feature de demostración.
+Ejecutor, revisor y superficie acordados viven en T-000/AUTONOMY; disponibilidad en [TOOLS](.junie/TOOLS.md). Registrar solo modelo/esfuerzo expuestos. El [microensayo unitario](docs/templates/junie-trial.md) es una opción si demuestra una función necesaria; su resultado debe venir de Junie. El mínimo temprano no exige ejecutar skills opcionales ni añadir una feature de demostración.
 
 ## Modo local explícito sin credenciales
 

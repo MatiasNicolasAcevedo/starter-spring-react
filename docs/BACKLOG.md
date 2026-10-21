@@ -1,11 +1,14 @@
 # Cola del starter
 
-Próxima acción: cierre del mismo PR de T-005 con veredicto/CI propios y merge elegible. Tras MERGED vuelve a frontera/dueño; no hay otra tarea predefinida ready. Estado y prompt en [STATUS](STATUS.md).
+Próxima acción: cerrar [T-006](tasks/T-006-adoption-handoff.md) con veredicto/CI exactos y merge elegible del mismo PR. Tras MERGED vuelve al dueño para adopción propia en otra sesión; no hay otra tarea predefinida ready aquí. Estado y prompt en [STATUS](STATUS.md).
 
 ## En vuelo
 | Tarea | Estado | Resultado |
 |---|---|---|
-| [T-005](tasks/T-005-generic-baseline.md) | mergeable | R1/R2 revisados favorablemente; pendiente cierre con HEAD/base/CI exactos y MERGED confirmado |
+| [T-006](tasks/T-006-adoption-handoff.md) | mergeable | R1 favorable, gate conservado; pendiente veredicto/CI del HEAD final y MERGED confirmado |
+
+## Hechas recientes
+- [T-005](tasks/T-005-generic-baseline.md): MERGED confirmado y conciliado en T-006.
 
 ## Por refinar
 - Implementar despliegue compartido después de elegir proveedor/región y aprobar el contrato de [DEPLOYMENT](DEPLOYMENT.md).
