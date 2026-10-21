@@ -1,6 +1,6 @@
 ---
 id: T-006
-status: in_progress
+status: in_review
 priority: P1
 size: M
 milestone: M0
@@ -10,9 +10,9 @@ spec_version: null
 depends_on: [T-005]
 branch: codex/t-006-adoption-handoff
 risk: standard
-role: implementer
+role: reviewer
 executor: frontier
-pr: null
+pr: 7
 ---
 # T-006 · Adopción hasta la primera tarea de producto
 
@@ -72,5 +72,9 @@ Tooling: probes 14/14; inicializador 36/36; copia personalizada sin Git/kit, 184
 
 gate-before.json y gate-after.json coinciden byte a byte: 280 huellas de archivos, HEAD/base inmóviles. gate-result.json confirma preflight vacío y cleanup container/network/volume 0/0/0 para ambos proyectos exteriores. Auditoría adicional own-cleanup.json: nueve namespaces propios extraídos del log, todos 0/0/0. main publicado reconsultado sigue en acbc2c355e535069edb122f6ae544eaceea57fbc. No se conserva evidencia de otra tarea como gate de estas fuentes.
 
-## Checkpoint vigente
-Fuentes cerradas y gate STARTER verde. Pendiente publicar un único PR en la rama exacta, comprobar perfil STARTER del diff comprometido y cerrar solo documentación a in_review con prompt para reviewer independiente. Después docs-check/regresiones documentales y CI propia del HEAD final; conservar gate solo si base/fuentes técnicas coinciden. Sin APROBADO ni merge propio, sin adopción de aplicaciones acreditada.
+## Checkpoint vigente · entrega a revisión independiente
+Fuentes técnicas publicadas en b7f6f9c2a26ab541d3037165ef9f742d7f92d99d; [PR #7](https://github.com/MatiasNicolasAcevedo/starter-spring-react/pull/7), base acbc2c355e535069edb122f6ae544eaceea57fbc. Perfil del diff publicado FULL/STARTER; gate propio descrito arriba. Cierre posterior limitado a tarea/STATUS/BACKLOG; no modifica fuentes técnicas/base ni repite STARTER por Markdown. docs-check, regresiones documentales y CI propia exigidos para ese HEAD final. SHA/CI final en el comentario de publicación del PR, sin mantener otro checkpoint duplicado.
+
+Pendiente: revisión independiente R1. Responsable: nueva sesión reviewer, con contrato/diff completos, evidencia local/huellas/logs/cleanup y HEAD/base publicados. Salida: APROBADO o CAMBIOS REQUERIDOS sobre HEAD/base exactos con CI vigente; conservar límite de dos rondas. El reviewer puede continuar el merger del mismo PR únicamente según AUTONOMY y confirmar MERGED; esta sesión implementer no aprueba ni mergea. Tras MERGED vuelve al dueño para preparar la adopción acotada de los cambios en una aplicación propia, en otra sesión, antes de conciliar su HANDOFF e iniciar producto. No hay otra tarea de implementación autorizada aquí.
+
+Transición documental verificada: docs-check exit 0, regresiones documentales 35/35 exit 0 (docs-transition.log), diff-check exit 0. publication-scope.json contrasta las 280 huellas del gate: solo cambian tarea/STATUS/BACKLOG y la base sigue idéntica; ninguna fuente técnica nueva sin validar. Pendiente únicamente CI del HEAD documental final y revisión independiente.

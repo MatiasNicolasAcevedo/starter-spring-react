@@ -1,11 +1,11 @@
 # Cola del starter
 
-Próxima acción: implementar [T-006](tasks/T-006-adoption-handoff.md), mejora de adopción autorizada por el dueño. Estado y prompt en [STATUS](STATUS.md).
+Próxima acción: revisar [T-006](tasks/T-006-adoption-handoff.md), mejora de adopción autorizada por el dueño. Estado y prompt en [STATUS](STATUS.md).
 
 ## En vuelo
 | Tarea | Estado | Resultado |
 |---|---|---|
-| [T-006](tasks/T-006-adoption-handoff.md) | in_progress | Regresiones de adopción, herramientas y traspaso hasta primera tarea predefinida |
+| [T-006](tasks/T-006-adoption-handoff.md) | in_review | Regresiones de adopción, herramientas y traspaso hasta primera tarea predefinida |
 
 ## Hechas recientes
 - [T-005](tasks/T-005-generic-baseline.md): MERGED confirmado y conciliado en T-006.
