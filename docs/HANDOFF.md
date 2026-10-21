@@ -4,14 +4,14 @@
 - **Continuidad:** `POR_SESION`.
 - **Merge:** `AUTOMATICO_ELEGIBLE` solo para el mantenimiento autorizado; cada copia decide su modalidad.
 
-Checklist reusable: describe lo que debe comprobar cada adopción; no es una bitácora del starter ni acredita pruebas por copiar código. Resultados de mantenimiento en su tarea/PR.
+Checklist reusable: describe lo que debe comprobar cada adopción; no es una bitácora del starter ni acredita pruebas por copiar código. Resultados de mantenimiento en su tarea/PR. STARTER_VALIDADO exige 22/22, al menos una tarea M0 y todas las tareas M0 done; M1 draft no invalida el cierre de adopción. Producto se acepta por sus propios contratos. [Definición y traspaso](ORCHESTRATION.md).
 
 | ID | Criterio | Estado | Evidencia heredada / propia requerida | Responsable / condición de revalidación |
 |---|---|---|---|---|
 | C-01 | Contexto propio aceptado: objetivo, usuarios, flujos, exclusiones y decisiones | pendiente | Verificar en la adopción propia | Dueño y revisor |
 | C-02 | Spec del primer flujo o contrato de infraestructura vigente, aceptación y pruebas trazadas | pendiente | Verificar en la adopción propia | Dueño y revisor |
 | C-03 | Arquitectura, contratos API/datos y versiones efectivos; auth y persistencia decididas | pendiente | Verificar en la adopción propia | Dueño y revisor |
-| E-01 | Raíz, modelo/herramienta/esfuerzo y ejecutor siguiente; inventario [TOOLS](../.junie/TOOLS.md) actualizado con MCP/skills, estados, fecha, superficie y limitaciones explícitos; disponibilidad requerida por la tarea comprobada | pendiente | Verificar en la adopción propia | Dueño y revisor |
+| E-01 | Raíz, modelo/herramienta/esfuerzo y ejecutor siguiente; inventario [TOOLS](../.junie/TOOLS.md) con naturaleza y declarado/expuesto-listado/verificado, fecha, superficie y límites; mínimo por función comprobado temprano con evidencia propia antes de revisión, sin exigir catálogo opcional | pendiente | Verificar en la adopción propia | Dueño y revisor |
 | E-02 | Wrappers/locks/imágenes inventariados; instalar, levantar, probar, detener y retomar desde copia limpia | pendiente | Verificar en la adopción propia | Dueño y revisor |
 | E-03 | Ejemplos ficticios, variables/URLs/puertos claros; configuración real fuera de Git/builds | pendiente | Verificar en la adopción propia | Dueño y revisor |
 | B-01 | db/server/client conectados; UI/API/DB reales, restart/rebuild/retoma conservan datos propios | pendiente | Verificar en la adopción propia | Dueño y revisor |

@@ -174,8 +174,9 @@ if (existsSync(join(ROOT, 'docs/HANDOFF.md'))) {
   verified = [...found.values()].filter((state) => state === 'verificado').length;
   const verdict = handoff.match(/^- \*\*Veredicto:\*\* `(NO_LISTO|STARTER_VALIDADO)`/m)?.[1];
   if (!verdict) fail('docs/HANDOFF.md', 'veredicto genérico ausente o inválido');
-  if (verdict === 'STARTER_VALIDADO' && (verified !== 22 || [...tasks.values()].some(t => t.status !== 'done'))) {
-    fail('docs/HANDOFF.md', 'STARTER_VALIDADO exige 22/22 y todas las partes done');
+  const adoptionTasks = [...tasks.values()].filter(t => t.milestone === 'M0');
+  if (verdict === 'STARTER_VALIDADO' && (verified !== 22 || adoptionTasks.length === 0 || adoptionTasks.some(t => t.status !== 'done'))) {
+    fail('docs/HANDOFF.md', 'STARTER_VALIDADO exige 22/22, al menos una tarea M0 y todas las tareas M0 done');
   }
   const count = handoff.match(/— (\d+)\/22 verificados/);
   if (!count || Number(count[1]) !== verified) fail('docs/HANDOFF.md', 'conteo de verificados incoherente');

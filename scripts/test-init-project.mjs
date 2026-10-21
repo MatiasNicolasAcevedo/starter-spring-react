@@ -31,6 +31,9 @@ const fixture = () => {
 };
 const entries = ['--name', 'Agenda Demo', '--slug', 'agenda-demo', '--package', 'org.demo.agenda', '--holder', 'Equipo Demo'];
 const run = (path, args = entries, apply = false) => spawnSync(process.execPath, [join(root, 'scripts/init-project.mjs'), '--root', path, ...args, ...(apply ? ['--apply'] : [])], { encoding: 'utf8' });
+// A nested Node test runner must not inherit its parent's internal test-worker protocol.
+const nestedTestEnv = { ...process.env };
+delete nestedTestEnv.NODE_TEST_CONTEXT;
 const snapshot = path => {
   const out = {};
   const visit = (dir, prefix = '') => {
@@ -101,7 +104,7 @@ test('apply connects identity and resets adoption, preserves inventory/auth/migr
   assert.doesNotMatch(readFileSync(join(path, 'PROJECT_CONTEXT.md'), 'utf8'), /Mantenimiento de esta base|MERGED/i);
   result = spawnSync(process.execPath, ['scripts/docs-check.mjs'], { cwd: path, encoding: 'utf8' });
   assert.equal(result.status, 0, result.stderr);
-  result = spawnSync(process.execPath, ['--test', 'scripts/ci/docs-check.test.mjs'], { cwd: path, encoding: 'utf8' });
+  result = spawnSync(process.execPath, ['--test', 'scripts/ci/docs-check.test.mjs'], { cwd: path, encoding: 'utf8', env: nestedTestEnv });
   assert.equal(result.status, 0, result.stdout + result.stderr);
   for (const apply of [true, false, false]) {
     result = run(path, entries, apply);
@@ -112,6 +115,38 @@ test('apply connects identity and resets adoption, preserves inventory/auth/migr
   rejectUnchanged(path, entries.map(s => s === 'Agenda Demo' ? 'Otra Agenda' : s));
   writeFileSync(join(path, 'PROJECT_CONTEXT.md'), '# Contexto completado por el dueño\n');
   rejectUnchanged(path, entries, /modificada o parcial/);
+});
+
+test('H01: the original disagreement regression also works in a valid blocked adoption', () => {
+  const path = fixture();
+  const result = run(path, entries, true); assert.equal(result.status, 0, result.stderr);
+  for (const file of ['docs/tasks/T-000-adoption.md', 'docs/STATUS.md']) {
+    const target = join(path, file);
+    writeFileSync(target, readFileSync(target, 'utf8').replace('status: draft', 'status: blocked').replace('| draft |', '| blocked |'));
+  }
+  assert.match(readFileSync(join(path, 'docs/tasks/T-000-adoption.md'), 'utf8'), /^status: blocked$/m);
+  const baseline = spawnSync(process.execPath, ['scripts/docs-check.mjs'], { cwd: path, encoding: 'utf8' });
+  assert.equal(baseline.status, 0, baseline.stderr);
+  const negative = spawnSync(process.execPath, ['--test', '--test-name-pattern=^backlog and task state must agree$', 'scripts/ci/docs-check.test.mjs'], { cwd: path, encoding: 'utf8', env: nestedTestEnv });
+  assert.equal(negative.status, 0, negative.stdout + negative.stderr);
+  assert.match(negative.stdout, /tests 1\b/);
+  assert.match(negative.stdout, /pass 1\b/);
+});
+
+test('adoption preflight names functional evidence, owners and the first product handoff without inherited installation', () => {
+  const path = fixture();
+  const result = run(path, entries, true); assert.equal(result.status, 0, result.stderr);
+  const task = readFileSync(join(path, 'docs/tasks/T-000-adoption.md'), 'utf8');
+  for (const pattern of [/Comprobación mínima temprana/, /lectura\/edición/, /terminal/, /Git\/PR\/CI/, /evidencia propia antes de revisión/, /ejecutor.*revisor.*superficie/i, /primera tarea de producto/, /MERGED/, /opcionales/]) assert.match(task, pattern);
+  for (const file of ['README.md', 'docs/SETUP.md', 'docs/ORCHESTRATION.md']) {
+    const guide = readFileSync(join(path, file), 'utf8');
+    assert.doesNotMatch(guide, /Qwen|GPT-6\.1|Opus 5\.5|cinco MCP|pendientes de observar/);
+    assert.match(guide, /TOOLS\.md/);
+  }
+  assert.match(readFileSync(join(path, 'docs/AUTONOMY.md'), 'utf8'), /capacidades efectivas/);
+  assert.equal(readdirSync(join(path, 'docs/tasks')).length, 1, 'the initializer cannot invent a product task');
+  assert.ok(!existsSync(join(path, '.git')) && !existsSync(join(path, 'plantilla')));
+  assert.match(readFileSync(join(path, 'docs/HANDOFF.md'), 'utf8'), /NO_LISTO.*0\/22/);
 });
 
 for (const [label, value, key] of [

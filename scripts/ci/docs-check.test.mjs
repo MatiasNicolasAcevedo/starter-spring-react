@@ -18,7 +18,7 @@ cpSync(root, temporary, { recursive: true, filter: source => {
 const firstTask = 'docs/tasks/' + readdirSync(join(temporary, 'docs/tasks')).find(name => /^T-\d{3}-.*\.md$/.test(name));
 const firstId = firstTask.match(/T-\d{3}/)[0];
 const originals = new Map(['docs/HANDOFF.md', 'docs/STATUS.md', 'docs/BACKLOG.md',
-  firstTask, '.github/workflows/ci.yml', '.github/workflows/full.yml',
+  ...readdirSync(join(temporary, 'docs/tasks')).map(name => 'docs/tasks/' + name), '.github/workflows/ci.yml', '.github/workflows/full.yml',
   'scripts/verify.sh'].map(path => [path, readFileSync(join(temporary, path), 'utf8')]));
 const change = (path, transform) => writeFileSync(join(temporary, path), transform(originals.get(path)));
 const run = () => spawnSync(process.execPath, ['scripts/docs-check.mjs'], { cwd: temporary, encoding: 'utf8' });
@@ -29,6 +29,21 @@ const rejects = (pattern) => {
 };
 afterEach(() => { for (const [path, text] of originals) writeFileSync(join(temporary, path), text); });
 after(() => rmSync(temporary, { recursive: true, force: true }));
+
+// Own the whole board arrangement, including STATUS/WIP, independently of live task states.
+const arrangeBoard = (state = 'done', milestone = 'M0') => {
+  for (const path of originals.keys()) if (path.startsWith('docs/tasks/')) {
+    change(path, text => text.replace(/^status: \w+/m, 'status: done'));
+  }
+  change(firstTask, text => text.replace(/^status: \w+/m, `status: ${state}`)
+    .replace(/^milestone: \w+/m, `milestone: ${milestone}`).replace(/^pr: .*$/m, 'pr: null'));
+  change('docs/BACKLOG.md', () => `# Cola\n\n| Tarea | Estado |\n|---|---|\n| [${firstId}](tasks/${firstTask.split('/').pop()}) | ${state} |\n`);
+  change('docs/STATUS.md', () => `# Estado\n\n| Tarea y contrato | [${firstId}](${firstTask.replace('docs/', '')}) |\n| Estado | ${state} |\n\n### Prompt de la siguiente sesión\n\x60\x60\x60text\nRetomar ${firstId}.\n\x60\x60\x60\n`);
+};
+const completeHandoff = () => change('docs/HANDOFF.md', text => text
+  .replace('`NO_LISTO`', '`STARTER_VALIDADO`').replace(/— \d+\/22 verificados/, '— 22/22 verificados')
+  .replace(/^(\| [A-Z]-\d{2} \|[^|]*\|)[^|]*\|[^|]*\|/gm,
+    '$1 verificado | Propia: 2026-10-21 fixture ficticia del checker |'));
 
 test('current generic contract passes without Git or the local kit', () => {
   const result = run();
@@ -77,8 +92,51 @@ test('STATUS must report the actual handoff count', () => {
 });
 test('backlog and task state must agree', () => {
   // Legacy tables still validate explicit states; a modern queue need not repeat them.
-  change('docs/BACKLOG.md', text => text + `\n## Bloqueadas\n| Tarea | Estado | Salida |\n|---|---|---|\n| [${firstId}](tasks/${firstTask.split('/').pop()}) | blocked | fixture |\n`);
+  arrangeBoard('in_progress');
+  writeFileSync(join(temporary, 'docs/BACKLOG.md'), `# Cola\n\n## Bloqueadas\n| Tarea | Estado | Salida |\n|---|---|---|\n| [${firstId}](tasks/${firstTask.split('/').pop()}) | blocked | fixture |\n`);
   rejects(new RegExp(`${firstId} figura como blocked, frontmatter dice`));
+});
+
+for (const state of ['draft', 'blocked', 'in_review', 'mergeable', 'done']) {
+  test(`H01: coherent ${state} board passes and a real disagreement rejects`, () => {
+    arrangeBoard(state);
+    let result = run(); assert.equal(result.status, 0, result.stderr);
+    writeFileSync(join(temporary, 'docs/BACKLOG.md'), readFileSync(join(temporary, 'docs/BACKLOG.md'), 'utf8')
+      .replace(`| ${state} |`, `| ${state === 'blocked' ? 'draft' : 'blocked'} |`));
+    rejects(new RegExp(`${firstId} figura como .*frontmatter dice ${state}`));
+  });
+}
+
+test('H02: complete M0 with future M1 draft passes adoption', () => {
+  arrangeBoard(); completeHandoff();
+  const result = run(); assert.equal(result.status, 0, result.stderr);
+  const path = join(temporary, 'docs/tasks/T-997-future-product.md');
+  try {
+    writeFileSync(path, `---\nid: T-997\nstatus: draft\nexecutor: junie\nrole: implementer\nmilestone: M1\npr: null\ndepends_on: [${firstId}]\n---\n`);
+    const future = run(); assert.equal(future.status, 0, future.stderr);
+  } finally { rmSync(path); }
+});
+
+for (const state of ['draft', 'ready', 'blocked', 'in_progress', 'in_review', 'changes_requested', 'mergeable']) {
+  test(`H02: unfinished M0 ${state} rejects complete criteria`, () => {
+    arrangeBoard(state); completeHandoff();
+    if (state === 'ready') writeFileSync(join(temporary, firstTask), readFileSync(join(temporary, firstTask), 'utf8')
+      .replace(/^depends_on:.*$/m, 'depends_on: []'));
+    rejects(/STARTER_VALIDADO exige 22\/22/);
+  });
+}
+test('H02: no M0 cannot validate an empty adoption scope', () => {
+  arrangeBoard(); completeHandoff();
+  for (const path of originals.keys()) if (path.startsWith('docs/tasks/')) {
+    writeFileSync(join(temporary, path), readFileSync(join(temporary, path), 'utf8').replace(/^milestone: M0$/m, 'milestone: M1'));
+  }
+  rejects(/STARTER_VALIDADO exige 22\/22/);
+});
+test('H02: completed M0 cannot bypass a pending criterion', () => {
+  arrangeBoard(); completeHandoff();
+  writeFileSync(join(temporary, 'docs/HANDOFF.md'), readFileSync(join(temporary, 'docs/HANDOFF.md'), 'utf8')
+    .replace(/^(\| C-01 \|[^|]*\|) verificado/m, '$1 pendiente').replace('— 22/22', '— 21/22'));
+  rejects(/STARTER_VALIDADO exige 22\/22/);
 });
 
 test('daily progress updates task and STATUS without rewriting queue or HANDOFF', () => {

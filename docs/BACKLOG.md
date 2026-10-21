@@ -1,11 +1,14 @@
 # Cola del starter
 
-Próxima acción: cierre del mismo PR de T-005 con veredicto/CI propios y merge elegible. Tras MERGED vuelve a frontera/dueño; no hay otra tarea predefinida ready. Estado y prompt en [STATUS](STATUS.md).
+Próxima acción: implementar [T-006](tasks/T-006-adoption-handoff.md), mejora de adopción autorizada por el dueño. Estado y prompt en [STATUS](STATUS.md).
 
 ## En vuelo
 | Tarea | Estado | Resultado |
 |---|---|---|
-| [T-005](tasks/T-005-generic-baseline.md) | mergeable | R1/R2 revisados favorablemente; pendiente cierre con HEAD/base/CI exactos y MERGED confirmado |
+| [T-006](tasks/T-006-adoption-handoff.md) | in_progress | Regresiones de adopción, herramientas y traspaso hasta primera tarea predefinida |
+
+## Hechas recientes
+- [T-005](tasks/T-005-generic-baseline.md): MERGED confirmado y conciliado en T-006.
 
 ## Por refinar
 - Implementar despliegue compartido después de elegir proveedor/región y aprobar el contrato de [DEPLOYMENT](DEPLOYMENT.md).
