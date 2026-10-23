@@ -1,6 +1,6 @@
 # Protocolo · merger
 
-Normalmente continúa la sesión revisora que aprobó. También puede retomarse en una sesión nueva si quedaron CI, permisos o un merge manual pendientes. Antes de reintentar, consultar si el PR ya está mergeado (`gh pr view <n> --json state,mergeCommit`): en ese caso solo reconciliar.
+Normalmente continúa la sesión revisora que aprobó. También puede retomarse en una sesión nueva si quedaron CI, permisos o un merge manual pendientes. Antes de reintentar, consultar si el PR ya está mergeado (consulta explícita con repositorio, fecha y SHA según [ORCHESTRATION](../ORCHESTRATION.md#confirmación-de-hechos-en-github)): en ese caso solo reconciliar.
 
 1. Comprobar autorización ([AUTONOMY.md](../AUTONOMY.md)), diff final, HEAD/base, veredicto `APROBADO` vigente, checks requeridos verdes, conversaciones y ausencia de cambios locales propios.
 2. Si cambió HEAD o base desde el veredicto, devolver a revisión/verificación. No reutilizar una aprobación vieja.
@@ -11,3 +11,5 @@ Normalmente continúa la sesión revisora que aprobó. También puede retomarse 
 
 Usar `--body-file` para cuerpos largos; no interpolar contenido de documentos como código de shell.
 El cierre y prompt de continuación identifican la siguiente tarea ya especificada, su dependencia satisfecha y si el objetivo de iteración exige frontera. El prompt de STATUS puede haberse escrito antes del merge: su precondición obliga al siguiente agente a comprobar MERGED. El dueño copia el prompt vigente; no reconstruye planificación ni mantiene estados a mano. No se escribe un nuevo commit en la rama ya mergeada: la conciliación de done ocurre en el primer avance de la siguiente rama.
+
+Aplicar el [prompt obligatorio al cierre](../ORCHESTRATION.md#prompt-obligatorio-al-cierre): tras confirmar MERGED entregar en el chat la continuación real y dejar su conciliación documental para la siguiente rama autorizada. No anunciar el merge por el exit del comando que lo solicitó.

@@ -1,6 +1,6 @@
 ---
 id: T-006
-status: mergeable
+status: done
 priority: P1
 size: M
 milestone: M0
@@ -102,3 +102,6 @@ Tarea/STATUS/BACKLOG pasan a mergeable; rol siguiente merger. Solo estas tres ru
 Transición local comprobada: `node --test scripts/ci/docs-check.test.mjs` exit 0, 35/35 en 10.105 s (review-r1-transition.log); `node scripts/docs-check.mjs` y `git diff --check` exit 0. Diff documental completo revisado; sin cambios de aceptación en HANDOFF ni de implementación. Perfil del PR sigue FULL/STARTER; se conserva el gate auditado, con solo tarea/STATUS/BACKLOG diferentes desde esa ejecución.
 
 Pendiente: publicación de la transición, CI propia, APROBADO exacto y merge elegible del PR #7. Responsable: esta sesión reviewer y luego merger, reconsultando protecciones/checks/conversaciones/HEAD/base y árbol limpio. Salida: MERGED confirmado con fecha/SHA y comentario de cierre; si se bloquea, retoma del mismo PR. Tras MERGED vuelve al dueño para adopción acotada en aplicación propia en otra sesión: mejora del starter mergeada, adopción propia y producto aún no iniciados. No existe otra tarea ready autorizada aquí. Conciliar T-006 done únicamente en el primer avance de una futura rama autorizada, sin commit en main ni después de APROBADO.
+
+## Conciliación por T-007
+PR #7 consultado con gh pr view 7 --repo MatiasNicolasAcevedo/starter-spring-react --json number,url,state,mergedAt,mergeCommit,headRefOid,baseRefOid,baseRefName: exit 0, state MERGED, mergedAt 2026-10-21T23:18:44Z, mergeCommit.oid 8d2fafecb0cfbd617998a41388c0855c676b3848, base main, head 2ac376721ab273da26ec943f3eb22d73f809aac0. Conciliado done en el primer avance de la rama nueva autorizada T-007, sin editar main ni la rama mergeada.

@@ -73,3 +73,28 @@ Antes de entregar adopción, frontera deja la primera tarea de producto especifi
 | MERGED | Merger autorizado: confirmación GitHub y commit de merge enlazados | Siguiente sesión concilia done en nueva rama y toma solo tarea predefinida |
 
 Cada traspaso explicita **pendiente, responsable y condición de salida**, también si falta aceptación, capacidad, gate, revisión o merge. Máximo dos rondas de revisión y tres correcciones distintas por bloqueo. Al agotar el límite: checkpoint con causa/evidencia/intentos, decisión necesaria y propuesta completa de cierre (quién corrige, quién revisa independientemente y qué habilita merge). Una revisión adicional requiere decisión específica del dueño; no hay excepción permanente ni aprobación propia. La corrección/aceptación posterior no produce APROBADO por sí sola. Conservar evidencia válida sin repetir suites ni pedir aceptaciones rutinarias por cambiar de rol.
+
+## Confirmación de hechos en GitHub
+
+Con operaciones GitHub autorizadas en AUTONOMY, consultar la PR exacta con repositorio explícito al adoptar una dependencia en una sesión nueva, después de solicitar merge y antes de anunciar MERGED, conciliar done o habilitar la tarea siguiente. Sustituir los argumentos por valores reales de AUTONOMY/tarea:
+
+```text
+gh pr view <numero-real> --repo <owner/repo-real> --json number,url,state,mergedAt,mergeCommit,headRefOid,baseRefName
+```
+
+Exigir exit 0, identidad de PR/repositorio y base correctas; para merge exigir además `state == MERGED`, `mergedAt` no nulo y `mergeCommit.oid` no vacío. Registrar una vez en la tarea comando, exit, respuesta mínima, fecha de consulta y SHA completo; el cierre al dueño enlaza PR y SHA confirmado. Verificar también existencia/identidad remota antes de anunciar una PR publicada. No inferir hechos desde un número escrito en STATUS o un chat anterior.
+
+| Respuesta de GitHub | Acción |
+|---|---|
+| MERGED con identidad/base, fecha y SHA válidos | Acreditar merge; conciliar/habilitar según rol y dependencia |
+| OPEN o merge solicitado/en cola | Mantener dependencia pendiente; nombrar próximo responsable y acción |
+| CLOSED sin merge o PR inexistente | No acreditar merge ni publicación inexistente; corregir la discrepancia |
+| Error de consulta o respuesta incompleta | Informar «merge no verificado», causa saneada y siguiente comprobación; no inferir OPEN ni MERGED |
+
+Git merge/rebase/cherry-pick, fetch/pull, contenido en main local, CI verde, APROBADO, auto-merge solicitado y exit 0 de gh pr merge no sustituyen esta consulta. Una PR abierta no habilita al implementer a mergearla; siguen vigentes revisión independiente, gate y AUTONOMY. Si documentos y GitHub discrepan, registrar la causa y conciliar en la rama/rol autorizados.
+
+## Prompt obligatorio al cierre
+
+Cada respuesta final de sesión incluye el prompt completo y copiable de la siguiente sesión, con tarea/rol, referencias concretas, precondición comprobable, acción y salida. Antes de publicar el cierre documental, STATUS contiene ese mismo prompt y refleja el pendiente real. Si el recibido ya se ejecutó, consultar el estado y entregar el paso vigente, sin limitarse a informar que ya se hizo. Un bloqueo también entrega la acción concreta que lo resuelve y su responsable.
+
+Implementación/corrección termina con prompt de revisión independiente; revisión con hallazgos entrega prompt de corrección; revisión elegible puede continuar el merger autorizado del mismo PR. Tras MERGED confirmado, entregar en el chat el prompt de conciliación y próxima tarea predefinida. STATUS puede conservar el prompt anterior escrito antes del merge: su precondición exige reconsultar GitHub y derivar el paso vigente. No commitear en la rama mergeada para actualizarlo; la siguiente sesión lo concilia en el primer avance de su nueva rama autorizada. Si no existe tarea siguiente o hay decisión fuera de contrato, entregar prompt de frontera con el pendiente específico. No iniciar otra implementación en la sesión que cierra esta.

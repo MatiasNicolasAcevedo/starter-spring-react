@@ -6,6 +6,71 @@ Versiones congeladas y efectivas en [DEPENDENCIES](DEPENDENCIES.md). Comandos y 
 Docker Desktop abierto (Linux/WSL2), Compose V2 y Git Bash. Node >=24 en host para control cerrado E2E; npm para scripts de navegador. JDK 21 solo para IDE/alternativa backend host; builds ordinarios en contenedor. Versiones de referencia del host: Docker 28.5.1, Compose v2.40.2-desktop.1, Git 2.51.1, gh 2.96.0, Node 24.21.0/npm 11.19.0, Corretto 21.0.9. Contenedores Temurin 21.0.12+8, Node 24.21.0, PostgreSQL 18.6.
 En PowerShell usar `& "C:\Program Files\Git\bin\bash.exe" scripts/verify.sh`. No ejecutar scripts con otro shell ni modificar configuración global.
 
+## Verificación desde PowerShell
+
+PowerShell es una entrada válida al verificador Bash existente; Node se usa desde la instalación del host. No hace falta otra instalación de Node para Git Bash. Desde la raíz y en la superficie real del agente, localizar los ejecutables y comprobar lo que recibe el proceso hijo. Ajustar la ruta de Bash únicamente si Git está instalado en otra ubicación comprobada:
+
+```powershell
+$verifyBash = Join-Path $env:ProgramFiles 'Git\bin\bash.exe'
+if (-not (Test-Path -LiteralPath $verifyBash)) { throw 'Localizar Git Bash instalado; registrar ruta/error antes de proponer instalación' }
+$verifyNodeDirectory = Split-Path (Get-Command node -CommandType Application -ErrorAction Stop).Source
+$verifyOriginalPath = $env:PATH
+try {
+  $env:PATH = "$verifyNodeDirectory;$verifyOriginalPath"
+  & $verifyBash -c 'set -e; command -v bash; command -v node; node -e "process.exit(parseInt(process.versions.node)>=24?0:1)"; node --version; command -v docker; docker compose version'
+  if ($LASTEXITCODE -ne 0) { throw 'Preflight Bash/Node/Docker falló; conservar error saneado' }
+  & $verifyBash scripts/verify.sh --policy origin/main
+  $verifyExit = $LASTEXITCODE
+} finally { $env:PATH = $verifyOriginalPath }
+if ($verifyExit -ne 0) { throw "Clasificación falló: $verifyExit" }
+```
+
+La sonda y `--policy` no ejecutan suites. El clasificador solo mira commits: revisar también el diff sin commit. Si PowerShell encuentra Node y Bash no, contrastar resolución/PATH en ambos procesos; el bloque transmite al hijo el directorio del Node resuelto sin cambiar configuración global. Si Bash no arranca por restricciones de la superficie, conservar el diagnóstico y solicitar solo la capacidad necesaria; no atribuirlo sin evidencia a una versión ausente de Node.
+
+Para FULL de aplicación, después del checkpoint y de comprobar labels ausentes según TESTING, usar este bloque en una misma sesión PowerShell; genera nombres estables con un sufijo independiente de la configuración regional y restaura el entorno local:
+
+```powershell
+$verifyBash = Join-Path $env:ProgramFiles 'Git\bin\bash.exe'
+$verifyNodeDirectory = Split-Path (Get-Command node -CommandType Application -ErrorAction Stop).Source
+$verifySuffix = [Guid]::NewGuid().ToString('N').Substring(0, 12)
+$verifyNames = @('PATH', 'COMPOSE_ENV_FILES', 'STARTER_SERVER_TESTS', 'COMPOSE_PROJECT_NAME', 'STARTER_E2E_PROJECT')
+$verifyPrevious = @{}
+foreach ($verifyName in $verifyNames) { $verifyPrevious[$verifyName] = [Environment]::GetEnvironmentVariable($verifyName, 'Process') }
+$verifyExit = 1
+$verifyCleanupExit = 1
+try {
+  $env:PATH = "$verifyNodeDirectory;$env:PATH"
+  $env:COMPOSE_ENV_FILES = '.env.example'
+  $env:STARTER_SERVER_TESTS = 'container'
+  $env:COMPOSE_PROJECT_NAME = "starter-verify-$verifySuffix"
+  $env:STARTER_E2E_PROJECT = "starter-e2e-$verifySuffix"
+  foreach ($verifyProject in @($env:COMPOSE_PROJECT_NAME, $env:STARTER_E2E_PROJECT)) {
+    foreach ($verifyKind in @('container', 'network', 'volume')) {
+      $verifyExisting = docker $verifyKind ls -q --filter "label=com.docker.compose.project=$verifyProject"
+      if ($LASTEXITCODE -ne 0 -or $verifyExisting) { throw "Namespace no disponible: $verifyProject/$verifyKind" }
+    }
+  }
+  try {
+    & $verifyBash scripts/verify.sh
+    $verifyExit = $LASTEXITCODE
+  } finally {
+    docker compose --env-file .env.example -p $env:COMPOSE_PROJECT_NAME down --volumes --remove-orphans
+    $verifyCleanupExit = $LASTEXITCODE
+  }
+  foreach ($verifyProject in @($env:COMPOSE_PROJECT_NAME, $env:STARTER_E2E_PROJECT)) {
+    foreach ($verifyKind in @('container', 'network', 'volume')) {
+      $verifyRemaining = docker $verifyKind ls -q --filter "label=com.docker.compose.project=$verifyProject"
+      if ($LASTEXITCODE -ne 0 -or $verifyRemaining) { throw "Cleanup no acreditado: $verifyProject/$verifyKind" }
+    }
+  }
+  if ($verifyExit -ne 0 -or $verifyCleanupExit -ne 0) { throw "Verificación falló: gate=$verifyExit cleanup=$verifyCleanupExit" }
+} finally {
+  foreach ($verifyName in $verifyNames) { [Environment]::SetEnvironmentVariable($verifyName, $verifyPrevious[$verifyName], 'Process') }
+}
+```
+
+Para perfil STARTER, cambiar la invocación del mismo bloque a `scripts/verify.sh --starter`. E2E y tooling conservan sus propietarios Bash, señales, readiness, saneado y cleanup propios; no sustituirlos por `run-e2e.mjs` aislado ni pasos Compose manuales. Ante interrupción, comprobar el cleanup por labels exactos antes de reintentar. Error de gate o de cleanup impide anunciar éxito. Registrar en la tarea comandos, exit, fuentes/base, logs saneados y recursos propios; ninguna ejecución de frontera acredita la superficie Junie.
+
 ## Primer uso local sin Google
 Comandos persistentes mínimos en [README](../README.md#modo-local-explícito-sin-credenciales). Cada acción exige --mode local, --proxy nginx|vite y --project starter-dev- seguido de un sufijo propio. El namespace starter-dev-auth- está reservado al harness efímero. Docker Desktop/Compose V2/Git Bash bastan para up/check/down; Node >=24 host sigue siendo requisito separado del controlador FULL/E2E.
 

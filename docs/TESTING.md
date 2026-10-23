@@ -3,7 +3,7 @@
 **Fase actual: `FULL`** de aplicación. Mantener suites, negativos, assertions, cobertura, aislamiento, retries y deadlines. Un check de herramientas verde no acredita tests de aplicación ni despliegue.
 
 ## Comandos
-Desde la raíz con Git Bash, Docker Desktop Linux y Node >=24. Usar `.env.example` y proyectos Compose nuevos propios; comprobar labels ausentes antes de empezar y limpiar solo esos recursos.
+Desde la raíz con Git Bash, Docker Desktop Linux y Node >=24. PowerShell puede invocar el mismo gate: [entrada y diagnóstico Windows](SETUP.md#verificación-desde-powershell). Comprobar Bash/Node/PATH en la superficie propia; conservar exit y cleanup. Una receta manual de E2E no sustituye FULL. Usar `.env.example` y proyectos Compose nuevos propios; comprobar labels ausentes antes de empezar y limpiar solo esos recursos.
 
 | Comando | Alcance |
 |---|---|
