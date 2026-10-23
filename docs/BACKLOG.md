@@ -1,16 +1,22 @@
 # Cola del starter
 
-Próxima acción: cerrar [T-006](tasks/T-006-adoption-handoff.md) con veredicto/CI exactos y merge elegible del mismo PR. Tras MERGED vuelve al dueño para adopción propia en otra sesión; no hay otra tarea predefinida ready aquí. Estado y prompt en [STATUS](STATUS.md).
+Acción y prompt en [STATUS](STATUS.md). T-007 autorizada por el dueño antes de futuras copias; no acredita adopción de ninguna aplicación.
 
 ## En vuelo
+
 | Tarea | Estado | Resultado |
 |---|---|---|
-| [T-006](tasks/T-006-adoption-handoff.md) | mergeable | R1 favorable, gate conservado; pendiente veredicto/CI del HEAD final y MERGED confirmado |
+| [T-007](tasks/T-007-agent-operating-rules.md) | in_progress | Prompt obligatorio, Windows reproducible y comprobación remota de publicación/MERGED |
 
 ## Hechas recientes
+
+- [T-006](tasks/T-006-adoption-handoff.md): MERGED confirmado y conciliado en T-007.
 - [T-005](tasks/T-005-generic-baseline.md): MERGED confirmado y conciliado en T-006.
 
 ## Por refinar
+
+No hay otra tarea predefinida ready. Tras MERGED de T-007, devolver al dueño para decidir el siguiente objetivo en otra sesión.
+
 - Implementar despliegue compartido después de elegir proveedor/región y aprobar el contrato de [DEPLOYMENT](DEPLOYMENT.md).
 - Optimizar las etapas dominantes del FULL con mediciones; conservar aislamiento, negativos y cleanup.
 - Endurecer validación de estados en listas del tablero y conteos repetidos de HANDOFF.
