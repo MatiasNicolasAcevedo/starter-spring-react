@@ -6,7 +6,7 @@ Acción y prompt en [STATUS](STATUS.md). T-007 autorizada por el dueño antes de
 
 | Tarea | Estado | Resultado |
 |---|---|---|
-| [T-007](tasks/T-007-agent-operating-rules.md) | in_review | Prompt obligatorio, Windows reproducible y comprobación remota de publicación/MERGED |
+| [T-007](tasks/T-007-agent-operating-rules.md) | mergeable | R1 favorable; pendiente APROBADO/CI del HEAD final y MERGED confirmado |
 
 ## Hechas recientes
 

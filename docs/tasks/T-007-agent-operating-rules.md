@@ -1,13 +1,13 @@
 ---
 id: T-007
-status: in_review
+status: mergeable
 priority: P1
 size: S
 milestone: M0
 spec: null
 depends_on: [T-006]
 branch: codex/t-007-agent-operating-rules
-role: reviewer
+role: merger
 executor: frontier
 counts_for_cycle: false
 pr: 8
@@ -61,7 +61,7 @@ Gate STARTER completo: exit 0, 2476.974 s, cleanup exterior exit 0. Suites: docs
 Pendiente: publicación del primer avance y PR; después transición solo documental a in_review y revisión independiente en sesión nueva. El gate se conserva mientras inventario, demás fuentes y base coincidan; comprobar docs-check/diff-check y CI del HEAD publicado final. No APROBADO ni merge propios.
 
 
-## Checkpoint vigente · entrega a revisión independiente
+## Entrega a revisión independiente
 
 Fuentes publicadas en f372e4f9c23ced0d3e0d0b2c4d2c84bd6936a0eb. [PR8](https://github.com/MatiasNicolasAcevedo/starter-spring-react/pull/8) creado y existencia comprobada con gh pr view 8 --repo MatiasNicolasAcevedo/starter-spring-react --json number,url,state,isDraft,mergedAt,mergeCommit,headRefOid,baseRefOid,baseRefName: exit 0, number 8, state OPEN, base main/8d2fafecb0cfbd617998a41388c0855c676b3848, head f372e4f9c23ced0d3e0d0b2c4d2c84bd6936a0eb, mergedAt/mergeCommit null. No MERGED ni APROBADO. El borrador pasa a ready después de publicar esta transición.
 
@@ -70,3 +70,27 @@ Transición posterior limitada a esta tarea/STATUS/BACKLOG. Gate STARTER conserv
 Pendiente: revisión independiente R1, responsable nueva sesión reviewer, con diff completo y fuentes/base publicados, gate/huellas y evidencia saneada. Salida: APROBADO exacto o CAMBIOS REQUERIDOS; máximo dos rondas. La sesión revisora puede continuar el merger del mismo PR únicamente por AUTONOMY, con SHA revisado/checks y confirmación GitHub posterior. Esta sesión autora no revisa ni mergea. No hay otra tarea ready: después de MERGED volver al dueño con prompt concreto para preparar el siguiente objetivo o nueva copia, sin operar otras aplicaciones. Conciliar done únicamente en el primer avance de una futura rama autorizada.
 
 Transición local comprobada: docs-check exit 0, regresiones documentales 35/35 exit 0 (docs-transition.log), diff-check exit 0. Auditoría contra gate-after.json: únicamente tarea/STATUS/BACKLOG difieren; las demás fuentes y origin/main coinciden. No se repite STARTER por este cierre documental.
+
+## Revisión independiente R1 · 2026-10-23
+
+Sesión nueva de frontera reviewer, distinta de implementación; Codex desktop/API, GPT-6 expuesto, variante runtime y esfuerzo efectivos no expuestos. PowerShell, Git/gh, Node 24.21.0, Git Bash y Docker; sin delegación ni ejecución Junie. Solo revisión y transición documental, sin impacto adicional en comportamiento/API/permisos/datos/UI.
+
+Consulta inicial `gh pr view 8 --repo MatiasNicolasAcevedo/starter-spring-react --json number,url,state,mergedAt,mergeCommit,headRefOid,baseRefOid,baseRefName,statusCheckRollup`: primer intento sandbox exit 1 por conexión; repetición con acceso de red exit 0, PR8 OPEN, base main/8d2fafecb0cfbd617998a41388c0855c676b3848, HEAD dd5fa546f3b55a149465e2cd575034b7e26f0969, mergedAt/mergeCommit null. HEAD coincide con el árbol limpio y la rama remota. Único PR abierto, propio y ready; CI vigente SUCCESS run 39895617993, posterior a run 39895615673 cancelado por concurrencia. No se acredita la ejecución cancelada.
+
+Diff completo de 14 rutas revisado. Inventario solo añade T-007 a REMOVE_FILES; no cambia runner, controles, versiones ni permisos. Rojo real existente: tarea de mantenimiento heredada, 2 tareas frente a 1; verde 36/36. Ensayo adicional de revisión en copia ficticia: tres reglas genéricas presentes en AGENTS/ORCHESTRATION/SETUP; instrucciones, tareas y evidencia de mantenimiento ausentes; AUTONOMY propia pendiente. Fixture propio eliminado en finally. Protocolos y template enlazan el contrato canónico y distinguen consulta fallida/OPEN/CLOSED/MERGED sin crédito heredado.
+
+Gate STARTER auditado: 281/281 huellas antes/después iguales, base inmóvil y todas las fuentes técnicas publicadas idénticas. Solo tarea/STATUS/BACKLOG difieren desde el gate; cinco suites exit 0 y logs concordantes con gate-result.json (2476.974 s). Backend 91 unitarios/slices y 75 IT PostgreSQL; copia compilable y Playwright real, saneador negativo, rollback y señal SIGTERM exit 143 con cleanup acreditados. Sonda exacta de SETUP y `--policy origin/main` ejecutados en esta superficie, exit 0 y perfil STARTER; consulta propia de los dos namespaces exteriores: container/network/volume 0/0/0. Ningún recurso creado o borrado por esta revisión. No se repite FULL por la transición Markdown.
+
+Protecciones efectivas consultadas: ruleset 25305930, PR con 0 aprobaciones formales, squash, verify-required estricto, resolución de conversaciones, sin force push. PR8 sin reviews ni hilos; configuración conserva solo squash y borrado automático. Sin hallazgos bloqueantes hasta aquí, una ronda de dos. Dirigidos propios en curso: `node --test scripts/test-init-project.mjs` y `node --test "scripts/ci/*.test.mjs"`, logs saneados .orchestrator/t-007/review-r1/init.log y review-r1-ci.log; solo fixtures efímeros propios con cleanup del test. Próximo paso: recoger exits, comprobar transición documental y publicar veredicto exacto únicamente tras CI verde del HEAD final. Responsable esta sesión reviewer/merger; salida MERGED confirmado o checkpoint de la causa concreta, sin iniciar otra tarea.
+
+Incidencia del entorno y siguiente intento distinto: dirigidos sandbox exit 1, inicializador 35/36 por symlink EPERM y matriz CI 80/93 por escritura .git/config de fixture denegada, symlink EPERM y arranque Bash restringido (exit 3221225794). No se acredita éxito global. Ejecutar la misma matriz CI fuera del sandbox, que ya incluye los 36 casos del inicializador, sin cambios de fuentes/tests/base; log .orchestrator/t-007/review-r1-ci-host.log. Fixtures efímeros propios y cleanup del test; no stacks. Este intento no constituye una segunda ronda de revisión ni una corrección de implementación.
+
+Resultado host: exit 0, 131/131 en 85.175 s, cero fallos/cancelados/omitidos, incluidos inicializador 36/36 y checker 35/35. No se cambiaron tests ni implementación para superar el sandbox. Auditoría propia conservada en .orchestrator/t-007/review-r1-audit.json; sonda/cleanup remotos y ruleset activo sin bypass reconsultados. R1 favorable sin hallazgos bloqueantes, una ronda de dos; gate STARTER válido conservado.
+
+## Checkpoint vigente · transición favorable y cierre de PR8
+
+Solo tarea/STATUS/BACKLOG pasan a mergeable, rol merger. Antes de publicar: `node --test scripts/ci/docs-check.test.mjs`, `node scripts/docs-check.mjs` y `git diff --check`; revisar diff e índice de rutas explícitas sin plantilla. Después de commit/push: reconsultar PR8 con repositorio explícito, HEAD/base y CI del HEAD final; ejecutar docs-check sobre el commit. Publicar APROBADO con SHA completo de HEAD/base únicamente si verify-required está verde. El SHA final y el enlace de CI quedan en el comentario vinculante del PR, sin commits después de APROBADO.
+
+Pendiente/responsable/salida: esta sesión reviewer continúa merger del mismo PR solo si AUTONOMY sigue satisfecha, árbol limpio y SHA/base/checks/protecciones/conversaciones vigentes. Squash ligado al HEAD aprobado, sin bypass; nueva consulta `gh pr view 8 --repo MatiasNicolasAcevedo/starter-spring-react --json number,url,state,mergedAt,mergeCommit,headRefOid,baseRefOid,baseRefName,statusCheckRollup` con exit 0 y MERGED/fecha/SHA válidos antes de anunciarlo, seguida del comentario de cierre. No hay tarea predefinida ready; tras MERGED vuelve al dueño en sesión de frontera para decidir siguiente objetivo, sin operar otras aplicaciones ni iniciar otra implementación. Conciliar T-007 done, STATUS y cola en el primer avance de una futura rama autorizada, nunca main ni rama mergeada.
+
+Transición documental comprobada: checker 35/35, exit 0, 14.280 s (.orchestrator/t-007/review-r1-transition.log); docs-check y diff-check exit 0. Diff completo de las tres rutas revisado, sin cambios de implementación ni de aceptación en HANDOFF. No hay kit plantilla local; git ls-files e índice deben seguir sin plantilla antes del commit. Pendiente exclusivamente publicación, CI propia y veredicto/merge remoto del HEAD documental final.
