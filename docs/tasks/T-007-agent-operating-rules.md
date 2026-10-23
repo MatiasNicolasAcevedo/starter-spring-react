@@ -1,16 +1,16 @@
 ---
 id: T-007
-status: in_progress
+status: in_review
 priority: P1
 size: S
 milestone: M0
 spec: null
 depends_on: [T-006]
 branch: codex/t-007-agent-operating-rules
-role: implementer
+role: reviewer
 executor: frontier
 counts_for_cycle: false
-pr: null
+pr: 8
 ---
 # T-007 · Continuidad y verificación explícitas para futuras copias
 
@@ -39,7 +39,7 @@ AGENTS y ORCHESTRATION contienen contrato canónico y enlaces desde protocolos/t
 
 Comandos dirigidos: node --test --test-name-pattern="apply connects identity" scripts/test-init-project.mjs; node --test scripts/test-init-project.mjs; node --test "scripts/ci/*.test.mjs"; node scripts/docs-check.mjs; git diff --check. Sonda Windows y --policy en SETUP. Gate: desde PowerShell invocar Git Bash explícito con scripts/verify.sh --starter, .env.example, STARTER_SERVER_TESTS=container y namespaces propios comprobados ausentes. Checkpoint de gate abajo antes de iniciar.
 
-## Sesión y checkpoint vigente
+## Sesión y conciliación inicial
 
 Frontera implementer, Codex; variante exacta y esfuerzo no expuestos. PowerShell, Git/gh, Node 24.21.0 y Git Bash/Docker; sin delegación ni ejecución Junie. Impacto en instrucciones/operación de agentes e inventario de exclusión; sin comportamiento/API/permisos/datos/UI de aplicación.
 
@@ -59,3 +59,14 @@ Sonda del bloque exacto de SETUP ejecutada desde PowerShell: Git Bash /usr/bin/b
 Gate STARTER completo: exit 0, 2476.974 s, cleanup exterior exit 0. Suites: docs 4s exit 0; server 244s exit 0; client 52s exit 0; tooling 1791s exit 0; e2e 384s exit 0. Logs y JSON before/after/result en .orchestrator/t-007/. Huellas de todos los archivos idénticas antes/después, HEAD/base 8d2fafecb0cfbd617998a41388c0855c676b3848 inmóviles. Recursos exteriores starter-verify-agent-rules-1792723644 y starter-e2e-agent-rules-1792723644: container/network/volume 0/0/0; los ensayos propios de tooling comprobaron su cleanup en el log. No hubo edición de fuentes durante la corrida.
 
 Pendiente: publicación del primer avance y PR; después transición solo documental a in_review y revisión independiente en sesión nueva. El gate se conserva mientras inventario, demás fuentes y base coincidan; comprobar docs-check/diff-check y CI del HEAD publicado final. No APROBADO ni merge propios.
+
+
+## Checkpoint vigente · entrega a revisión independiente
+
+Fuentes publicadas en f372e4f9c23ced0d3e0d0b2c4d2c84bd6936a0eb. [PR8](https://github.com/MatiasNicolasAcevedo/starter-spring-react/pull/8) creado y existencia comprobada con gh pr view 8 --repo MatiasNicolasAcevedo/starter-spring-react --json number,url,state,isDraft,mergedAt,mergeCommit,headRefOid,baseRefOid,baseRefName: exit 0, number 8, state OPEN, base main/8d2fafecb0cfbd617998a41388c0855c676b3848, head f372e4f9c23ced0d3e0d0b2c4d2c84bd6936a0eb, mergedAt/mergeCommit null. No MERGED ni APROBADO. El borrador pasa a ready después de publicar esta transición.
+
+Transición posterior limitada a esta tarea/STATUS/BACKLOG. Gate STARTER conservado por inventario y demás fuentes/base idénticos; huellas/log/cleanup propios disponibles arriba. Ejecutar docs-check, regresiones documentales y diff-check; publicar y exigir verify-required SUCCESS del HEAD final. HEAD/CI finales consultables en el PR; esta documentación no inventa un SHA de su propio commit.
+
+Pendiente: revisión independiente R1, responsable nueva sesión reviewer, con diff completo y fuentes/base publicados, gate/huellas y evidencia saneada. Salida: APROBADO exacto o CAMBIOS REQUERIDOS; máximo dos rondas. La sesión revisora puede continuar el merger del mismo PR únicamente por AUTONOMY, con SHA revisado/checks y confirmación GitHub posterior. Esta sesión autora no revisa ni mergea. No hay otra tarea ready: después de MERGED volver al dueño con prompt concreto para preparar el siguiente objetivo o nueva copia, sin operar otras aplicaciones. Conciliar done únicamente en el primer avance de una futura rama autorizada.
+
+Transición local comprobada: docs-check exit 0, regresiones documentales 35/35 exit 0 (docs-transition.log), diff-check exit 0. Auditoría contra gate-after.json: únicamente tarea/STATUS/BACKLOG difieren; las demás fuentes y origin/main coinciden. No se repite STARTER por este cierre documental.
