@@ -2,6 +2,8 @@
 
 Normalmente continúa la sesión revisora que aprobó. También puede retomarse en una sesión nueva si quedaron CI, permisos o un merge manual pendientes. Antes de reintentar, consultar si el PR ya está mergeado (consulta explícita con repositorio, fecha y SHA según [ORCHESTRATION](../ORCHESTRATION.md#confirmación-de-hechos-en-github)): en ese caso solo reconciliar.
 
+Junie puede ejecutar este protocolo sin nueva confirmación del dueño cuando AUTONOMY propia autoriza `AUTOMATICO_ELEGIBLE` y se cumplen sus condiciones. No devolver un merge elegible al dueño por ser Junie. Conservar la separación respecto de la sesión implementadora; una capacidad técnica faltante exige evidencia y retoma concreta, no inventar una autorización pendiente.
+
 1. Comprobar autorización ([AUTONOMY.md](../AUTONOMY.md)), diff final, HEAD/base, veredicto `APROBADO` vigente, checks requeridos verdes, conversaciones y ausencia de cambios locales propios.
 2. Si cambió HEAD o base desde el veredicto, devolver a revisión/verificación. No reutilizar una aprobación vieja.
 3. Squash merge ligado al SHA revisado, sin `--admin`: `gh pr merge <número> --squash --delete-branch --match-head-commit <sha-revisado>` con valores reales.
