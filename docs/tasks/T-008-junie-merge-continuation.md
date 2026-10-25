@@ -1,16 +1,16 @@
 ---
 id: T-008
-status: in_progress
+status: in_review
 priority: P1
 size: S
 milestone: M0
 spec: null
 depends_on: [T-007]
 branch: codex/t-008-junie-merge-continuation
-role: implementer
+role: reviewer
 executor: frontier
 counts_for_cycle: false
-pr: null
+pr: 9
 ---
 # T-008 · Merge autorizado de Junie y continuidad ante bloqueos
 
@@ -58,7 +58,7 @@ Frontera planner/implementer, Codex desktop/API, familia GPT-6 expuesta; variant
 
 ## Checkpoint vigente
 
-HEAD/base 9547a33bccfed49da6691587426677eba879876d. Guías e inventario corregidos; copia dirigida verde 1/1, docs-check y diff-check exit 0. Docker sandbox denegó acceso al pipe; sonda fuera del sandbox exit 0: Linux, Git Bash /usr/bin/bash, Node host 24.21.0 y Compose 2.40.2-desktop.1, sin instalar ni cambiar configuración global. Matriz dirigida completa exit 0, 131/131, sin fallos/cancelados/omitidos, 81.726 s (.orchestrator/t-008/directed.log). Gate STARTER completo verde y cleanup acreditado abajo. Pendiente: publicar fuentes y PR, cerrar transición documental a in_review y entregar revisión independiente en sesión nueva. No hay otra tarea predefinida siguiente: tras MERGED vuelve a frontera/dueño para decidir el siguiente objetivo en otra sesión.
+Guías e inventario publicados en 043553f9fcafab9dfe8ff2c92dd39a6298fb9a47, base 9547a33bccfed49da6691587426677eba879876d. Copia dirigida verde 1/1, docs-check y diff-check exit 0. Docker sandbox denegó acceso al pipe; sonda fuera del sandbox exit 0: Linux, Git Bash /usr/bin/bash, Node host 24.21.0 y Compose 2.40.2-desktop.1, sin instalar ni cambiar configuración global. Matriz dirigida completa exit 0, 131/131, sin fallos/cancelados/omitidos, 81.726 s (.orchestrator/t-008/directed.log). Gate STARTER completo verde y cleanup acreditado abajo. PR9 OPEN comprobado; transición solo documental a in_review. Pendiente/responsable/salida: nueva sesión reviewer revisa HEAD/base publicados y evidencia del gate; publica APROBADO o CAMBIOS REQUERIDOS (máximo dos rondas), y puede continuar merger elegible del mismo PR por AUTONOMY sin nueva confirmación del dueño. Esta sesión autora no aprueba ni mergea. No hay otra tarea predefinida siguiente: tras MERGED vuelve a frontera/dueño para decidir el siguiente objetivo en otra sesión.
 
 ## Gate STARTER · checkpoint previo
 
@@ -71,3 +71,9 @@ HEAD/base origin/main 9547a33bccfed49da6691587426677eba879876d; fuentes técnica
 Preflight de labels exteriores vacío y cierre container/network/volume 0/0/0 en los dos proyectos exactos del checkpoint. Los ensayos de tooling acreditan su cleanup propio en gate.log. Auditoría before/after: 282/282 huellas iguales y HEAD/base inmóviles; gate-result.json confirma gateExit=0, cleanupExit=0, labelsClean=true y sourcesUnchanged=true. Wrapper propio ignorado run-gate.ps1 conserva entorno/exit/cleanup; no se leyó .env real ni se operaron recursos ajenos.
 
 La publicación y transición posterior solo cambian tarea/STATUS/BACKLOG; conservar gate mientras inventario, demás fuentes y base coincidan. Antes de cada commit: docs-check, diff-check e índice explícito sin plantilla (kit ausente, git check-ignore plantilla/ devuelve ignorado). Revisión pendiente en sesión nueva; esta sesión autora no publica APROBADO ni mergea. El prompt de STATUS pasa a reviewer después de comprobar PR real y CI del HEAD publicado.
+
+## Publicación comprobada · 2026-10-25
+
+Commit/push de fuentes exit 0, 043553f9fcafab9dfe8ff2c92dd39a6298fb9a47. `gh pr create --repo MatiasNicolasAcevedo/starter-spring-react --base main --head codex/t-008-junie-merge-continuation --draft --title … --body-file .orchestrator/t-008/pr-body.md`: exit 0, PR9. Confirmación `gh pr view --repo MatiasNicolasAcevedo/starter-spring-react codex/t-008-junie-merge-continuation --json number,url,state,isDraft,mergedAt,mergeCommit,headRefOid,baseRefOid,baseRefName,statusCheckRollup`: exit 0, number 9, URL https://github.com/MatiasNicolasAcevedo/starter-spring-react/pull/9, OPEN/draft, base main/9547a33bccfed49da6691587426677eba879876d, HEAD 043553f9fcafab9dfe8ff2c92dd39a6298fb9a47, mergedAt/mergeCommit null; CI entonces QUEUED. Existencia comprobada; no MERGED ni APROBADO. Fetch previo exit 0 confirma base inmóvil.
+
+Transición solo de tarea/STATUS/BACKLOG comprobada: docs-check exit 0, checker dirigido 35/35 exit 0 (13.513 s, docs-transition.log), diff-check exit 0. Auditoría contra gate-after.json: únicamente esas tres rutas difieren; inventario y demás fuentes idénticos. `bash scripts/verify.sh --policy origin/main`: exit 0, policy FULL/profile STARTER por la única ruta técnica (inventario), gate correspondiente satisfecho. No repetir STARTER por este cierre Markdown. Después de push comprobar HEAD remoto/CI propia y pasar ready; HEAD/CI finales y consulta remota se conservan en el comentario de entrega del autor en PR9, sin commit recursivo para escribir el SHA del propio commit. El revisor consulta el HEAD definitivo en GitHub y conserva gate si fuentes/base siguen iguales.
