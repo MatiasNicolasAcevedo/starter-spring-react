@@ -1,6 +1,6 @@
 ---
 id: T-007
-status: mergeable
+status: done
 priority: P1
 size: S
 milestone: M0
@@ -94,3 +94,7 @@ Solo tarea/STATUS/BACKLOG pasan a mergeable, rol merger. Antes de publicar: `nod
 Pendiente/responsable/salida: esta sesión reviewer continúa merger del mismo PR solo si AUTONOMY sigue satisfecha, árbol limpio y SHA/base/checks/protecciones/conversaciones vigentes. Squash ligado al HEAD aprobado, sin bypass; nueva consulta `gh pr view 8 --repo MatiasNicolasAcevedo/starter-spring-react --json number,url,state,mergedAt,mergeCommit,headRefOid,baseRefOid,baseRefName,statusCheckRollup` con exit 0 y MERGED/fecha/SHA válidos antes de anunciarlo, seguida del comentario de cierre. No hay tarea predefinida ready; tras MERGED vuelve al dueño en sesión de frontera para decidir siguiente objetivo, sin operar otras aplicaciones ni iniciar otra implementación. Conciliar T-007 done, STATUS y cola en el primer avance de una futura rama autorizada, nunca main ni rama mergeada.
 
 Transición documental comprobada: checker 35/35, exit 0, 14.280 s (.orchestrator/t-007/review-r1-transition.log); docs-check y diff-check exit 0. Diff completo de las tres rutas revisado, sin cambios de implementación ni de aceptación en HANDOFF. No hay kit plantilla local; git ls-files e índice deben seguir sin plantilla antes del commit. Pendiente exclusivamente publicación, CI propia y veredicto/merge remoto del HEAD documental final.
+
+## Conciliación postmerge · T-008, 2026-10-25
+
+Consulta explícita de PR8 con repositorio, comando/exit y respuesta mínima registrada en T-008: MERGED 2026-10-23T19:01:16Z, commit 9547a33bccfed49da6691587426677eba879876d. Se concilia done en el primer avance de la nueva rama autorizada de T-008; el checkpoint anterior queda como evidencia histórica del traspaso. No hubo commits en la rama mergeada. El nuevo encargo del dueño es aclarar merge Junie y continuidad ante bloqueos; no se heredan pruebas ni aceptación de otra aplicación.
