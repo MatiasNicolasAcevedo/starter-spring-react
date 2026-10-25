@@ -1,13 +1,13 @@
 ---
 id: T-008
-status: in_review
+status: mergeable
 priority: P1
 size: S
 milestone: M0
 spec: null
 depends_on: [T-007]
 branch: codex/t-008-junie-merge-continuation
-role: reviewer
+role: merger
 executor: frontier
 counts_for_cycle: false
 pr: 9
@@ -58,7 +58,7 @@ Frontera planner/implementer, Codex desktop/API, familia GPT-6 expuesta; variant
 
 ## Checkpoint vigente
 
-Guías e inventario publicados en 043553f9fcafab9dfe8ff2c92dd39a6298fb9a47, base 9547a33bccfed49da6691587426677eba879876d. Copia dirigida verde 1/1, docs-check y diff-check exit 0. Docker sandbox denegó acceso al pipe; sonda fuera del sandbox exit 0: Linux, Git Bash /usr/bin/bash, Node host 24.21.0 y Compose 2.40.2-desktop.1, sin instalar ni cambiar configuración global. Matriz dirigida completa exit 0, 131/131, sin fallos/cancelados/omitidos, 81.726 s (.orchestrator/t-008/directed.log). Gate STARTER completo verde y cleanup acreditado abajo. PR9 OPEN comprobado; transición solo documental a in_review. Pendiente/responsable/salida: nueva sesión reviewer revisa HEAD/base publicados y evidencia del gate; publica APROBADO o CAMBIOS REQUERIDOS (máximo dos rondas), y puede continuar merger elegible del mismo PR por AUTONOMY sin nueva confirmación del dueño. Esta sesión autora no aprueba ni mergea. No hay otra tarea predefinida siguiente: tras MERGED vuelve a frontera/dueño para decidir el siguiente objetivo en otra sesión.
+Revisión independiente R1 favorable sobre HEAD publicado 8cb550c983b00fc619198393bbf09aaece93b1b0 y base main 9547a33bccfed49da6691587426677eba879876d; alcance, gate STARTER conservado, copia y protecciones comprobados abajo. Transición exclusivamente documental a mergeable/merger. Pendiente/responsable/salida: esta sesión revisora publica la transición, comprueba HEAD final y CI propia, publica APROBADO con SHA/base exactos y continúa merger del mismo PR si AUTONOMY sigue satisfecha. No hacer commits después de APROBADO. La consulta de merge y su evidencia se publican en PR9; la siguiente rama autorizada las concilia aquí. No hay otra tarea predefinida ready: tras MERGED confirmado vuelve a frontera/dueño para decidir el siguiente objetivo en otra sesión, sin iniciar otra tarea aquí.
 
 ## Gate STARTER · checkpoint previo
 
@@ -77,3 +77,17 @@ La publicación y transición posterior solo cambian tarea/STATUS/BACKLOG; conse
 Commit/push de fuentes exit 0, 043553f9fcafab9dfe8ff2c92dd39a6298fb9a47. `gh pr create --repo MatiasNicolasAcevedo/starter-spring-react --base main --head codex/t-008-junie-merge-continuation --draft --title … --body-file .orchestrator/t-008/pr-body.md`: exit 0, PR9. Confirmación `gh pr view --repo MatiasNicolasAcevedo/starter-spring-react codex/t-008-junie-merge-continuation --json number,url,state,isDraft,mergedAt,mergeCommit,headRefOid,baseRefOid,baseRefName,statusCheckRollup`: exit 0, number 9, URL https://github.com/MatiasNicolasAcevedo/starter-spring-react/pull/9, OPEN/draft, base main/9547a33bccfed49da6691587426677eba879876d, HEAD 043553f9fcafab9dfe8ff2c92dd39a6298fb9a47, mergedAt/mergeCommit null; CI entonces QUEUED. Existencia comprobada; no MERGED ni APROBADO. Fetch previo exit 0 confirma base inmóvil.
 
 Transición solo de tarea/STATUS/BACKLOG comprobada: docs-check exit 0, checker dirigido 35/35 exit 0 (13.513 s, docs-transition.log), diff-check exit 0. Auditoría contra gate-after.json: únicamente esas tres rutas difieren; inventario y demás fuentes idénticos. `bash scripts/verify.sh --policy origin/main`: exit 0, policy FULL/profile STARTER por la única ruta técnica (inventario), gate correspondiente satisfecho. No repetir STARTER por este cierre Markdown. Después de push comprobar HEAD remoto/CI propia y pasar ready; HEAD/CI finales y consulta remota se conservan en el comentario de entrega del autor en PR9, sin commit recursivo para escribir el SHA del propio commit. El revisor consulta el HEAD definitivo en GitHub y conserva gate si fuentes/base siguen iguales.
+
+## Revisión independiente R1 · 2026-10-25
+
+Sesión nueva, distinta de la implementación: frontera reviewer y continuación merger, Codex desktop/API, familia GPT-6 expuesta; variante exacta y esfuerzo efectivos no expuestos. Herramientas propias PowerShell, Git/gh, Node 24.21.0 y Git Bash; sin delegación ni ejecución Junie. Impacto exclusivamente documental/operativo y exclusión de la tarea en copias; sin cambios de comportamiento/API/auth/permisos técnicos/datos/UI de aplicación.
+
+Precondición: árbol limpio, rama exacta, fetch exit 0; HEAD local/origin de tarea 8cb550c983b00fc619198393bbf09aaece93b1b0 y origin/main 9547a33bccfed49da6691587426677eba879876d. `gh pr view 9 --repo MatiasNicolasAcevedo/starter-spring-react --json number,url,state,isDraft,mergedAt,mergeCommit,headRefOid,baseRefOid,baseRefName,statusCheckRollup`: primer intento sandbox exit 1 por conexión; consulta con red exit 0, PR9 OPEN/no draft, URL correcta, HEAD/base anteriores, mergedAt/mergeCommit null. CI propia consultada por `gh api repos/MatiasNicolasAcevedo/starter-spring-react/commits/8cb550c983b00fc619198393bbf09aaece93b1b0/check-runs`: ambos verify-required completed/success con ese head_sha. Solo PR9 abierto; sin reviews ni conversaciones (GraphQL reviewThreads totalCount 0). Ruleset 25305930 active, sin bypass, strict y verify-required integración 15368, cero aprobaciones formales, resolución obligatoria, solo squash; PR MERGEABLE/CLEAN. Se reconsultan después de publicar el HEAD documental.
+
+Diff completo de 11 archivos revisado. El permiso explícito de Junie conserva independencia, SHA/base, gate, CI y protecciones; distingue autorización de capacidad. AGENTS/ORCHESTRATION/protocolos/plantilla exigen prompt completo ante bloqueantes sin dar por otorgada una decisión pendiente. REMOVE_FILES agrega solo T-008; adoptionDocuments reemplaza AUTONOMY por decisión propia pendiente y conserva guías genéricas, sin trasladar permisos ni evidencia. Conciliación de T-007 corresponde a la nueva rama. Sin hallazgos bloqueantes ni correcciones de implementación; primera ronda de un máximo de dos.
+
+Gate conservado: auditoría independiente de gate-before.json/gate-after.json, 282/282 huellas idénticas durante la corrida, HEAD/base inmóviles; contra el árbol publicado solo difieren tarea/STATUS/BACKLOG. gate-result.json: gateExit=0, cleanupExit=0, labelsClean=true, sourcesUnchanged=true, 2812.067 s. gate.log confirma docs/server/client/tooling/e2e exit 0, 91 unitarios/slices y 75 IT sin fallos/omitidos, copia compilable, negativos, Playwright real y saneador fail-closed. Cleanup exterior y propio de tooling acreditados; no se reejecuta FULL por Markdown. `bash scripts/verify.sh --policy origin/main`: sandbox bloqueó Git Bash con NtCreateDirectoryObject/0xC0000022 (exit -1073741502); mismo comando fuera del sandbox exit 0, policy FULL/profile STARTER, única ruta técnica inventario. Incidencias de entorno resueltas, sin permisos nuevos ni cambios de configuración.
+
+Dirigido independiente: `node --test --test-name-pattern="apply connects identity" scripts/test-init-project.mjs`, exit 0, 1/1, sin fallos/cancelados/omitidos, 22.217 s (.orchestrator/t-008/review-r1-copy.log). Comprueba exclusión de mantenimiento, autonomía pendiente, idempotencia, negativos y checker de copia. Antes del commit de transición: `node scripts/docs-check.mjs`, `node --test scripts/ci/docs-check.test.mjs` y `git diff --check`; registrar resultado en el comentario del HEAD final y conservar log review-r1-transition.log. Recursos: solo fixtures ficticias propias con cleanup del test; sin nuevos stacks. Revisar el diff documental, índice explícito y exclusión de plantilla antes de publicar; esperar CI propia del nuevo HEAD antes del veredicto vinculante.
+
+Transición revisada: solo tarea/STATUS/BACKLOG; docs-check exit 0, checker 35/35 exit 0, sin fallos/cancelados/omitidos, 13.299 s (review-r1-transition.log), diff-check exit 0. No cambian fuentes técnicas/base ni criterios de HANDOFF. Kit plantilla ausente e inventario versionado/índice sin plantilla; staging restringido a estas tres rutas. HEAD final, CI propia y veredicto se registran en el comentario de PR9 después del push, sin commit recursivo ni commits posteriores a APROBADO.

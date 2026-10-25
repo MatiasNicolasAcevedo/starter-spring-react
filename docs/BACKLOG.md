@@ -6,7 +6,7 @@ Acción y prompt en [STATUS](STATUS.md). T-008 autorizada por el dueño para acl
 
 | Tarea | Estado | Resultado |
 |---|---|---|
-| [T-008](tasks/T-008-junie-merge-continuation.md) | in_review | PR9 publicado; gate STARTER verde, pendiente revisión independiente |
+| [T-008](tasks/T-008-junie-merge-continuation.md) | mergeable | R1 favorable; pendiente APROBADO/CI del HEAD final y MERGED confirmado |
 
 ## Hechas recientes
 
