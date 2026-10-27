@@ -198,8 +198,10 @@ if (existsSync(join(ROOT, 'docs/HANDOFF.md'))) {
   if (verdict === 'STARTER_VALIDADO' && (verified !== 22 || adoptionTasks.length === 0 || adoptionTasks.some(t => t.status !== 'done'))) {
     fail('docs/HANDOFF.md', 'STARTER_VALIDADO exige 22/22, al menos una tarea M0 y todas las tareas M0 done');
   }
-  const count = handoff.match(/— (\d+)\/22 verificados/);
-  if (!count || Number(count[1]) !== verified) fail('docs/HANDOFF.md', 'conteo de verificados incoherente');
+  for (const count of handoff.matchAll(/— (\d+)\/22 verificados/g)) {
+    if (Number(count[1]) !== verified) fail('docs/HANDOFF.md', `conteo ${count[1]}/22 incoherente con ${verified}/22 verificados`);
+  }
+  if (!handoff.includes('—')) fail('docs/HANDOFF.md', 'conteo de verificados ausente');
   if (!/`(POR_SESION|CICLO_AUTOMATICO_VERIFICADO)`/.test(handoff)) fail('docs/HANDOFF.md', 'modalidad de continuidad ausente');
   if (!/`(AUTOMATICO_ELEGIBLE|MANUAL_POR_DUENO)`/.test(handoff)) fail('docs/HANDOFF.md', 'modalidad de merge ausente');
 }
@@ -223,8 +225,9 @@ if (existsSync(join(ROOT, 'docs/STATUS.md'))) {
     if (id && !prompt.includes(id)) fail('docs/STATUS.md', `el prompt no menciona ${id}`);
     if (/T-NNN|S-NNN|<[a-z][^>]*>|\bTODO\b|\bTBD\b/.test(prompt)) fail('docs/STATUS.md', 'el prompt contiene placeholders');
   }
-  const count = status.match(/HANDOFF del (?:starter|producto):\s*(\d+)\/22 verificados/)?.[1];
-  if (count !== undefined && verified !== null && Number(count) !== verified) fail('docs/STATUS.md', `conteo ${count}/22 distinto de HANDOFF ${verified}/22`);
+  for (const count of status.matchAll(/HANDOFF del (?:starter|producto):\s*(\d+)\/22 verificados/g)) {
+    if (verified !== null && Number(count[1]) !== verified) fail('docs/STATUS.md', `conteo ${count[1]}/22 distinto de HANDOFF ${verified}/22`);
+  }
   if (existsSync(join(ROOT, 'docs/BACKLOG.md'))) {
     const next = read('docs/BACKLOG.md').match(/^Próxima acción:[^\n]*/m)?.[0] ?? '';
     if (next && id && !next.includes(id)) fail('docs/BACKLOG.md', `la próxima acción no coincide con STATUS (${id})`);
