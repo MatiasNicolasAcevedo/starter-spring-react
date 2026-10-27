@@ -1,6 +1,6 @@
 ---
 id: T-009
-status: in_review
+status: changes_requested
 priority: P1
 size: S
 milestone: M0
@@ -278,4 +278,14 @@ Commit técnico/documental `977974cc0d6f3145ba1ce22207e04989cfceda11` y push de 
 
 ## Checkpoint vigente · revisión independiente
 
-T-009 in_review en PR10; siguiente responsable: revisor M0 en otra sesión. Consultar la PR exacta y sus HEAD/base/checks reales, contrastar el diff final y la evidencia ignorada con el gate, revisar criterios y límites; publicar veredicto independiente ligado a SHA/base y continuar merger solo si AUTONOMY y CI lo permiten. Esta sesión autora no revisa ni mergea; T-009 no está done y la aceptación final sigue pendiente del dueño. No repetir H4 ni STARTER por cierre Markdown con fuentes/base iguales; si cambian, revalidar lo afectado. Tras MERGED confirmado, frontera concilia en otra rama y prepara contratos de correcciones, sin comenzar otra tarea en la sesión de revisión.
+R1: changes_requested; siguiente responsable implementer de T-009 en otra sesión, misma rama/PR. Conciliar las contradicciones documentales señaladas abajo y devolver a revisión independiente; no repetir STARTER por Markdown con fuentes técnicas/base iguales. No iniciar otra tarea ni declarar aceptación del dueño.
+
+## Revisión independiente R1 · 2026-10-27
+
+Revisor M0, Codex desktop/API, familia GPT-6; variante exacta y esfuerzo efectivos no expuestos. PowerShell, Node, Git Bash y gh; sin delegación. Revisión documental y del inventario, sin cambio de comportamiento, API, permisos, datos ni UI. HEAD revisado 4359c2afb0ac9ead14fb3dd6760ea4894b5ce66e; base 3fbea6a35cba5018e402038400d89c2d806db44a. PR10 OPEN, ready, verify-required COMPLETED/SUCCESS; referencias remotas coincidían y era la única PR abierta. Árbol e índice limpios; kit ausente/no rastreado.
+
+**Hallazgo bloqueante AC-01:** la fila «Uso local y persistencia» afirma que las pruebas de persistencia/proxies no se ejecutaron por R-08, pero el resultado final de esta tarea y gate.log registran `test-dev-stack.sh nginx` y `vite` con preservación de volumen, exit 0, y `test-auth-proxies.sh` exit 0. La introducción de candidatos también presenta R-08 como bloqueo nuevo pese a la decisión vigente y su fila de cierre. La fila R-03 solo presenta tiempos históricos/parciales sin identificar allí el gate final disponible. El diagnóstico es el resultado principal y debe distinguir explícitamente la corrida histórica fallida de la final verde. Responsable: implementer; salida: actualizar esas descripciones con evidencia y límites reales, sin afirmar que se reparó la causa histórica.
+
+Contraste: `node scripts/docs-check.mjs` exit 0; `node --test --test-name-pattern="apply connects identity" scripts/test-init-project.mjs` exit 0, 1/1; logs originales rojo 2 ≠ 1 y verde 1/1. `git diff --check` exit 0. `bash scripts/verify.sh --policy origin/main` sandbox exit 1 sin salida; con capacidad Git Bash exit 0, FULL/STARTER, 7 rutas y una técnica. Gate-result exit 0 en 3099.929 s, cleanup 0; gate.log confirma por cada original/copia 91 unitarios/slices, 75 IT y 133 tests client, tooling y E2E exit 0. Huellas before/after: 283, sin cambios durante gate; comparación actual: solo tarea/STATUS/BACKLOG Markdown cambiaron, base coincide. cleanup-final: ambos labels exteriores 0/0/0 y 30 IDs propios ausentes. Sin cambios de tests/config/frontend frente a base; único cambio técnico es REMOVE_FILES. Causa histórica de R-08 desconocida y riesgo de recurrencia conservado. No se repitió STARTER ni H4.
+
+El veredicto vinculante se publica en PR10 tras comprobar el HEAD de la transición y su CI. Una vez corregido el diagnóstico, revisor independiente revalida HEAD/base y evidencia afectada; no merge con cambios pendientes.

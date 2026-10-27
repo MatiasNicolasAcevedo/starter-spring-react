@@ -6,7 +6,7 @@ Acción y prompt en [STATUS](STATUS.md). Objetivo del dueño: dejar la base puli
 
 | Tarea | Estado | Resultado |
 |---|---|---|
-| [T-009](tasks/T-009-starter-readiness.md) | in_review | R-08 cerrado técnicamente; STARTER propio completo verde, todos los tests intactos; revisión independiente de PR10 pendiente |
+| [T-009](tasks/T-009-starter-readiness.md) | changes_requested | R1 solicita conciliar contradicciones del diagnóstico; STARTER propio verde conservado con fuentes/base iguales |
 
 ## Hechas recientes
 
