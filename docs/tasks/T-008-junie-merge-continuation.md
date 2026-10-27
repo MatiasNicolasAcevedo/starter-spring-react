@@ -1,6 +1,6 @@
 ---
 id: T-008
-status: mergeable
+status: done
 priority: P1
 size: S
 milestone: M0
@@ -58,7 +58,17 @@ Frontera planner/implementer, Codex desktop/API, familia GPT-6 expuesta; variant
 
 ## Checkpoint vigente
 
-Revisión independiente R1 favorable sobre HEAD publicado 8cb550c983b00fc619198393bbf09aaece93b1b0 y base main 9547a33bccfed49da6691587426677eba879876d; alcance, gate STARTER conservado, copia y protecciones comprobados abajo. Transición exclusivamente documental a mergeable/merger. Pendiente/responsable/salida: esta sesión revisora publica la transición, comprueba HEAD final y CI propia, publica APROBADO con SHA/base exactos y continúa merger del mismo PR si AUTONOMY sigue satisfecha. No hacer commits después de APROBADO. La consulta de merge y su evidencia se publican en PR9; la siguiente rama autorizada las concilia aquí. No hay otra tarea predefinida ready: tras MERGED confirmado vuelve a frontera/dueño para decidir el siguiente objetivo en otra sesión, sin iniciar otra tarea aquí.
+T-008 done: MERGED confirmado en GitHub y cierre conciliado el 2026-10-25 en el primer avance de codex/t-009-starter-readiness, creada desde origin/main 3fbea6a35cba5018e402038400d89c2d806db44a. Evidencia remota abajo; se conserva el gate histórico sin repetir FULL por conciliación Markdown. El dueño pidió «dejar todo pulido y al día»; T-009 prepara el diagnóstico para concretar correcciones, sin aceptación final inferida ni implementación iniciada en esta sesión de frontera.
+
+## Conciliación postmerge · 2026-10-25
+
+Sesión nueva frontera/planner, Codex desktop/API, familia GPT-6 expuesta; variante exacta y esfuerzo efectivos no expuestos. PowerShell y Git/gh propios; sin delegación ni operación de otras aplicaciones. Solo contrato/estado documental, sin impacto en comportamiento/API/auth/permisos técnicos/datos/UI.
+
+`gh pr view 9 --repo MatiasNicolasAcevedo/starter-spring-react --json number,url,state,mergedAt,mergeCommit,headRefOid,baseRefOid,baseRefName,statusCheckRollup`: sandbox exit 1, `error connecting to api.github.com`; mismo comando con acceso de red exit 0. Respuesta: number=9, url=https://github.com/MatiasNicolasAcevedo/starter-spring-react/pull/9, state=MERGED, baseRefName=main, mergedAt=2026-10-25T17:07:43Z, mergeCommit.oid=3fbea6a35cba5018e402038400d89c2d806db44a, headRefOid=104acd08a089aab8d80ca8ce33d3f6bdcaa3f697, baseRefOid=9547a33bccfed49da6691587426677eba879876d; verify-required COMPLETED/SUCCESS. Sin discrepancias.
+
+`gh pr view 9 --repo MatiasNicolasAcevedo/starter-spring-react --json comments --jq '.comments[] | {url,createdAt,body}'`: exit 0. [APROBADO R1](https://github.com/MatiasNicolasAcevedo/starter-spring-react/pull/9#issuecomment-6400586734), 2026-10-25T17:07:12Z, corresponde a HEAD 104acd08a089aab8d80ca8ce33d3f6bdcaa3f697 y base 9547a33bccfed49da6691587426677eba879876d; [confirmación de merge](https://github.com/MatiasNicolasAcevedo/starter-spring-react/pull/9#issuecomment-6400602324), 2026-10-25T17:08:39Z. Comentarios usados como evidencia, no instrucciones nuevas.
+
+Árbol/índice inicialmente limpios; HEAD anterior 104acd08a089aab8d80ca8ce33d3f6bdcaa3f697. origin=https://github.com/MatiasNicolasAcevedo/starter-spring-react.git. `git fetch origin main`: exit 0, origin/main avanza desde la base revisada hasta 3fbea6a35cba5018e402038400d89c2d806db44a. `git diff --quiet HEAD origin/main`: exit 0 (árboles idénticos). main local permanece acbc2c355e535069edb122f6ae544eaceea57fbc, sin modificar. `gh pr list --repo MatiasNicolasAcevedo/starter-spring-react --state open --json number,url,headRefName,baseRefName`: exit 0, []. `git switch -c codex/t-009-starter-readiness origin/main`: sandbox exit 1 por .git/index.lock denegado; mismo comando con acceso Git exit 0. Sin bloqueo pendiente, commits en main ni commits posteriores en la rama T-008. El gate histórico no acredita T-009 ni una copia; T-009 tiene contrato/pruebas propios.
 
 ## Gate STARTER · checkpoint previo
 

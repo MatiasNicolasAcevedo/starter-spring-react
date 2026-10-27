@@ -3,6 +3,8 @@
 ## Objetivo
 Base inicial genérica para aplicaciones pequeñas: Java 21, Spring Boot 4.1.1, React/TypeScript/Vite/MUI y PostgreSQL 18. Cada aplicación parte de una copia propia, define su idea con frontera y ejecuta tareas pequeñas con Junie.
 
+Objetivo de mantenimiento confirmado por el dueño el 2026-10-25: «dejar todo pulido y al día». Primer resultado autorizado: auditar la preparación de la base para su uso y clasificar pendientes comprobables antes de especificar correcciones. [T-009](docs/tasks/T-009-starter-readiness.md) delimita ese diagnóstico. Conservar versiones congeladas y permisos existentes; esta intención no acredita aceptación final ni autoriza producción u otra aplicación.
+
 ## Incluido
 API/DB conectadas, OIDC con sesión backend y CSRF, autorización por propietario, referencia CRUD removible, Swagger opt-in, entorno local persistente, pruebas y CI. El formulario [project-context](docs/templates/project-context.md) prepara problema, usuarios, flujo central, MVP/exclusiones, datos, reglas, permisos y aceptación. El contexto completado pertenece al PROJECT_CONTEXT de cada aplicación.
 
