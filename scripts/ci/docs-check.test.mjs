@@ -6,6 +6,7 @@ import { tmpdir } from 'node:os';
 import { resolve, join, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
+import { REMOVE_FILES } from '../../scripts/lib/init-project-manifest.mjs';
 
 const root = resolve(fileURLToPath(new URL('../..', import.meta.url)));
 const temporary = mkdtempSync(join(tmpdir(), 'starter-docs-check-'));
@@ -197,4 +198,38 @@ test('starter gate cannot omit tooling', () => {
 test('manual STARTER cannot skip tooling', () => {
   change('.github/workflows/full.yml', text => text.replace('run: bash scripts/verify.sh --tooling', 'run: echo skip'));
   rejects(/perfil STARTER remoto sin tooling/);
+});
+
+// S-004 regla 1: estados explícitos inválidos en tablas con columna Estado
+test('S004: explicit invalid state typo in Estado column is rejected', () => {
+  arrangeBoard('ready');
+  change('docs/BACKLOG.md', () => `# Cola\n\n## Listas\n| Tarea | Estado | Resultado |\n|---|---|---|\n| [${firstId}](tasks/${firstTask.split('/').pop()}) | in_progres | fixture |\n`);
+  rejects(new RegExp(`${firstId} estado explícito inválido: in_progres`));
+});
+test('S004: empty state cell in table with Estado column is rejected', () => {
+  arrangeBoard('ready');
+  change('docs/BACKLOG.md', () => `# Cola\n\n## Listas\n| Tarea | Estado | Resultado |\n|---|---|---|\n| [${firstId}](tasks/${firstTask.split('/').pop()}) | | fixture |\n`);
+  rejects(new RegExp(`${firstId} celda de estado vacía`));
+});
+test('S004: valid state cell disagreeing with frontmatter is rejected', () => {
+  arrangeBoard('ready');
+  change('docs/BACKLOG.md', () => `# Cola\n\n## Listas\n| Tarea | Estado | Resultado |\n|---|---|---|\n| [${firstId}](tasks/${firstTask.split('/').pop()}) | done | fixture |\n`);
+  rejects(new RegExp(`${firstId} figura como done, frontmatter dice ready`));
+});
+test('S004: valid state with backticks passes when it matches frontmatter', () => {
+  arrangeBoard('ready');
+  change('docs/BACKLOG.md', () => `# Cola\n\n## Listas\n| Tarea | Estado | Resultado |\n|---|---|---|\n| [${firstId}](tasks/${firstTask.split('/').pop()}) | \`ready\` | fixture |\n`);
+  const result = run(); assert.equal(result.status, 0, result.stderr);
+});
+test('S004: table without Estado column still passes', () => {
+  arrangeBoard('ready');
+  change('docs/BACKLOG.md', () => `# Cola\n\n## Listas\n| Tarea | Resultado |\n|---|---|\n| [${firstId}](tasks/${firstTask.split('/').pop()}) | fixture |\n`);
+  const result = run(); assert.equal(result.status, 0, result.stderr);
+});
+
+// S-004 regla 3: copia no hereda S-004 ni sus tareas
+test('S004: initialized copy must not contain S-004 spec', () => {
+  assert.ok(REMOVE_FILES.includes('docs/specs/S-004-document-verification.md'), 'S-004 must be in REMOVE_FILES');
+  assert.ok(REMOVE_FILES.includes('docs/tasks/T-010-docs-check-board.md'), 'T-010 must be in REMOVE_FILES');
+  assert.ok(REMOVE_FILES.includes('docs/tasks/T-011-docs-check-counts.md'), 'T-011 must be in REMOVE_FILES');
 });

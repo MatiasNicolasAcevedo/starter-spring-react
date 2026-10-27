@@ -2,19 +2,17 @@
 
 | Campo | Valor |
 |---|---|
-| Tarea y contrato | [T-009](tasks/T-009-starter-readiness.md) |
-| Estado | mergeable |
-| Acción actual | Publicar veredicto R2 y continuar merger de PR10 si cumple AUTONOMY |
-| Rama / PR | codex/t-009-starter-readiness · [PR10](https://github.com/MatiasNicolasAcevedo/starter-spring-react/pull/10) |
+| Tarea y contrato | [T-010](tasks/T-010-docs-check-board.md) |
+| Estado | in_progress |
+| Acción actual | Junie implementa S-004 regla 1 y 3: checker rechaza estados inválidos en tablas con columna Estado; REMOVE_FILES incluye S-004/T-010/T-011 |
+| Rama / PR | codex/t-010-docs-check-board · sin PR |
 
-R2 favorable sobre la corrección R1; el veredicto vinculante requiere CI del HEAD final. R-08 conserva causa histórica desconocida y riesgo residual. T-009 no está done antes de MERGED confirmado; aceptación final del Starter pendiente del dueño.
+T-009 MERGED y conciliada; S-004 ordena dos correcciones de R-04. T-011 espera T-010. La retoma en Codex comprobó la precondición pero no expone la superficie Junie asignada; evidencia en T-010. R-08 conserva causa histórica desconocida y riesgo residual; la aceptación final corresponde al dueño.
 
 ### Prompt de la siguiente sesión
 
 ```text
-Retomar únicamente T-009/PR10 como reviewer independiente o merger según el estado real. Leer AGENTS.md, PROJECT_CONTEXT.md, STATUS, T-009, reviewer, merger, AUTONOMY y TESTING pertinentes. Consultar `gh pr view 10 --repo MatiasNicolasAcevedo/starter-spring-react --json number,url,state,isDraft,mergedAt,mergeCommit,headRefName,headRefOid,baseRefName,baseRefOid,statusCheckRollup`, comentarios y conversaciones; una consulta fallida no verifica publicación ni merge.
+El dueño abre una sesión nueva de Junie Lite en IntelliJ IDEA con AIR sobre este checkout y le entrega T-010 en la rama codex/t-010-docs-check-board. La retoma anterior fue en Codex, no en la superficie Junie asignada, y solo verificó PR10 y el estado local; no implementó ni ejecutó tests. Junie lee AGENTS.md, PROJECT_CONTEXT.md, STATUS, T-010, S-004, el protocolo implementer, AUTONOMY y TESTING/SETUP pertinentes; consulta .junie/TOOLS.md para capacidades efectivas. Precondición: preservar los cambios de planificación locales sin reset, comprobar árbol/índice, HEAD y main remoto, PR abiertas y confirmar con gh pr view 10 --repo MatiasNicolasAcevedo/starter-spring-react --json number,url,state,mergedAt,mergeCommit,headRefOid,baseRefName que PR10 está MERGED con fecha y mergeCommit.oid válidos. Una consulta fallida no verifica el merge.
 
-Si OPEN, comprobar HEAD/base publicados, árbol/índice, gate STARTER conservado sobre fuentes técnicas/base vigentes, CI requerida verde y ausencia de bloqueos. Publicar APROBADO independiente ligado a HEAD/base finales si falta y R2 sigue vigente; después efectuar squash sin bypass ligado al SHA aprobado solo con todas las condiciones de AUTONOMY. Si cambió HEAD/base o falta evidencia, revalidar lo afectado y devolver a revisión; no repetir STARTER ni H4 por Markdown con fuentes/base iguales. Verificar MERGED en GitHub con fecha y mergeCommit.oid, y publicar cierre en PR10. Ante bloqueo registrar causa, evidencia, responsable y capacidad o decisión necesaria; no declarar done ni iniciar otra tarea.
-
-Si MERGED confirmado, frontera en sesión nueva concilia T-009 done, STATUS y cola en el primer avance de una nueva rama autorizada, y especifica correcciones ordenadas desde el diagnóstico T-009 dentro del objetivo acordado: no hay otra tarea predefinida ready. Conservar causa histórica R-08 desconocida y riesgo residual; no afirmar reparación ni aceptación del Starter por el dueño. Salida: contratos pequeños con evidencia, dependencia, aceptación y pruebas, y único prompt vigente. No commitear en main ni en la rama mergeada.
+Adoptar la conciliación y ejecutar el contrato T-010: primero demostrar rojo para estados explícitos inválidos y copia que hereda S-004/tareas; corregir mínimamente checker e inventario, conservar compatibilidad de tablero simplificado y controles existentes, y registrar rojo/verde y resultados. Antes del gate STARTER completo, preparar checkpoint, preflight de recursos propios y cleanup exacto según la tarea y SETUP. Mantener versiones, permisos, tests y límites de seguridad; no afirmar reparación de R-08 ni aceptar el Starter. Con gate y docs-check verdes, publicar código y cierre bajo AUTONOMY en una sola PR; entregar revisión independiente en sesión distinta. Ante bloqueo, registrar causa, evidencia, responsable y capacidad o decisión necesaria. Salida: tarea y PR con evidencia o checkpoint verificable, y único prompt completo vigente para el siguiente rol y tarea.
 ```

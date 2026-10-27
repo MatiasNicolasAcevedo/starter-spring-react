@@ -125,20 +125,40 @@ const SECTION_STATES = { 'En vuelo': [...IN_FLIGHT, 'blocked'], 'Listas': ['read
 if (existsSync(join(ROOT, 'docs/BACKLOG.md'))) {
   let section = null;
   const listed = new Set();
+  let estadoColIdx = null;
   for (const line of read('docs/BACKLOG.md').split('\n')) {
     const h = line.match(/^## (.+)$/);
     if (h) { section = h[1].trim(); continue; }
     const row = line.match(/^\|(.+)\|$/);
     if (!row) continue;
     const cells = row[1].split('|').map((c) => c.trim());
+    // Detect the Estado column from the header row (separator row follows)
+    if (estadoColIdx === null) {
+      for (let i = 0; i < cells.length; i++) {
+        if (cells[i].replace(/`/g, '').toLowerCase() === 'estado') { estadoColIdx = i; break; }
+      }
+    }
     const idCell = cells.find((c) => /\[T-\d{3}\]\(tasks\//.test(c));
     if (!idCell) continue;
     const id = idCell.match(/T-\d{3}/)[0];
     const task = tasks.get(id);
     if (!task) { fail('docs/BACKLOG.md', `${id} sin archivo de tarea`); continue; }
     listed.add(id);
-    const state = cells.find((c) => STATES.includes(c.replace(/`/g, '')))?.replace(/`/g, '');
-    if (state && state !== task.status) fail('docs/BACKLOG.md', `${id} figura como ${state}, frontmatter dice ${task.status}`);
+    // S-004 regla 1: si la tabla tiene columna Estado, validar cada celda explícita
+    if (estadoColIdx !== null && estadoColIdx < cells.length) {
+      const raw = cells[estadoColIdx].replace(/`/g, '').trim();
+      if (raw === '') {
+        fail('docs/BACKLOG.md', `${id} celda de estado vacía en tabla con columna Estado`);
+      } else if (!STATES.includes(raw)) {
+        fail('docs/BACKLOG.md', `${id} estado explícito inválido: ${raw}`);
+      } else if (raw !== task.status) {
+        fail('docs/BACKLOG.md', `${id} figura como ${raw}, frontmatter dice ${task.status}`);
+      }
+    } else {
+      // Legacy: sin columna Estado explícita, buscar celda que coincida con STATES
+      const state = cells.find((c) => STATES.includes(c.replace(/`/g, '')))?.replace(/`/g, '');
+      if (state && state !== task.status) fail('docs/BACKLOG.md', `${id} figura como ${state}, frontmatter dice ${task.status}`);
+    }
     const allowed = SECTION_STATES[section];
     if (allowed && !allowed.includes(task.status)) fail('docs/BACKLOG.md', `${id} (${task.status}) en sección "${section}"`);
   }

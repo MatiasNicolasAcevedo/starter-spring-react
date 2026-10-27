@@ -1,6 +1,6 @@
 ---
 id: T-009
-status: mergeable
+status: done
 priority: P1
 size: S
 milestone: M0
@@ -13,6 +13,10 @@ counts_for_cycle: false
 pr: 10
 ---
 # T-009 · Auditoría de preparación del Starter para su uso
+
+## Conciliación posterior al merge · 2026-10-27
+
+Frontera/planner, Codex desktop/API, familia GPT-6; variante y esfuerzo efectivos no expuestos. PowerShell, Git y gh; sin delegación. Impacto de esta conciliación y planificación: documental, sin cambios de aplicación, API, UI, permisos ni datos. Consulta `gh pr view 10 --repo MatiasNicolasAcevedo/starter-spring-react --json number,url,state,mergedAt,mergeCommit,headRefOid,baseRefName`: primer intento exit 1 por conexión; con red exit 0, PR10 MERGED en main, mergedAt 2026-10-27T03:32:11Z, mergeCommit.oid 7b6f83f283e451d10a4da75a3ffa0ecda159fd74 y headRefOid 03d07175250fcef24288a83f05b5e7dd5c77d6d5. `gh pr list --repo MatiasNicolasAcevedo/starter-spring-react --state open --json number,title,headRefName,baseRefName,url` exit 0, []; `git ls-remote origin refs/heads/main` exit 0, mismo merge commit. Fetch y creación de `codex/t-010-docs-check-board` desde origin/main exit 0; árbol inicial limpio. T-009 done por merge confirmado; el diagnóstico y gate no aceptan el Starter por el dueño. R-08: causa histórica desconocida, riesgo residual de recurrencia, sin reparación causal acreditada.
 
 ## Objetivo
 
