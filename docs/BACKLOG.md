@@ -6,7 +6,7 @@ Acción y prompt en [STATUS](STATUS.md). Objetivo del dueño: dejar la base puli
 
 | Tarea | Estado | Resultado |
 |---|---|---|
-| [T-009](tasks/T-009-starter-readiness.md) | in_review | Corrección documental R1 pendiente de revisión independiente; STARTER propio verde conservado con fuentes/base iguales |
+| [T-009](tasks/T-009-starter-readiness.md) | mergeable | R2 favorable; pendiente veredicto y CI del HEAD final y MERGED confirmado |
 
 ## Hechas recientes
 
@@ -25,4 +25,4 @@ Tras MERGED confirmado de T-009, frontera prepara contratos de corrección/valid
 - R-05a/b · TEMP: hipótesis P3 no reproducida por la sonda actual; imágenes efímeras: mejora opcional P3 con ownership por definir, sin prune.
 - R-06 · Callback OIDC fallido con sesión previa: hipótesis de bug descartada para replay ya cubierto; política de cierre explícita y límite de variantes/Google real. Cualquier cambio UX requiere contrato posterior.
 
-R-08 cerrado técnicamente el 2026-10-27 bajo la decisión de cierre práctico del dueño: STARTER actual completo verde con los 133 tests/client intactos, causa histórica desconocida y riesgo residual explícitos. T-009 en revisión independiente; no done antes de MERGED. R-01 corrige la exclusión de T-009 de la copia; R-07 conserva Google real/aceptación final como pendientes externos del dueño. Ninguna fila acredita adopción ni producción.
+R-08 cerrado técnicamente el 2026-10-27 bajo la decisión de cierre práctico del dueño: STARTER actual completo verde con los 133 tests/client intactos, causa histórica desconocida y riesgo residual explícitos. T-009 pendiente de veredicto final y merge; no done antes de MERGED. R-01 corrige la exclusión de T-009 de la copia; R-07 conserva Google real/aceptación final como pendientes externos del dueño. Ninguna fila acredita adopción ni producción.

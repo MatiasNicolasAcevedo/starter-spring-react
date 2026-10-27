@@ -1,6 +1,6 @@
 ---
 id: T-009
-status: in_review
+status: mergeable
 priority: P1
 size: S
 milestone: M0
@@ -302,3 +302,11 @@ El auditor histórico `node .orchestrator/t-009/r08/r08-close-bcb4f7914665/audit
 Primer `node scripts/docs-check.mjs` exit 1 por estado de T-009 aún `changes_requested` en BACKLOG tras pasar frontmatter a `in_review`; sincronizada esa fila sin cambiar cola; segundo `node scripts/docs-check.mjs` exit 0 (46 Markdown, 5 tareas, HANDOFF 0/22). `git diff --check` exit 0; kit ausente, `git ls-files -- plantilla` e índice inicial vacíos.
 
 Publicación de la corrección: commit `996222f1c9eaef8f6bc0007353652216c2f9786d`, `git push origin codex/t-009-starter-readiness` exit 0. `gh pr view 10 --repo MatiasNicolasAcevedo/starter-spring-react --json number,url,state,isDraft,headRefName,headRefOid,baseRefOid,baseRefName,statusCheckRollup` exit 0: OPEN/ready, rama esperada, HEAD 996222f1c9eaef8f6bc0007353652216c2f9786d, base main 3fbea6a35cba5018e402038400d89c2d806db44a, verify-required QUEUED. `git ls-remote origin refs/heads/main refs/heads/codex/t-009-starter-readiness` exit 0, mismos SHA; árbol/índice limpios. Este registro documental cambia el HEAD: volver a consultar PR/CI sobre el SHA final, sin heredar el check de la transición.
+
+## Revisión independiente R2 · 2026-10-27
+
+Reviewer M0 en sesión nueva distinta de la implementación, Codex desktop/API, familia GPT-6 expuesta; variante y esfuerzo efectivos no expuestos. PowerShell, Node, Git Bash y gh; sin delegación. Transición documental únicamente, sin impacto en comportamiento, API, permisos, datos ni UI. Contenido revisado HEAD 593dee228582a5bf67be9cf74bba7005aa9b2070, base 3fbea6a35cba5018e402038400d89c2d806db44a. PR10 OPEN, ready, rama propia, única PR abierta; referencias remotas coinciden, verify-required SUCCESS y sin hilos de revisión. Consulta exacta inicial sandbox exit 1 por conexión; con red exit 0. R1 publicado contrastado con la corrección.
+
+Sin hallazgos bloqueantes: uso local distingue el gate histórico del final y sus límites; R-08 conserva causa desconocida y riesgo residual sin afirmar reparación; R-03 identifica etapas finales y evita comparar el parcial con el total. gate.log acredita nginx 356 s, Vite 384 s y proxies 135 s exit 0, original y copia con 133 tests, tooling y E2E exitosos. gate-result exit 0, cleanup 0, labels limpios; 283 huellas iguales durante gate y únicamente tarea/STATUS/BACKLOG cambiaron después, base idéntica. El auditor histórico exit 1 por condiciones ya superadas de HEAD/árbol original y su extracción de prompt sensible a finales de línea; sus comprobaciones de huellas y cleanup son verificables individualmente. STARTER y H4 no se repiten por Markdown. Única fuente técnica distinta de base: exclusión T-009 en REMOVE_FILES; política FULL/STARTER exit 0 con Git Bash, tras intento sandbox exit 1 sin salida. Test dirigido de inicialización exit 0, 1/1; docs-check y diff-check exit 0.
+
+Pendiente de esta sesión: publicar esta transición, comprobar CI y HEAD/base finales, publicar APROBADO en PR10 ligado al SHA final y ejecutar merger solo si AUTONOMY se cumple. No aceptar el Starter por el dueño.
