@@ -233,3 +233,59 @@ test('S004: initialized copy must not contain S-004 spec', () => {
   assert.ok(REMOVE_FILES.includes('docs/tasks/T-010-docs-check-board.md'), 'T-010 must be in REMOVE_FILES');
   assert.ok(REMOVE_FILES.includes('docs/tasks/T-011-docs-check-counts.md'), 'T-011 must be in REMOVE_FILES');
 });
+
+// S-004 regla 2: validar todos los conteos explícitos, no solo el primero
+test('S004: second contradictory HANDOFF count is rejected', () => {
+  // HANDOFF has 0/22 verified; add a second count claiming 22/22
+  change('docs/HANDOFF.md', text => {
+    const current = text.match(/— (\d+)\/22 verificados/);
+    const real = current ? current[1] : '0';
+    return text + `\n— 22/22 verificados\n`;
+  });
+  rejects(/conteo.*incoherente/);
+});
+test('S004: second contradictory STATUS count with first correct is rejected', () => {
+  // STATUS has no count; add two counts, first correct, second wrong
+  change('docs/STATUS.md', text => {
+    const handoffVerified = readFileSync(join(temporary, 'docs/HANDOFF.md'), 'utf8')
+      .match(/^\|[A-Z]-\d{2}\|[^|]*\|\s*`?verificado`?\s*\|/gm)?.length ?? 0;
+    return text + `\nHANDOFF del starter: ${handoffVerified}/22 verificados\nHANDOFF del producto: 22/22 verificados\n`;
+  });
+  rejects(/conteo.*distinto de HANDOFF/);
+});
+test('S004: first incorrect HANDOFF count is rejected', () => {
+  change('docs/HANDOFF.md', text => {
+    const current = text.match(/— (\d+)\/22 verificados/);
+    const real = current ? Number(current[1]) : 0;
+    const wrong = real === 22 ? '0' : '22';
+    return text.replace(/— \d+\/22 verificados/, `— ${wrong}/22 verificados`);
+  });
+  rejects(/conteo.*incoherente/);
+});
+test('S004: first incorrect STATUS count is rejected', () => {
+  change('docs/STATUS.md', text => {
+    const handoffVerified = readFileSync(join(temporary, 'docs/HANDOFF.md'), 'utf8')
+      .match(/^\|[A-Z]-\d{2}\|[^|]*\|\s*`?verificado`?\s*\|/gm)?.length ?? 0;
+    const wrong = handoffVerified === 22 ? '0' : '22';
+    return text + `\nHANDOFF del starter: ${wrong}/22 verificados\n`;
+  });
+  rejects(/conteo.*distinto de HANDOFF/);
+});
+test('S004: coherent repeated HANDOFF counts pass', () => {
+  change('docs/HANDOFF.md', text => {
+    const current = text.match(/— (\d+)\/22 verificados/);
+    const real = current ? current[1] : '0';
+    return text + `\n— ${real}/22 verificados\n`;
+  });
+  const result = run(); assert.equal(result.status, 0, result.stderr);
+});
+test('S004: 0/22 count is valid when no criteria verified', () => {
+  const result = run(); assert.equal(result.status, 0, result.stderr);
+});
+test('S004: 22/22 count is valid when all criteria verified', () => {
+  arrangeBoard(); completeHandoff();
+  const result = run(); assert.equal(result.status, 0, result.stderr);
+});
+test('S004: STATUS without count passes', () => {
+  const result = run(); assert.equal(result.status, 0, result.stderr);
+});
