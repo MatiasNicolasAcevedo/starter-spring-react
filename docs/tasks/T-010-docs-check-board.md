@@ -36,4 +36,19 @@ Leer [S-004](../specs/S-004-document-verification.md), [diagnóstico T-009](T-00
 
 Frontera preparó el contrato en `codex/t-010-docs-check-board` desde origin/main 7b6f83f283e451d10a4da75a3ffa0ecda159fd74. PR10 MERGED confirmada en T-009; no hay PR abiertos. `node scripts/docs-check.mjs` exit 0: 49 Markdown, 7 tareas, HANDOFF 0/22; `git diff --check` exit 0. Planificación local sin commit; ningún test de corrección ni gate de T-010 ejecutado. El inventario todavía no excluye esta planificación: la regresión de copia es trabajo deliberado de esta tarea. Siguiente responsable Junie implementer en sesión nueva; adoptar cambios y probar primero rojo. Sin aceptación final del Starter.
 
+Implementación completada 2026-10-27: commit ca93533 en codex/t-010-docs-check-board, PR #11 draft. Regresiones y corrección verde:
+- `node scripts/docs-check.mjs` exit 0 (49 MD, 7 tareas, HANDOFF 0/22).
+- `node --test scripts/ci/docs-check.test.mjs` 41/41 pass (6 nuevas: in_progres rechazado, celda vacía rechazada, estado válido ≠ frontmatter rechazado, backticks compatibles, sin columna Estado pasa, REMOVE_FILES contiene S-004).
+- `node --test "scripts/ci/*.test.mjs"` 137/137 pass.
+- `node --test --test-name-pattern="apply connects identity" scripts/test-init-project.mjs` pass.
+- `git diff --check` exit 0.
+
+Gate STARTER (`verify.sh --starter`): docs OK, server OK (75/75), tooling fallido por 4 timeouts de tests React preexistentes en test-init-copy.sh (ReferencePage.test.tsx 3, ReferenceSession.test.tsx 1). No causado por este cambio; la copia hereda client/src sin modificación. e2e no alcanzado. Cleanup exit 0, cero recursos residuales. Bloqueante: tests flaky de ReferencePage/ReferenceSession en copia compilable; requiere tarea propia de estabilidad client. Responsable: dueño/frontera para decidir si se acepta el riesgo residual o se asigna tarea de estabilidad. T-010 parcialmente done: corrección y regresiones acreditadas, gate STARTER incompleto por infraestructura preexistente.
+
+Bitácora de correcciones:
+| Problema | Causa | Arreglo | Prueba |
+|---|---|---|---|
+| `in_progres` aceptado en tablas Estado | Sección 5 solo buscaba celdas en STATES; valores desconocidos se saltaban | Detectar columna Estado por encabezado; validar cada celda explícita contra STATES | S004: 3 tests negativos + 2 positivos, 41/41 pass |
+| Copia hereda S-004/T-010/T-011 | REMOVE_FILES sin estas rutas | Agregar 3 rutas a REMOVE_FILES | apply connects identity pass, S004 REMOVE_FILES test pass |
+
 Retoma solicitada 2026-10-27: esta conversación expone Codex desktop/API, familia GPT-6, variante y esfuerzo efectivos no expuestos; PowerShell, Git y gh, sin delegación. No es la sesión Junie Lite en IntelliJ IDEA con AIR asignada por AUTONOMY y este contrato. `gh pr view 10 --repo MatiasNicolasAcevedo/starter-spring-react --json number,url,state,mergedAt,mergeCommit,headRefOid,baseRefName` con red exit 0: MERGED/main, 2026-10-27T03:32:11Z, mergeCommit.oid 7b6f83f283e451d10a4da75a3ffa0ecda159fd74 y HEAD 03d07175250fcef24288a83f05b5e7dd5c77d6d5. `gh pr list --repo MatiasNicolasAcevedo/starter-spring-react --state open --json number,url,headRefName,baseRefName` exit 0, []; `git ls-remote origin refs/heads/main` exit 0, mismo merge commit. HEAD y origin/main locales coinciden; índice vacío, siete rutas de planificación preservadas. No se ha iniciado implementación ni ejecutado tests de corrección o gate; impacto de esta comprobación exclusivamente documental, sin cambios de comportamiento, API, UI, datos ni permisos. Responsable de la retoma: dueño abre una sesión nueva de Junie Lite en IntelliJ con AIR en este checkout y entrega el prompt de STATUS; capacidad necesaria: superficie Junie efectiva, sin inferirla de las herramientas Codex. Esta observación no afirma que Junie esté desinstalado ni revoca la autorización existente. T-010 sigue ready para ese ejecutor.
