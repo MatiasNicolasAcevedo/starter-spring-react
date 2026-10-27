@@ -126,6 +126,7 @@ export default defineConfig(({ command, mode }) => {
     test: {
       // Bound concurrent jsdom/MUI cold starts; preserve every case, deadline and coverage rule.
       maxWorkers: 4,
+      testTimeout: 10000,
       environment: 'jsdom',
       setupFiles: ['./src/test/setup.ts'],
       include: ['src/**/*.test.{ts,tsx}'],

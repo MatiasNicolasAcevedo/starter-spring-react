@@ -1,28 +1,33 @@
 # Cola del starter
 
-Acción y prompt en [STATUS](STATUS.md). Objetivo del dueño: dejar la base pulida y al día; primero obtener el diagnóstico de T-009. Sin aceptación final ni adopción de otra aplicación inferidas.
+Acción y prompt en [STATUS](STATUS.md). Objetivo del dueño: dejar la base pulida y al día; sin aceptación final ni adopción de otra aplicación inferidas.
 
 ## En vuelo
 
 | Tarea | Estado | Resultado |
 |---|---|---|
-| [T-009](tasks/T-009-starter-readiness.md) | mergeable | R2 favorable; pendiente veredicto y CI del HEAD final y MERGED confirmado |
+| [T-010](tasks/T-010-docs-check-board.md) | in_progress | Estado explícito del tablero y aislamiento de esta planificación en copias |
+
+## Bloqueadas
+
+| Tarea | Estado | Dependencia |
+|---|---|---|
+| [T-011](tasks/T-011-docs-check-counts.md) | draft | T-010 done y MERGED confirmado |
 
 ## Hechas recientes
 
-- [T-008](tasks/T-008-junie-merge-continuation.md): MERGED confirmado y conciliado al preparar T-009.
-- [T-007](tasks/T-007-agent-operating-rules.md): MERGED confirmado y conciliado en T-008.
-- [T-006](tasks/T-006-adoption-handoff.md): MERGED confirmado y conciliado en T-007.
-- [T-005](tasks/T-005-generic-baseline.md): MERGED confirmado y conciliado en T-006.
+- [T-009](tasks/T-009-starter-readiness.md): diagnóstico MERGED confirmado y conciliado; R-08 causa desconocida y riesgo residual.
+- [T-008](tasks/T-008-junie-merge-continuation.md): MERGED confirmado y conciliado.
+- [T-007](tasks/T-007-agent-operating-rules.md): MERGED confirmado y conciliado.
+- [T-006](tasks/T-006-adoption-handoff.md): MERGED confirmado y conciliado.
+- [T-005](tasks/T-005-generic-baseline.md): MERGED confirmado y conciliado.
 
 ## Por refinar
 
-Tras MERGED confirmado de T-009, frontera prepara contratos de corrección/validación desde hallazgos comprobados dentro del objetivo aceptado. Esas tareas todavía no están definidas ni ready. Clasificación, límites, responsable, aceptación y pruebas en el [diagnóstico T-009](tasks/T-009-starter-readiness.md#registro-de-candidatos-y-pendientes):
-
 - R-02 · Despliegue compartido: pendiente externo P3, dueño/proveedor/región/contrato de [DEPLOYMENT](DEPLOYMENT.md).
-- R-03 · Rendimiento FULL: mejora opcional P2, priorizar desde TIMING propio conservando aislamiento, negativos y cleanup.
-- R-04 · Estados del tablero/conteos repetidos: mejora opcional P2 con dos huecos del checker reproducidos; frontera especifica corrección posterior.
-- R-05a/b · TEMP: hipótesis P3 no reproducida por la sonda actual; imágenes efímeras: mejora opcional P3 con ownership por definir, sin prune.
-- R-06 · Callback OIDC fallido con sesión previa: hipótesis de bug descartada para replay ya cubierto; política de cierre explícita y límite de variantes/Google real. Cualquier cambio UX requiere contrato posterior.
+- R-03 · Rendimiento FULL: mejora opcional P2; tooling domina la corrida medida, sin duplicación demostrada ni comparación controlada. Evaluar al retorno a frontera con evidencia, preservando controles.
+- R-05a · TEMP: hipótesis P3 no reproducida; requiere caso mínimo antes de cambiar ownership. R-05b · imágenes efímeras: mejora P3; falta decidir identificación propia y tradeoff cache/espacio, sin prune.
+- R-06 · Callback OIDC: bug para replay descartado por evidencia; cambio de política UX requiere contrato y decisión del dueño.
+- R-07 · Google real y aceptación final: pendientes externos del dueño, evidencia saneada y propia de cada adopción.
 
-R-08 cerrado técnicamente el 2026-10-27 bajo la decisión de cierre práctico del dueño: STARTER actual completo verde con los 133 tests/client intactos, causa histórica desconocida y riesgo residual explícitos. T-009 pendiente de veredicto final y merge; no done antes de MERGED. R-01 corrige la exclusión de T-009 de la copia; R-07 conserva Google real/aceptación final como pendientes externos del dueño. Ninguna fila acredita adopción ni producción.
+R-04 se ejecuta en [S-004](specs/S-004-document-verification.md). R-08 cerrada técnicamente por validación actual, sin causa histórica ni reparación acreditadas; riesgo residual de recurrencia. Ninguna fila acredita adopción ni producción.

@@ -73,7 +73,7 @@ export const JAVA_FILES = {
     "system/SystemInfoControllerTest.java"
   ]
 };
-export const REMOVE_FILES = ["docs/tasks/T-005-generic-baseline.md", "docs/tasks/T-006-adoption-handoff.md", "docs/tasks/T-007-agent-operating-rules.md", "docs/tasks/T-008-junie-merge-continuation.md", "docs/tasks/T-009-starter-readiness.md"];
+export const REMOVE_FILES = ["docs/tasks/T-005-generic-baseline.md", "docs/tasks/T-006-adoption-handoff.md", "docs/tasks/T-007-agent-operating-rules.md", "docs/tasks/T-008-junie-merge-continuation.md", "docs/tasks/T-009-starter-readiness.md", "docs/tasks/T-010-docs-check-board.md", "docs/tasks/T-011-docs-check-counts.md", "docs/specs/S-004-document-verification.md"];
 export const TEXT_FILES = [
   "server/pom.xml",
   "server/Dockerfile",
