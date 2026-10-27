@@ -1,6 +1,6 @@
 ---
 id: T-009
-status: in_progress
+status: in_review
 priority: P1
 size: S
 milestone: M0
@@ -10,7 +10,7 @@ branch: codex/t-009-starter-readiness
 role: implementer
 executor: frontier
 counts_for_cycle: false
-pr: null
+pr: 10
 ---
 # T-009 · Auditoría de preparación del Starter para su uso
 
@@ -266,10 +266,16 @@ Reconsulta remota de cierre: gh pr view 9 --repo MatiasNicolasAcevedo/starter-sp
 
 Validación de cierre documental: `node scripts/docs-check.mjs` exit 0 (46 Markdown, 5 tareas, HANDOFF 0/22); `git diff --check` exit 0; `node .orchestrator/t-009/r08/r08-close-bcb4f7914665/audit-final.mjs` exit 0. final-source-audit.json acredita 283 fuentes cotejadas, durante gate changed=[], después solo tarea/STATUS/BACKLOG; client intacto, HEAD/base/main inmóviles, siete rutas originales, índice vacío y kit ausente/no rastreado. next-prompt.txt conserva el único prompt de STATUS, que sustituye la recogida del gate ya ejecutada por publicación de la entrega local, sin pedir al dueño nueva investigación. Comprobaciones actualizadas tras esta anotación; no suites técnicas adicionales por Markdown.
 
-## Checkpoint vigente · publicación 2026-10-27
+## Publicación · 2026-10-27
 
 Implementer M0 en nueva sesión, Codex desktop/API basado en GPT-6; variante exacta y esfuerzo efectivos no expuestos. PowerShell, Git/gh y Node propios, sin delegación. Impacto: diagnóstico y exclusión de este archivo de copias nuevas; sin cambios de comportamiento de aplicación, API, auth, permisos, datos ni UI. Se conservaron las siete rutas y main local.
 
 Reconsulta `gh pr view 9 --repo MatiasNicolasAcevedo/starter-spring-react --json number,url,state,mergedAt,mergeCommit,headRefOid,baseRefOid,baseRefName,statusCheckRollup`: sandbox exit 1 por conexión; con red exit 0, MERGED/main, mergedAt 2026-10-25T17:07:43Z, mergeCommit 3fbea6a35cba5018e402038400d89c2d806db44a, HEAD 104acd08a089aab8d80ca8ce33d3f6bdcaa3f697, base 9547a33bccfed49da6691587426677eba879876d y verify-required SUCCESS. Coincide con T-008 conciliada. `gh pr list --repo MatiasNicolasAcevedo/starter-spring-react --state open --json number,title,headRefName,baseRefName,url` exit 0, []; `git ls-remote origin refs/heads/main refs/heads/codex/t-009-starter-readiness` exit 0, main 3fbea6a35cba5018e402038400d89c2d806db44a y rama aún ausente.
 
 Evidencia ignorada del gate revisada y `node .orchestrator/t-009/r08/r08-close-bcb4f7914665/audit-final.mjs` exit 0: 283 huellas, ninguna cambió durante gate; desde entonces solo tarea/STATUS/BACKLOG, client intacto; gate/cleanup exit 0, labels 0/0/0 y 30 IDs propios ausentes. `node scripts/docs-check.mjs` exit 0 (46 Markdown, 5 tareas, HANDOFF 0/22), `git diff --check` exit 0; kit ausente, `git ls-files -- plantilla` e índice vacíos. Diff completo revisado: único cambio técnico, entrada T-009 en REMOVE_FILES; no se repite STARTER por Markdown. Pendiente de esta sesión: commit de siete rutas explícitas, clasificación del diff commiteado, publicación de la misma rama y PR, y cierre documental para revisión independiente.
+
+Commit técnico/documental `977974cc0d6f3145ba1ce22207e04989cfceda11` y push de la misma rama exit 0. `bash scripts/verify.sh --policy origin/main` en sandbox exit 1 sin salida; con capacidad Git Bash exit 0: policy=FULL, changed=7, profile=STARTER, una ruta técnica. `gh pr create --repo MatiasNicolasAcevedo/starter-spring-react --base main --head codex/t-009-starter-readiness` exit 0; [PR10](https://github.com/MatiasNicolasAcevedo/starter-spring-react/pull/10). `gh pr view 10 --repo MatiasNicolasAcevedo/starter-spring-react --json number,url,state,isDraft,headRefName,headRefOid,baseRefName,baseRefOid,statusCheckRollup` exit 0: OPEN, ready, HEAD 977974cc0d6f3145ba1ce22207e04989cfceda11, base main 3fbea6a35cba5018e402038400d89c2d806db44a, verify-required IN_PROGRESS. El cierre siguiente solo cambia Markdown; el gate se conserva sobre fuentes/base iguales. La CI del HEAD final se consulta nuevamente en GitHub, no se hereda de este HEAD.
+
+## Checkpoint vigente · revisión independiente
+
+T-009 in_review en PR10; siguiente responsable: revisor M0 en otra sesión. Consultar la PR exacta y sus HEAD/base/checks reales, contrastar el diff final y la evidencia ignorada con el gate, revisar criterios y límites; publicar veredicto independiente ligado a SHA/base y continuar merger solo si AUTONOMY y CI lo permiten. Esta sesión autora no revisa ni mergea; T-009 no está done y la aceptación final sigue pendiente del dueño. No repetir H4 ni STARTER por cierre Markdown con fuentes/base iguales; si cambian, revalidar lo afectado. Tras MERGED confirmado, frontera concilia en otra rama y prepara contratos de correcciones, sin comenzar otra tarea en la sesión de revisión.
