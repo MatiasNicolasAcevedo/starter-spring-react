@@ -33,7 +33,7 @@ Archivos previstos y 2–4 pasos ejecutables. Si hace falta ampliar capas o reso
 |---|---|---|---|
 | AC-01 | Unitario/componente/integración/E2E según riesgo | Completar antes de ready | Completar |
 
-Bugfix: demostrar rojo antes de arreglar. Conservar regresiones y umbrales. Dirigidos durante iteración; FULL de aplicación, más tooling si el perfil es STARTER, o DOCS_ONLY según TESTING; escribir aquí comandos finales con namespaces propios si corresponden. No añadir E2E por costumbre.
+Bugfix: demostrar rojo antes de arreglar. Conservar regresiones y umbrales. Cierre con el gate diario de TESTING: escribir aquí los comandos dirigidos exactos, el filtro del E2E dirigido si hay flujo de usuario y los namespaces propios. No añadir E2E por costumbre. `FULL/STARTER: DIFERIDO POR EL DUEÑO`; no incluirlos como paso de cierre ni ejecutarlos sin su orden expresa.
 
 ## Checkpoint vigente
 Rol/modelo/herramienta/esfuerzo reales una vez. Hecho y pendiente en pocas líneas; SHA/base conocidos; comando, exit, alcance y log saneado. Antes de una operación larga incluir recursos propios y cleanup. Ante bloqueo: causa, reproducción, intentos distintos y decisión/dato necesario. El prompt único de retoma vive en STATUS.
@@ -45,7 +45,20 @@ Rol/modelo/herramienta/esfuerzo reales una vez. Hecho y pendiente en pocas líne
 
 Conservar hallazgos que explican decisiones o regresiones; no registrar cada edición, repetir comandos ya enlazados ni crear una bitácora global adicional. Trabajo anterior en tareas cerradas y Git/PR; el checkpoint no sustituye esa evidencia.
 
+## Prompts de salida
+<!-- El planner los deja escritos con rutas y nombres reales. Quien cierra la sesión solo completa número de PR y SHA, copia el que corresponde a STATUS y lo repite al final de su respuesta. Plantilla y casos en docs/WORKFLOW.md. -->
+
+Al publicar la implementación o una corrección (para el reviewer):
+```text
+Completar: nivel y rol reviewer, esta tarea, repositorio, qué leer, precondición «PR abierto en el HEAD publicado», revisión contra los criterios, gate diario, merge si aprueba y salida.
+```
+
+Al aprobar y mergear (para la tarea siguiente, o revisión de lote si esta es la última):
+```text
+Completar: nivel y rol, tarea siguiente con su archivo, precondición «PR de esta tarea MERGED», conciliación de esta tarea en el primer commit, acción y salida.
+```
+
 ## Cierre y siguiente tarea
 Criterios/evidencia, PR y revisión pendientes o confirmados. No done hasta MERGED comprobado. Actualizar STATUS al cambiar acción/rol; BACKLOG si cambia la cola; HANDOFF solo si afecta aceptación/traspaso. No reescribir cuatro documentos por cada corrección.
-El cierre entrega el único prompt de STATUS para revisar o para la siguiente tarea según el estado real. Tras MERGED, el siguiente implementer reconcilia done en el primer avance de su rama y toma la siguiente tarea ya definida; si solo esperaba esa dependencia, puede marcarla ready sin otra sesión de frontera. No hacer commits en la rama mergeada ni saltar revisión/merge.
-La respuesta final reproduce ese prompt completo y copiable según [ORCHESTRATION](../ORCHESTRATION.md#prompt-obligatorio-al-cierre), también ante bloqueantes, errores, pruebas fallidas o decisiones pendientes del dueño: causa/evidencia, responsable, dato o decisión necesaria, acción y salida. Un diagnóstico o pregunta no sustituye el prompt. Conservar en esta tarea comando/exit y respuesta mínima de GitHub para publicación/MERGED: repositorio/PR/base, estado, fecha y SHA; consulta fallida no acredita dependencia.
+Tras MERGED, el siguiente implementer concilia done en el primer commit de su rama y toma la siguiente tarea ya definida; si solo esperaba esa dependencia, puede marcarla ready sin otra sesión de frontera. No hacer commits en la rama mergeada ni saltar revisión/merge.
+La respuesta final de cada sesión termina con el prompt vigente, completo y copiable, según [WORKFLOW](../WORKFLOW.md#cierre-de-sesión-el-prompt-siguiente), también ante bloqueantes, errores, pruebas fallidas o decisiones pendientes del dueño. Un diagnóstico o pregunta no sustituye el prompt. Conservar en esta tarea comando/exit y respuesta mínima de GitHub para publicación/MERGED: repositorio/PR/base, estado, fecha y SHA; consulta fallida no acredita dependencia.

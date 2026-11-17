@@ -1,6 +1,6 @@
 ---
 id: T-011
-status: draft
+status: done
 priority: P2
 size: S
 milestone: M1
@@ -10,7 +10,7 @@ branch: codex/t-011-docs-check-counts
 role: implementer
 executor: junie
 counts_for_cycle: false
-pr: null
+pr: 12
 ---
 # T-011 · Validar todos los conteos explícitos de adopción
 
@@ -34,3 +34,11 @@ Leer [S-004](../specs/S-004-document-verification.md), [diagnóstico T-009](T-00
 ## Checkpoint
 
 Contrato preparado por frontera; pendiente T-010 done con confirmación remota. No se ejecutaron tests ni se creó esta rama. Tras su merge, Junie concilia T-010, habilita T-011 y ejecuta su contrato; luego el retorno a frontera exige ambas tareas mergeadas, sin aceptación final inferida.
+
+Implementación completada 2026-10-27: commit c6ac6e0 en codex/t-011-docs-check-counts, PR #12. Regresiones y corrección verde:
+- `node scripts/docs-check.mjs` exit 0 (50 MD, 7 tareas, HANDOFF 0/22).
+- `node --test scripts/ci/docs-check.test.mjs` 49/49 pass (8 nuevas: segundo count HANDOFF contradictorio, segundo count STATUS contradictorio, primer count incorrecto HANDOFF, primer count incorrecto STATUS, conteos repetidos coherentes, 0/22, 22/22, STATUS sin count).
+- `node --test "scripts/ci/*.test.mjs"` 145/145 pass.
+- `git diff --check` exit 0.
+
+Gate tooling (`verify.sh --tooling`): exit 0. PR #12 MERGED (mergeCommit ea3d7958, 2026-10-27T15:06:37Z). T-011 done y conciliada. S-004 completada.

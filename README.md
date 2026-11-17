@@ -33,6 +33,7 @@ Versiones completas y dependencias de runtime/build/test: [DEPENDENCIES](docs/DE
 | server/ y client/ | Aplicación y pruebas de cada capa; sus AGENTS describen convenciones |
 | e2e/ y scripts/ | Playwright, arranque/verificación/personalización y regresiones operativas |
 | docs/ROADMAP.md y docs/specs/ | Iteraciones/versiones y contratos agrupados por capacidad/épica |
+| docs/WORKFLOW.md | Proceso diario: niveles, roles, modos, gates y prompt de cierre |
 | docs/STATUS.md, docs/BACKLOG.md y docs/tasks/ | Acción y prompt vigentes, cola de tareas, progreso/correcciones y evidencia |
 | docs/SETUP.md, TESTING.md y HANDOFF.md | Operación/trampas, validación y aceptación/traspaso |
 | .junie/TOOLS.md | Naturaleza de herramientas/agentes/skills y evidencia por superficie |
@@ -57,7 +58,7 @@ Versiones completas y dependencias de runtime/build/test: [DEPENDENCIES](docs/DE
 
 ROADMAP identifica una versión/iteración, su objetivo observable y su condición de salida. Cada spec Markdown representa una capacidad/épica y agrupa sus tareas ordenadas; una tarea sigue siendo suficientemente pequeña para implementar y revisar un resultado útil. Los objetivos posteriores quedan visibles, sin inventar todos sus detalles antes de tener evidencia. Una corrección aislada puede usar un contrato de tarea autosuficiente, sin otra spec.
 
-La ruta preparada es: frontera define iteración/specs/tareas → Junie T1 → revisión/merge → Junie T2 → revisión/merge → Junie T3… → objetivo de iteración comprobado → frontera decide/refina el siguiente objetivo. La revisión puede realizarla otra sesión de Junie cuando AUTONOMY y sus capacidades lo permitan; el implementador nunca revisa ni mergea su propio trabajo. No hace falta una sesión de frontera entre tareas ni al llegar a cinco: Junie comprueba el avance, y frontera vuelve al objetivo acordado, a un cambio de intención del dueño o a una decisión/bloqueo fuera del contrato.
+El proceso completo está en [WORKFLOW](docs/WORKFLOW.md). Hay tres roles, cada uno en sesión nueva: planner, implementer y reviewer, que además mergea. «Frontera» es el modelo de máxima capacidad disponible, sin marca fija; «Junie» es un modelo de menor capacidad que ejecuta contratos cerrados. Cada aplicación elige su modo en AUTONOMY: `FRONTERA_CONTINUA`, o `LOTES_JUNIE`, donde frontera planifica un lote de unas diez tareas → Junie T1 → revisión y merge → Junie T2 … → frontera audita el lote completo, corrige y planifica el siguiente. El implementador nunca revisa ni mergea su propio trabajo. Dentro del lote no hace falta una sesión de frontera entre tareas; vuelve antes solo por un cambio de intención del dueño o una decisión o bloqueo fuera del contrato.
 
 Las tareas posteriores pueden estar definidas y draft solo por dependencias pendientes. Al comprobar MERGED de la anterior, Junie habilita la siguiente ya especificada si no falta ninguna decisión; máximo cinco ready y una tarea/PR activos. Si el contrato no está completo, no improvisa arquitectura para continuar. [Estados y continuidad](docs/ORCHESTRATION.md).
 
@@ -69,7 +70,7 @@ El progreso y evidencia van en la tarea. STATUS cambia al cambiar acción/rol/bl
 
 Cada tarea conserva una bitácora corta de correcciones significativas: problema/causa, arreglo y prueba/SHA. El checkpoint dice dónde retomar ahora; tareas cerradas, commits y PRs explican lo desarrollado antes. El tablero enlaza En curso, Siguientes y Hechas, sin copiar toda esa evidencia. Ninguna tarea pasa a done solo porque compila o tiene tests verdes: exige MERGED comprobado y conciliación. La confirmación del merge queda en el PR y el siguiente implementer concilia done al primer avance de su rama; nunca se vuelve a commitear en la rama ya mergeada.
 
-Tu intervención diaria es copiar el único prompt de STATUS y abrir una sesión nueva del rol indicado: implementar, revisar/corregir o continuar con la siguiente tarea. El prompt lleva tarea/rama/PR, precondición y primera acción. Antes de pasar a la siguiente comprueba el cierre de la anterior; no tenés que reconstruir el contexto ni editar el tablero a mano. Si corresponde volver a frontera, el prompt explica qué objetivo se cumplió o qué decisión falta.
+Tu intervención diaria es copiar el único prompt de STATUS y abrir una sesión nueva del rol indicado: implementar, revisar/corregir o continuar con la siguiente tarea. Toda sesión termina mostrando ese prompt completo al final de su respuesta; si falta, pedirlo antes de cerrar. El prompt lleva tarea/rama/PR, precondición y primera acción. Antes de pasar a la siguiente comprueba el cierre de la anterior; no tenés que reconstruir el contexto ni editar el tablero a mano. Si corresponde volver a frontera, el prompt explica qué objetivo se cumplió o qué decisión falta.
 
 Ejecutor, revisor y superficie acordados viven en T-000/AUTONOMY; disponibilidad en [TOOLS](.junie/TOOLS.md). Registrar solo modelo/esfuerzo expuestos. El [microensayo unitario](docs/templates/junie-trial.md) es una opción si demuestra una función necesaria; su resultado debe venir de Junie. El mínimo temprano no exige ejecutar skills opcionales ni añadir una feature de demostración.
 
@@ -92,14 +93,15 @@ El login local usa el proveedor ficticio y `host.docker.internal`; si se abre un
 | Momento | Qué comprueba el agente |
 |---|---|
 | Mientras implementa y antes de un commit con código | Test dirigido al comportamiento/corrección, rojo previo si es bug, tipos/formato pertinentes y diff/index sin secretos/kit. La tarea especifica comandos exactos y motivo de cada capa de prueba |
-| Al cerrar fuentes de un PR técnico | Un FULL de aplicación válido y tooling si el perfil del diff es STARTER, sobre fuentes finales/base, logs saneados, cleanup y correspondencia con lo publicado; no un FULL por cada commit |
-| Si después cambia solo Markdown | docs-check y regresiones afectadas; conservar FULL si fuentes técnicas/base siguen idénticas. No llamar DOCS_ONLY a un diff que el clasificador trata como FULL |
-| Revisión independiente | Aceptación, diff, arquitectura/contratos/propiedad/migraciones, evidencia y pruebas dirigidas a riesgos; FULL solo si cambian fuentes/base, falta evidencia o hay motivo concreto |
-| Merge | CI requerida verde sobre HEAD/base vigentes, veredicto independiente y AUTONOMY propia; squash confirmado MERGED antes de la siguiente tarea |
+| Al cerrar fuentes de un PR técnico | Gate diario, unos 20 minutos: pruebas unitarias y de componente de lo tocado, IT dirigido si cambia persistencia o permisos, typecheck, E2E filtrado del flujo afectado, docs-check y CI liviana |
+| Si después cambia solo Markdown | docs-check y regresiones afectadas. No llamar DOCS_ONLY a un diff que el clasificador trata como FULL |
+| Revisión independiente | Aceptación, diff, arquitectura/contratos/propiedad/migraciones, evidencia y pruebas dirigidas a riesgos. Si aprueba, la misma sesión hace el squash y confirma MERGED |
+| Merge | CI requerida verde sobre HEAD/base vigentes, gate diario, veredicto independiente y AUTONOMY propia; MERGED confirmado antes de la siguiente tarea |
+| Solo cuando el dueño lo ordena | Gate integrado: FULL de aplicación, suite E2E completa y, si corresponde, STARTER/tooling. Los agentes lo recomiendan al cerrar un lote o ante cambios de riesgo, pero no lo inician |
 
 La arquitectura se revisa contra AGENTS/ARCHITECTURE/spec, además de compilar y probar: límites de feature, DTO/API, validación, autorización por propietario, sesión/CSRF y migraciones. Es un control explícito del agente y revisor, no una garantía automática de que ningún bug pueda entrar. El flujo reduce riesgo con pruebas útiles y revisión sin instalar otra capa de herramientas. Hay un check requerido CI liviano, sin hooks o dispatcher nuevos.
 
-Durante una tarea ejecutar los tests dirigidos elegidos por frontera. Cierre técnico con namespaces nuevos propios, tras comprobar labels ausentes según SETUP:
+Durante una tarea ejecutar los tests dirigidos elegidos por frontera y cerrar con el [gate diario](docs/TESTING.md#gate-diario). El gate integrado queda diferido hasta que el dueño lo pida; cuando lo pide, se corre con namespaces nuevos propios, tras comprobar labels ausentes según SETUP:
 
 ```bash
 COMPOSE_ENV_FILES=.env.example COMPOSE_PROJECT_NAME=starter-verify-mi-app STARTER_E2E_PROJECT=starter-e2e-mi-app STARTER_SERVER_TESTS=container bash scripts/verify.sh
@@ -107,7 +109,7 @@ COMPOSE_ENV_FILES=.env.example COMPOSE_PROJECT_NAME=starter-verify-mi-app STARTE
 docker compose --env-file .env.example -p starter-verify-mi-app --profile verify down --volumes --remove-orphans
 ```
 
-FULL cotidiano conserva backend/IT PostgreSQL, client y Playwright reales; los ensayos de inicializador/copia/CLI/proxies van aparte con --tooling, obligatorios para el perfil STARTER de --policy. --starter reúne ambos recorridos. CI automática `verify-required` comprueba herramientas/documentación y clasifica el diff; no ejecuta ni acredita FULL. No repetir FULL por cierre solo documental con base/fuentes idénticas. Política y elección de pruebas: [TESTING](docs/TESTING.md#elegir-pruebas-para-una-tarea-pequeña). Versiones: [DEPENDENCIES](docs/DEPENDENCIES.md).
+FULL conserva backend/IT PostgreSQL, client y Playwright reales; los ensayos de inicializador/copia/CLI/proxies van aparte con --tooling y --starter reúne ambos recorridos. CI automática `verify-required` comprueba herramientas/documentación y clasifica el diff; no ejecuta ni acredita FULL. STATUS lleva el registro de gates diferidos: último integrado válido y tareas mergeadas desde entonces. Política y elección de pruebas: [TESTING](docs/TESTING.md#elegir-pruebas-para-una-tarea-pequeña). Versiones: [DEPENDENCIES](docs/DEPENDENCIES.md).
 
 ## Formulario, kit y primera prueba sencilla
 
