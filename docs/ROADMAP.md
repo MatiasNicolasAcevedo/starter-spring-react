@@ -2,7 +2,8 @@
 
 | Política | Valor |
 |---|---|
-| Cadencia efectiva | 5 tareas de producto; también revisar al cumplir objetivo o cambiar alcance |
+| Cadencia efectiva | 10 tareas mergeadas por lote, con revisión de lote por frontera; también al cumplir objetivo o cambiar alcance |
+| Proceso | [WORKFLOW](WORKFLOW.md): tres roles, modo del proyecto, gate diario y gates diferidos |
 | WIP | Una tarea y un PR activos; revisión independiente |
 
 1. Base genérica breve, sin historia operativa ni contexto de otra aplicación.
@@ -13,10 +14,10 @@ La tarea actual y su aceptación viven en [STATUS](STATUS.md) y el orden en [BAC
 
 ## Uso de una copia
 
-Personalizar identidad antes de completar PROJECT_CONTEXT; aceptar contexto y AUTONOMY propios, validar adopción y preparar el primer flujo con frontera. Las specs agrupan capacidades; Junie encadena tareas predefinidas hasta el objetivo acordado. Volver a frontera ante alcance/arquitectura/permisos no resueltos. No trasladar tareas ni evidencias del mantenimiento.
+Personalizar identidad antes de completar PROJECT_CONTEXT; aceptar contexto y AUTONOMY propios, validar adopción y preparar el primer flujo con frontera. Elegir el modo en AUTONOMY. Las specs agrupan capacidades; en `LOTES_JUNIE` Junie encadena unas diez tareas predefinidas y frontera audita el lote. Volver a frontera antes ante alcance/arquitectura/permisos no resueltos. No trasladar tareas ni evidencias del mantenimiento.
 
-## Iteración vigente · preparación para uso
+## Iteración vigente · el flujo nuevo llega a las herramientas
 
-Objetivo del dueño del 2026-10-25: dejar el Starter pulido y al día. T-008 cerrada no equivale a aceptación final. Primer tramo: [T-009](tasks/T-009-starter-readiness.md), diagnóstico autosuficiente de coherencia documental, flujos de copia/desarrollo/verificación y pendientes técnicos conocidos; sin spec adicional que repita este único resultado.
+Objetivo del dueño del 2026-11-16: que la base entregue a cada aplicación nueva el flujo de trabajo y lo aprendido en las aplicaciones derivadas, para desarrollar rápido sin perder calidad. La iteración anterior (T-009 y S-004) está cerrada y el dueño aceptó la base como usable el 2026-10-27.
 
-Ruta: diagnóstico T-009 mergeado → [S-004](specs/S-004-document-verification.md), dos correcciones verificables del checker → ejecución y revisión independiente por tarea → retorno a frontera al cumplir esa salida, para contrastar el objetivo general y pendientes externos. La salida de S-004 no acepta el Starter: la decisión final sigue siendo del dueño. R-03 y R-05 siguen como mejoras condicionadas, sin prometer optimizaciones o limpieza por sospecha. Conservar versiones; sin deploy, gastos, Google real ni producto nuevo por esta iteración.
+Ruta: adopción documental del flujo → [T-012](tasks/T-012-workflow-tooling.md) inicializador y docs-check → [T-013](tasks/T-013-targeted-e2e.md) E2E dirigido → [T-014](tasks/T-014-single-container-deploy.md) imagen de un contenedor → retorno a frontera para elegir con el dueño entre los candidatos de «Por refinar». Conservar versiones; sin deploy, gastos ni Google real por esta iteración.

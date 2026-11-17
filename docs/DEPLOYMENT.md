@@ -2,7 +2,31 @@
 
 **Pendiente de decisión del dueño para cada aplicación.** Esta guía es una propuesta técnica: completar contexto, carga prevista, capacidad, presupuesto, proveedor, región y dominio propios antes de aprobar despliegue o gastos. Las decisiones del mantenimiento del starter no autorizan ni aceptan la operación de una copia.
 
-## Arquitectura recomendada
+## Camino corto: un contenedor en un PaaS
+Para la primera publicación de una aplicación chica, antes de justificar un VPS. Es el empaquetado que ya funcionó en una aplicación derivada de esta base sobre Render Free; proveedor, plan y gasto siguen siendo decisión del dueño.
+
+- **Un solo Web Service Docker** con React compilado, nginx y Spring Boot en la misma imagen, y un PostgreSQL 18 gestionado aparte en la misma región, alcanzado por red interna y sin acceso externo.
+- **Dockerfile multietapa** con contexto en la raíz: `npm ci` y `npm run build` del cliente; Maven Wrapper con Java 21 y jar extraído por capas; runtime sobre la imagen nginx con un JRE de la misma versión. Versiones fijadas, usuario sin privilegios y credenciales solo en el entorno de ejecución.
+- **Un entrypoint que coordina dos procesos**: valida `PORT`, genera la configuración de nginx desde el origen público, arranca Spring en `127.0.0.1:8080` y nginx en `PORT`, termina ambos si uno cae y reenvía TERM/INT. Sin eso, un proceso muerto deja el contenedor «vivo» y roto.
+- **Un único origen público.** nginx sirve la SPA y reenvía `/api/`, `/oauth2/`, el callback y `/logout`. Se conserva la validación de Host, la reconstrucción de `Forwarded`/`X-Forwarded-*` desde configuración confiable, sesión y CSRF ([ADR 0002](adr/0002-google-oidc-session-csrf-and-proxy.md)). `APP_PUBLIC_URL` es la URL HTTPS pública y la URI de redirección de Google es esa URL más `/login/oauth2/code/google`.
+- **Health check** en `GET /actuator/health/readiness`, que ya comprueba Spring y PostgreSQL.
+- **Variables en el panel privado**, nunca en el repo: `SPRING_DATASOURCE_URL` en formato `jdbc:postgresql://<host-interno>:5432/<base>`, `SPRING_DATASOURCE_USERNAME`, `SPRING_DATASOURCE_PASSWORD`, `APP_PUBLIC_URL`, perfil `google` y `GOOGLE_CLIENT_ID`/`GOOGLE_CLIENT_SECRET`. Las tres de datasource se cambian juntas.
+
+Lo que costó tiempo y conviene saber de entrada:
+
+| Tema | Lección |
+|---|---|
+| Arranque en plan chico | Con unos 512 MB y 0,1 CPU, Spring tarda alrededor de un minuto en estar listo. `-XX:TieredStopAtLevel=1` reduce el trabajo de compilación en frío. Medir memoria pico al arrancar y tras una operación real antes de publicar |
+| Primer deploy | El servicio despliega al crearse y al tocar variables: sin las de datasource cargadas, falla o queda en 502. Cargar todas las variables antes del primer deploy útil |
+| Auto-deploy | Elegir a conciencia entre desplegar en cada commit a `main` o por SHA manual. Con auto-deploy, un merge solo documental también despliega salvo que el mensaje lleve el marcador de omisión del proveedor |
+| Suspensión por inactividad | El plan gratuito duerme el servicio a los 15 minutos sin tráfico entrante; el primer acceso paga el arranque completo. Decidir si se acepta, antes de construir sondas |
+| Base gratuita | Vence a los 30 días y no tiene backups gestionados. Hace falta una exportación propia de datos probada con una restauración real antes de depender de ella |
+| Prueba local de la imagen | Un Compose de humo con la imagen final, PostgreSQL aparte, OIDC ficticio y límites de memoria/CPU parecidos al plan, antes de tocar el proveedor |
+| Nombres de variables | Un nombre mal escrito deja el valor por defecto sin error visible. Verificar cada variable nueva con una comprobación observable después del deploy |
+
+Los archivos (`deploy/`, Compose de humo y prueba del entrypoint) no están todavía en esta base; se incorporan con una tarea propia. La creación de recursos, las credenciales, Google real y cualquier costo los decide y opera el dueño.
+
+## Arquitectura recomendada con varias aplicaciones
 Un VPS Linux con Docker Compose, un proxy HTTPS compartido (Caddy como opción inicial), un PostgreSQL 18 compartido y un stack separado por aplicación. Servir React compilado y `/api`, `/oauth2`, callback y logout desde el mismo origen de cada aplicación: `https://app-a.ejemplo.com`, `https://app-b.ejemplo.com`. Cloudflare DNS Free como opción inicial propuesta; proxy/CDN opcionales, con TLS completo hasta el origen. No cachear API privada ni respuestas con sesión. No cambiar el modelo OIDC/sesión/CSRF ni publicar puertos de PostgreSQL/backend.
 
 Cada aplicación sigue necesitando un proceso Java/contenedor propio; el ahorro es compartir la máquina y pagar su capacidad, no una tarifa por instancia. PostgreSQL y proxy se administran una vez y el deploy de una aplicación no puede reiniciarlos ni destruirlos. Proyectos, redes, credenciales y límites de recursos explícitos por aplicación. DB en redes privadas; restringir comunicación entre stacks. Separar el host si aparecen usuarios no confiables o necesidades de aislamiento fuerte.

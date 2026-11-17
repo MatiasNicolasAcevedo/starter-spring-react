@@ -1,6 +1,6 @@
 # Orquestación y estados
 
-Contrato mínimo para encadenar sesiones. **No hay dispatcher instalado:** la continuidad es `POR_SESION` y el dueño abre cada sesión pegando el prompt de [STATUS.md](STATUS.md#prompt-de-la-siguiente-sesión). Este documento fija los valores que validan las tareas y docs-check; no describe una instalación concreta. Ejecutores/superficies se acuerdan en la adopción; naturaleza y disponibilidad canónicas en [TOOLS](../.junie/TOOLS.md).
+Estados, campos y hechos verificables. El proceso diario (roles, modos, gates y prompt de cierre) está en [WORKFLOW](WORKFLOW.md). **No hay dispatcher instalado:** la continuidad es `POR_SESION` y el dueño abre cada sesión pegando el prompt de [STATUS.md](STATUS.md#prompt-de-la-siguiente-sesión). Este documento fija los valores que validan las tareas y docs-check; no describe una instalación concreta. Ejecutores/superficies se acuerdan en la adopción; naturaleza y disponibilidad canónicas en [TOOLS](../.junie/TOOLS.md).
 
 ## Estados de tarea
 | Estado | Significado | Próximo rol |
@@ -10,7 +10,7 @@ Contrato mínimo para encadenar sesiones. **No hay dispatcher instalado:** la co
 | `in_progress` | Misma tarea, rama y PR activos | implementer |
 | `in_review` | Implementación publicada; revisión pendiente | reviewer |
 | `changes_requested` | Hallazgos concretos; conserva rama y PR | implementer |
-| `mergeable` | Veredicto vigente y checks verdes; merge pendiente | merger (normalmente la sesión revisora) |
+| `mergeable` | Veredicto vigente y checks verdes; merge pendiente | la misma sesión reviewer; merger solo si hay que retomarlo |
 | `done` | GitHub confirma MERGED y el cierre documental está reconciliado | siguiente tarea predefinida / frontera al objetivo |
 | `blocked` | Falta dato, permiso, dependencia o solución tras intentos acotados | rol indicado por el bloqueo |
 
@@ -35,18 +35,19 @@ Contrato mínimo para encadenar sesiones. **No hay dispatcher instalado:** la co
 | Documento | Función y cuándo cambia |
 |---|---|
 | PROJECT_CONTEXT | Problema, MVP, reglas/permisos y aceptación del dueño; cambia con intención de producto |
-| STATUS | Enlace a tarea actual, estado resumido y único prompt; cambia al cambiar acción/rol/bloqueo |
+| STATUS | Enlace a tarea actual, estado resumido, registro de gates diferidos y único prompt; cambia al cambiar acción/rol/bloqueo. Corto y sin historial |
+| WORKFLOW | Proceso diario; cambia solo con una decisión del dueño sobre cómo se trabaja |
 | Tarea | Estado canónico, decisiones, archivos/comandos, checkpoint y evidencia; progreso ordinario aquí |
 | BACKLOG | Orden y dependencia de la siguiente tarea; índice sin estados repetidos. Tablas históricas con estado, si existen, deben concordar |
 | HANDOFF | Aceptación/traspaso; cambia al aportar evidencia o invalidar un criterio, no con cada fix |
-| ROADMAP | Objetivos e hitos; revisión cada cinco tareas de producto mergeadas, hito o cambio relevante |
+| ROADMAP | Objetivos e hitos; se revisa en la revisión de lote, al cumplir un hito o ante un cambio relevante |
 
 La cadencia se consulta en tareas mergeadas; no exige mantener contadores duplicados. Las tareas autosuficientes pueden usar spec null. PROJECT es un índice del contexto, sin otro brief que mantener. Las tareas de mantenimiento no se copian al producto.
 
 ## Continuidad mínima vigente
 Frontera deja ROADMAP por versiones/iteraciones, specs agrupadas por capacidad/épica y sus tareas pequeñas con decisiones resueltas. Puede haber muchas tareas definidas, aunque solo cinco ready y una en vuelo. Una tarea draft puede estar completa y esperar únicamente la dependencia indicada; Junie la habilita al comprobarla sin pedir otro planner. Si falta una decisión de verdad, no la trata como ready.
 
-Secuencia diaria: implementación Junie → revisión en sesión distinta (también Junie si está autorizado y tiene capacidad) → merge elegible confirmado → siguiente tarea Junie predefinida. El dueño copia el único prompt vigente y abre la sesión del rol indicado. No hay alternancia obligatoria con frontera. La revisión de avance cada cinco tareas puede hacerla Junie; el regreso a frontera se fija por objetivo cumplido de iteración o por decisiones/bloqueos que excedan el contrato.
+Secuencia diaria: implementer → reviewer en sesión distinta, que aprueba y mergea → implementer de la siguiente tarea predefinida. El dueño copia el único prompt vigente y abre la sesión del rol y nivel indicados. En modo `LOTES_JUNIE` no hay alternancia con frontera dentro del lote: el regreso ocurre en la revisión de lote (unas diez tareas), o antes por una decisión o bloqueo que exceda el contrato.
 
 El tablero agrupa En curso, Siguientes y Hechas, o una cola equivalente que identifique la actual y la siguiente con su dependencia, enlazando contratos. El inicializador entrega la cola mínima de T-000; al empezar producto se organiza la iteración propia. Los estados exactos se marcan en las tareas y STATUS refleja solo la actual. Pasar una entrada a Hechas exige MERGED comprobado y reconciliación, nunca solo tests verdes. La sesión revisora confirma el merge en el PR; el siguiente implementer concilia done en su nueva rama sin editar la ya mergeada. El prompt de continuación indica cuál sigue y esa comprobación inicial.
 
@@ -95,7 +96,7 @@ Git merge/rebase/cherry-pick, fetch/pull, contenido en main local, CI verde, APR
 
 ## Prompt obligatorio al cierre
 
-Cada respuesta final de sesión incluye el prompt completo y copiable de la siguiente sesión, con tarea/rol, referencias concretas, precondición comprobable, acción y salida. **La obligación también rige ante bloqueantes, errores, pruebas fallidas, falta de herramientas/permisos, límites de intentos o decisiones pendientes del dueño.** No cerrar solo con un diagnóstico, una pregunta, una lista de pendientes o una oferta de continuar. Antes de publicar el cierre documental, STATUS contiene ese mismo prompt y refleja el pendiente real. Si el recibido ya se ejecutó, consultar el estado y entregar el paso vigente, sin limitarse a informar que ya se hizo.
+Plantilla del prompt y tabla de qué prompt corresponde a cada cierre: [WORKFLOW](WORKFLOW.md#cierre-de-sesión-el-prompt-siguiente). Cada respuesta final de sesión incluye el prompt completo y copiable de la siguiente sesión, con tarea/rol, referencias concretas, precondición comprobable, acción y salida. **La obligación también rige ante bloqueantes, errores, pruebas fallidas, falta de herramientas/permisos, límites de intentos o decisiones pendientes del dueño.** No cerrar solo con un diagnóstico, una pregunta, una lista de pendientes o una oferta de continuar. Antes de publicar el cierre documental, STATUS contiene ese mismo prompt y refleja el pendiente real. Si el recibido ya se ejecutó, consultar el estado y entregar el paso vigente, sin limitarse a informar que ya se hizo.
 
 Ante bloqueo, el prompt identifica causa y evidencia en la tarea, intentos distintos ya realizados, responsable que puede resolverlo, dato/capacidad/decisión faltante y acción concreta con condición de salida. Si corresponde decidir al dueño, el próximo rol es frontera/dueño para resolver ese punto; no presentar la implementación o el merge como habilitados. Si no puede escribirse STATUS por una limitación comprobada, entregar igualmente el prompt en el chat e indicar esa limitación y la conciliación pendiente. Se mantienen las excepciones documentales postmerge del párrafo siguiente; ninguna exime de entregar el prompt en la respuesta final.
 

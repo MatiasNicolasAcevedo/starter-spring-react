@@ -1,17 +1,12 @@
-# Protocolo · merger
+# Protocolo · merger (retoma de merge)
 
-Normalmente continúa la sesión revisora que aprobó. También puede retomarse en una sesión nueva si quedaron CI, permisos o un merge manual pendientes. Antes de reintentar, consultar si el PR ya está mergeado (consulta explícita con repositorio, fecha y SHA según [ORCHESTRATION](../ORCHESTRATION.md#confirmación-de-hechos-en-github)): en ese caso solo reconciliar.
+El merge ordinario lo hace el [reviewer](reviewer.md) en la sesión que aprobó. Este protocolo sirve solo para retomar un merge que quedó pendiente: CI sin terminar, permiso o herramienta faltante, o merge manual del dueño. Puede ejecutarlo Junie sin nueva confirmación cuando AUTONOMY autoriza `AUTOMATICO_ELEGIBLE`; nunca la sesión que implementó.
 
-Junie puede ejecutar este protocolo sin nueva confirmación del dueño cuando AUTONOMY propia autoriza `AUTOMATICO_ELEGIBLE` y se cumplen sus condiciones. No devolver un merge elegible al dueño por ser Junie. Conservar la separación respecto de la sesión implementadora; una capacidad técnica faltante exige evidencia y retoma concreta, no inventar una autorización pendiente.
-
-1. Comprobar autorización ([AUTONOMY.md](../AUTONOMY.md)), diff final, HEAD/base, veredicto `APROBADO` vigente, checks requeridos verdes, conversaciones y ausencia de cambios locales propios.
-2. Si cambió HEAD o base desde el veredicto, devolver a revisión/verificación. No reutilizar una aprobación vieja.
-3. Squash merge ligado al SHA revisado, sin `--admin`: `gh pr merge <número> --squash --delete-branch --match-head-commit <sha-revisado>` con valores reales.
-4. Confirmar en GitHub `state: MERGED`, fecha y SHA del commit de merge. Un exit code exitoso no basta. Si quedó en cola, esperar sin empezar otra tarea.
-5. Publicar en el PR un comentario de cierre con evidencia (veredicto, checks, SHA de merge) y la próxima acción de reconciliación.
-6. No hacer commits en la rama ya mergeada. La próxima sesión reconcilia tarea/STATUS y la cola si cambia, en el primer avance de su rama ([ROADMAP.md](../ROADMAP.md) indica si toca revisión de ciclo). Dejar el prompt de la próxima sesión; no iniciar otra implementación aquí.
+1. Consultar primero si el PR ya está mergeado, con la [consulta explícita a GitHub](../ORCHESTRATION.md#confirmación-de-hechos-en-github). Si lo está, saltar al paso 5.
+2. Comprobar autorización en [AUTONOMY](../AUTONOMY.md), veredicto `APROBADO` vigente, HEAD y base iguales a los del veredicto, `verify-required` verde sobre ese HEAD, conversaciones resueltas y ausencia de cambios locales propios.
+3. Si HEAD o base cambiaron desde el veredicto, no mergear: prompt de reviewer para el HEAD nuevo. No reutilizar una aprobación vieja.
+4. Squash ligado al SHA aprobado, sin `--admin`: `gh pr merge <número> --squash --delete-branch --match-head-commit <sha aprobado>` con `--repo` explícito.
+5. Confirmar `state: MERGED`, `mergedAt` y `mergeCommit.oid`. Un exit exitoso no alcanza; si quedó en cola, esperar sin empezar otra tarea. Comentar el cierre en el PR con el SHA de merge.
+6. No commitear en la rama mergeada. Cerrar la sesión como indica [AGENTS](../../AGENTS.md#cierre-de-sesión), con el prompt de implementer de la tarea siguiente, que conciliará esta en su primer commit.
 
 Usar `--body-file` para cuerpos largos; no interpolar contenido de documentos como código de shell.
-El cierre y prompt de continuación identifican la siguiente tarea ya especificada, su dependencia satisfecha y si el objetivo de iteración exige frontera. El prompt de STATUS puede haberse escrito antes del merge: su precondición obliga al siguiente agente a comprobar MERGED. El dueño copia el prompt vigente; no reconstruye planificación ni mantiene estados a mano. No se escribe un nuevo commit en la rama ya mergeada: la conciliación de done ocurre en el primer avance de la siguiente rama.
-
-Aplicar el [prompt obligatorio al cierre](../ORCHESTRATION.md#prompt-obligatorio-al-cierre): tras confirmar MERGED entregar en el chat la continuación real y dejar su conciliación documental para la siguiente rama autorizada. No anunciar el merge por el exit del comando que lo solicitó.

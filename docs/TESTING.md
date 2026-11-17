@@ -2,6 +2,40 @@
 
 **Fase actual: `FULL`** de aplicación. Mantener suites, negativos, assertions, cobertura, aislamiento, retries y deadlines. Un check de herramientas verde no acredita tests de aplicación ni despliegue.
 
+El trabajo de todos los días cierra con el [gate diario](#gate-diario): pruebas unitarias y E2E dirigidas, en unos 20 minutos. FULL, la suite E2E completa, STARTER y tooling son [gates diferidos](#gates-diferidos): existen, se conservan intactos y **solo se ejecutan cuando el dueño lo ordena en la sesión**. Proceso completo en [WORKFLOW](WORKFLOW.md#gates).
+
+## Gate diario
+Lo corre el implementer al cerrar la tarea, sobre el HEAD que publica. Los comandos exactos están en la tarea.
+
+| Paso | Cuándo aplica | Comando de referencia |
+|---|---|---|
+| Unitarias y de componente de lo tocado | Siempre que cambie código | Backend: `./mvnw -q test -Dtest=NombreTest` en server/. Client: `npx vitest run ruta/al/archivo.test.tsx` en client/ |
+| IT dirigido con PostgreSQL | Cambia persistencia, consulta, constraint o permiso | `./mvnw -q verify -Dit.test=NombreIT -Djacoco.skip=true` en server/. `-Djacoco.skip` evita presentar cobertura parcial como gate global; no cambia umbrales |
+| Typecheck del cliente | Cambia client/ | `npx tsc -b` en client/ |
+| E2E dirigido | Cambia un flujo de usuario, el proxy o la sesión | `bash scripts/e2e.sh --grep "patrón" --project desktop` con `STARTER_E2E_PROJECT` propio. API, base y OIDC reales; un solo proyecto salvo que la tarea pida móvil |
+| Documentos | Siempre | `node scripts/docs-check.mjs` y `git diff --check` |
+| Perfil del diff | Siempre, solo informativo | `bash scripts/verify.sh --policy origin/main`; anotar el perfil y `FULL/STARTER: DIFERIDO POR EL DUEÑO` |
+| CI | Siempre | `verify-required` verde sobre el HEAD publicado |
+
+Si `scripts/e2e.sh` de este proyecto todavía no acepta `--grep`/`--project`, el E2E dirigido es `bash scripts/verify.sh --e2e` mientras la suite quepa en el presupuesto; si no cabe, se difiere y se anota. No invocar `node scripts/run-e2e.mjs` ni `docker compose … playwright test` a mano: sin el entorno que arma `e2e.sh` fallan o pierden el cleanup.
+
+Presupuesto orientativo: 20 minutos de pared para todo el gate. Si una corrida lo supera, detenerla, registrar comando y duración, acotar el filtro y continuar. No subir timeouts ni retries para que entre.
+
+## Gates diferidos
+| Gate | Comando | Qué agrega |
+|---|---|---|
+| FULL de aplicación | `bash scripts/verify.sh` | Backend completo con IT y cobertura, cliente completo y toda la suite Playwright |
+| Suite E2E completa | `bash scripts/verify.sh --e2e` | Todos los specs en escritorio y móvil; crece con el producto y puede pasar la hora |
+| STARTER | `bash scripts/verify.sh --starter` | FULL más la matriz de herramientas |
+| Tooling | `bash scripts/verify.sh --tooling` | Inicializador, copia compilable, CLI, proxies, fallos y señales |
+| FULL remoto | workflow manual [full.yml](../.github/workflows/full.yml) | Lo mismo en GitHub Actions |
+
+- Ningún agente los inicia por su cuenta: ni al cerrar una tarea, ni al revisar, ni al terminar un lote, ni porque `--policy` informe `FULL` o `STARTER`. Hace falta la orden expresa del dueño en esa sesión.
+- La tarea registra `FULL/STARTER: DIFERIDO POR EL DUEÑO`. No se escribe aprobado, satisfecho ni no aplica.
+- El agente puede **recomendar** el integrado, en una línea del cierre y en el registro «Gates diferidos» de STATUS, cuando: se cerró un lote o se mergearon unas diez tareas desde el último integrado; se acerca un deploy a producción; el diff tocó dependencias, lockfiles, Docker/Compose, workflows, autenticación o migraciones; o hay una regresión que los dirigidos no explican.
+- Cuando el dueño lo ordena: fuentes congeladas, checkpoint previo con SHA/base, comando, namespaces y cleanup; una sola corrida sobre el diff acumulado desde el último integrado; evidencia en la tarea y registro de STATUS actualizado con el SHA nuevo. Un corte anterior acredita solo lo que contiene.
+- Las pruebas dirigidas y la CI liviana no acreditan el integrado. La deuda queda visible en STATUS; no bloquea el merge diario.
+
 ## Comandos
 Desde la raíz con Git Bash, Docker Desktop Linux y Node >=24. PowerShell puede invocar el mismo gate: [entrada y diagnóstico Windows](SETUP.md#verificación-desde-powershell). Comprobar Bash/Node/PATH en la superficie propia; conservar exit y cleanup. Una receta manual de E2E no sustituye FULL. Usar `.env.example` y proyectos Compose nuevos propios; comprobar labels ausentes antes de empezar y limpiar solo esos recursos.
 
@@ -37,14 +71,14 @@ Frontera especifica la capa mínima que demuestra el riesgo y el comando exacto,
 
 Backend: `*Test`/`*Tests` usa Surefire, `*IT` Failsafe. `mvnw test` no acredita IT. Client: `tsc -b` explícito; Vite build no basta. Vitest usa cuatro workers para limitar arranques jsdom/MUI; no aumentar timeouts/retries para ocultar fallos. Playwright conserva desktop 1280 y móvil 375, datos ficticios por caso, retries 0 y export saneado fail-closed. Los tests de protocolo no imprimen tokens/claims/cookies; el fixture HTTP negativo no sustituye el login real.
 
-## Frecuencia y alcance del gate
-Dirigidos durante cada ajuste; un gate al cerrar las fuentes técnicas de la tarea, no en cada commit. Frontera deja el comando concreto; Junie no vuelve a correr la matriz del starter por una función de negocio. Ejecutar `bash scripts/verify.sh --policy origin/main` sobre commits finales y revisar también el diff sin commit antes de publicar.
+## Perfil del diff y alcance del integrado
+Dirigidos durante cada ajuste; el gate diario al cerrar las fuentes técnicas de la tarea, no en cada commit. Frontera deja el comando concreto. `bash scripts/verify.sh --policy origin/main` clasifica los commits finales; revisar también el diff sin commit antes de publicar. El perfil indica qué gate integrado correspondería a ese diff **cuando el dueño lo ordene**; no dispara nada.
 
-| Perfil del diff | Gate de cierre |
-|---|---|
-| DOCUMENTATION / DOCS_ONLY | docs-check; conservar evidencia técnica válida según reglas siguientes |
-| APPLICATION | FULL sin opciones: backend con IT PostgreSQL, frontend y Playwright real |
-| STARTER | FULL + `--tooling` sobre las mismas fuentes/base, o una ejecución `--starter` |
+| Perfil del diff | Gate diario | Integrado que correspondería (diferido) |
+|---|---|---|
+| DOCUMENTATION / DOCS_ONLY | docs-check y `git diff --check` | Ninguno |
+| APPLICATION | Dirigidos de la tarea | FULL sin opciones |
+| STARTER | Dirigidos de la tarea más los tests Node de la herramienta tocada (`node --test "scripts/ci/*.test.mjs"`, `node --test scripts/test-init-project.mjs`) | FULL + `--tooling`, o `--starter` |
 
 APPLICATION solo permite archivos regulares de código/tests bajo server/src, client/src o e2e/tests y e2e/fixtures, además de documentación permitida. Migraciones bajo server/src siguen exigiendo IT y Playwright reales. Scripts, Docker/Compose, dependencias/locks, workflows, otras configuraciones, rutas desconocidas, modos especiales y errores de clasificación exigen STARTER. No basta que una tarea se llame de producto; manda el diff completo. Copias de aplicación conservan la misma regla si modifican el tooling; no existe crédito heredado de la plantilla.
 
@@ -60,13 +94,13 @@ APPLICATION solo permite archivos regulares de código/tests bajo server/src, cl
 
 Los ensayos de herramientas se conservan fuera del gate cotidiano. Tiempos medidos y evidencia de cada cambio viven en su tarea. No ejecutar por calendario ni por cada PR de aplicación. Los tests de selección usan runners ficticios; no sustituir la API propia ni PostgreSQL en E2E, ni convertir esos resultados en aceptación de permisos/datos.
 
-## Cuándo ejecutar FULL
-Dirigidos mientras se implementa. Un FULL de aplicación válido al cerrar fuentes técnicas y tooling si STARTER, con SHA/base, huella antes/después, comandos, logs saneados y cleanup en la tarea. No editar fuentes durante la corrida. Una transición solo Markdown conserva esa evidencia si base/fuentes técnicas coinciden; ejecutar docs-check y los checks afectados. Cambios de fuentes/base, falta de evidencia o riesgo concreto requieren revalidar lo afectado. La revisión es independiente y no repite FULL por rutina.
+## Cómo se ejecuta un integrado ordenado por el dueño
+Con SHA/base, huella antes/después, comandos, logs saneados y cleanup en la tarea. No editar fuentes durante la corrida. Una transición solo Markdown conserva esa evidencia si base y fuentes técnicas coinciden. La revisión es independiente y no lo repite.
 
 DOCS_ONLY acepta solo archivos regulares A/M de Markdown raíz/docs, AGENTS/CLAUDE conocidos y LICENSE. Código/scripts/workflows/locks, Markdown técnico, renombres/borrados, modos especiales, diff vacío o error exigen FULL. El clasificador conservador no sustituye comprobar las fuentes probadas.
 
 ## CI y merge
-CI automática [ci.yml](../.github/workflows/ci.yml): solo PR, un job `verify-required`, matrices Node de herramientas/docs/clasificación, sin Docker ni dependencias de aplicación. HEAD real, concurrencia con cancelación y timeout 5 minutos. Puede ser verde en draft; no acredita FULL. Antes de merge: CI propia del HEAD/base exactos, gate local por alcance válido para fuentes/base, veredicto independiente y AUTONOMY. No cambiar protecciones para destrabar.
+CI automática [ci.yml](../.github/workflows/ci.yml): solo PR, un job `verify-required`, matrices Node de herramientas/docs/clasificación, sin Docker ni dependencias de aplicación. HEAD real, concurrencia con cancelación y timeout 5 minutos. Puede ser verde en draft; no acredita FULL. Antes de merge: CI propia del HEAD/base exactos, gate diario válido para esas fuentes/base, veredicto independiente y AUTONOMY. No cambiar protecciones para destrabar.
 
 FULL remoto [full.yml](../.github/workflows/full.yml): exclusivamente manual `workflow_dispatch`, no push/PR/calendario. El perfil calculado agrega tooling dentro del job E2E solo si STARTER; en APPLICATION corre solo Playwright real. Conserva backend/client/E2E y agregado estricto `full-result`: FULL exige todas sus suites success; DOCS_ONLY requiere las técnicas skipped. Fallo, ausencia, cancelación o pendiente de una suite exigida nunca cuenta como éxito.
 
